@@ -26,3 +26,13 @@
 *.exe
 *.out
 *.app
+
+# virtual studio temp files
+*.suo
+*.pdf
+*.sdf
+*.opensdf
+*.filters
+x64/
+Win32/
+*.user
