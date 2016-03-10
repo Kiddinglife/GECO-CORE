@@ -4,9 +4,8 @@
 
 TEST(testcase1, testHello)
 {
-    printf("hello");
+    printf("hello\n");
 }
-
 
 
 // MS C++ compiler/linker has a bug on Windows (not on Windows CE), which
@@ -16,7 +15,6 @@ TEST(testcase1, testHello)
 // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=394464  // NOLINT
 #if GTEST_OS_WINDOWS_MOBILE
 # include <tchar.h>  // NOLINT
-
 GTEST_API_ int _tmain(int argc, TCHAR** argv) {
 #else
 GTEST_API_ int main(int argc, char** argv) {

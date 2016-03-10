@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gtest", "..\..\thirdparty\g
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "geco-core-ds-unittest", "geco-core-ds-unittest.vcxproj", "{72AF46AF-DA45-43E5-8E63-D4B3B39B52FC}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "geco_core_net_static_lib", "geco_core_net_static_lib.vcxproj", "{DC71FA32-CEC5-46D0-A4A3-615D792EFEB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -69,6 +71,16 @@ Global
 		{72AF46AF-DA45-43E5-8E63-D4B3B39B52FC}.Release|Win32.Build.0 = Release|Win32
 		{72AF46AF-DA45-43E5-8E63-D4B3B39B52FC}.Release|x64.ActiveCfg = Release|x64
 		{72AF46AF-DA45-43E5-8E63-D4B3B39B52FC}.Release|x64.Build.0 = Release|x64
+		{DC71FA32-CEC5-46D0-A4A3-615D792EFEB8}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{DC71FA32-CEC5-46D0-A4A3-615D792EFEB8}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{DC71FA32-CEC5-46D0-A4A3-615D792EFEB8}.Debug|Win32.ActiveCfg = Debug|Win32
+		{DC71FA32-CEC5-46D0-A4A3-615D792EFEB8}.Debug|Win32.Build.0 = Debug|Win32
+		{DC71FA32-CEC5-46D0-A4A3-615D792EFEB8}.Debug|x64.ActiveCfg = Debug|Win32
+		{DC71FA32-CEC5-46D0-A4A3-615D792EFEB8}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{DC71FA32-CEC5-46D0-A4A3-615D792EFEB8}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{DC71FA32-CEC5-46D0-A4A3-615D792EFEB8}.Release|Win32.ActiveCfg = Release|Win32
+		{DC71FA32-CEC5-46D0-A4A3-615D792EFEB8}.Release|Win32.Build.0 = Release|Win32
+		{DC71FA32-CEC5-46D0-A4A3-615D792EFEB8}.Release|x64.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
