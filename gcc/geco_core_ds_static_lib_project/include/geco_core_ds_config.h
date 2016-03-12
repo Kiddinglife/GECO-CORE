@@ -1,36 +1,36 @@
 /*
  *
  * Copyright (c) 1994
- * Hewlett-Packard CompGECO_GECO_STL
+ * Hewlett-Packard Company SGI_STL
  *
  * Permission to use, copy, modify, distribute and sell this software
- * and its documentation for GECO_GECO_STL purpose is hereby granted without fee,
+ * and its documentation for SGI_STL purpose is hereby granted without fee,
  * provided that the above copyright notice appear in all copies and
  * that both that copyright notice and this permission notice appear
- * in supporting documentation.  Hewlett-Packard CompGECO_GECO_STL makes no
- * representations about the suitability of this software for GECO_GECO_STL
+ * in supporting documentation.  Hewlett-Packard Comp SGI_STL makes no
+ * representations about the suitability of this software for SGI_STL
  * purpose.  It is provided "as is" without express or implied warranty.
  *
  * Copyright (c) 1997
  * Silicon Graphics
  *
  * Permission to use, copy, modify, distribute and sell this software
- * and its documentation for GECO_GECO_STL purpose is hereby granted without fee,
+ * and its documentation for SGI_STL purpose is hereby granted without fee,
  * provided that the above copyright notice appear in all copies and
  * that both that copyright notice and this permission notice appear
  * in supporting documentation.  Silicon Graphics makes no
- * representations about the suitability of this software for GECO_GECO_STL
+ * representations about the suitability of this software for SGI_STL
  * purpose.  It is provided "as is" without express or implied warranty.
  *
  * Copyright (c) 2016
- * Geco Gaming
+ * Geco Gaming Company
  *
  * Permission to use, copy, modify, distribute and sell this software
- * and its documentation for GECO_GECO_STL purpose is hereby granted without fee,
+ * and its documentation for GECO_STL purpose is hereby granted without fee,
  * provided that the above copyright notice appear in all copies and
  * that both that copyright notice and this permission notice appear
  * in supporting documentation.  Silicon Graphics makes no
- * representations about the suitability of this software for GECO_GECO_STL
+ * representations about the suitability of this software for GECO_STL
  * purpose.  It is provided "as is" without express or implied warranty.
  *
  */
@@ -46,7 +46,6 @@
 // __GECO_STL_HAS_WCHAR_T
 // defined if the compier has wchar_t as a builtin type.
 
-
 // __GECO_STL_NO_DRAND48
 // defined if the compiler doesn't have the drand48 function.
 // @See http://blog.csdn.net/jimmyblind/article/details/5550042 
@@ -58,7 +57,6 @@
 // __GECO_STL_STATIC_CONST_INIT_BUG: 
 // defined if the compiler can't handle a constant-initializer in the declaration 
 // of a static const data member
-
 
 // __GECO_STL_CLASS_PARTIAL_SPECIALIZATION 
 // defined if the compiler supports partial specialization of template classes.
@@ -86,7 +84,6 @@
 // defined if the compiler supports calling a function template by providing its 
 // template arguments explicitly.
 
-
 // __GECO_STL_LIMITED_DEFAULT_TEMPLATES
 // defined if the compiler is unable to handle default template parameters
 // that depend on previous template parameters.
@@ -99,7 +96,6 @@
 // __GECO_STL_NON_TYPE_TMPL_PARAM_BUG
 // defined if the compiler has trouble with
 // function template argument deduction for non-type template parameters.
-
 
 // __SGI_GECO_STL_NO_ARROW_OPERATOR
 // defined if the compiler is unable to support the -> operator for iterators.
@@ -164,8 +160,6 @@
 
 // __GECO_STL_ASSERTIONS
 // if defined, then enable runtime checking through the __geco_stl_assert macro.
-
-
 
 // __GECO_STL_SGI_THREADS
 // defined if this is being compiled for an SGI IRIX
@@ -305,15 +299,15 @@
 # endif // sgi complier
 
 /*
-* Jochen Schlick '1999  - added new #defines (__GECO_STL)_UITHREADS (for
-*                         providing SCO / Solaris / UI thread support)
-*                       - added the necessary defines for the SCO UDK 7
-*                         compiler (and its template friend behavior)
-*                       - all UDK7 specific GECO_STL changes are based on the
-*                         macro __USLC__ being defined
-*
-SCO Unix是在国内比较有名气的操作系统，因为他是当时能运行在Intel的平台之一，并且较早进入中国市场。它的历史可以追溯到MicroSoft开发的Xienx，Xienx是运行在Intel平台上的一种基于Unix V 6的系统，后来Xienx开发部门独立出来成立了SCO公司，并基于AT&T System VR3.2开发了SCO Unix，其最新的版本为增强了图形接口的SCO OpenServer 5.0.4。此时AT&T已经将它们负责Unix的部门USL(Unix系统实验室)，卖给了Novell公司，它们的Unix被更名为UnixWare ，但是Novell正逢经营问题，不得不将UnixWare再次卖给SCO。SCO之所以能占有市场，并不是其产品特别出色，而是因为在小型机特别昂贵的年代，对一些追求稳定的行业来说，使用SCO能在x86上运行，可以节约大量成本。因此早期的银行、金融行业的终端大多是使用SCO的。而最近SCO的名声越来越坏，只因被更加优秀且同样能运行于x86的Linux抢走大量份额，大家知道知道吃不饱的狗是会乱咬人的。不过可惜最后授权没强行推销出去几份，反而得了个$CO之名。而Novell在购买UnixWare之后的一个重要举动是将Unix商标赠送给一个非盈利的Unix组织X/Open，结束了USL与BSD以及其他厂商的纷争。
-*/
+ * Jochen Schlick '1999  - added new #defines (__GECO_STL)_UITHREADS (for
+ *                         providing SCO / Solaris / UI thread support)
+ *                       - added the necessary defines for the SCO UDK 7
+ *                         compiler (and its template friend behavior)
+ *                       - all UDK7 specific GECO_STL changes are based on the
+ *                         macro __USLC__ being defined
+ *
+ SCO Unix是在国内比较有名气的操作系统，因为他是当时能运行在Intel的平台之一，并且较早进入中国市场。它的历史可以追溯到MicroSoft开发的Xienx，Xienx是运行在Intel平台上的一种基于Unix V 6的系统，后来Xienx开发部门独立出来成立了SCO公司，并基于AT&T System VR3.2开发了SCO Unix，其最新的版本为增强了图形接口的SCO OpenServer 5.0.4。此时AT&T已经将它们负责Unix的部门USL(Unix系统实验室)，卖给了Novell公司，它们的Unix被更名为UnixWare ，但是Novell正逢经营问题，不得不将UnixWare再次卖给SCO。SCO之所以能占有市场，并不是其产品特别出色，而是因为在小型机特别昂贵的年代，对一些追求稳定的行业来说，使用SCO能在x86上运行，可以节约大量成本。因此早期的银行、金融行业的终端大多是使用SCO的。而最近SCO的名声越来越坏，只因被更加优秀且同样能运行于x86的Linux抢走大量份额，大家知道知道吃不饱的狗是会乱咬人的。不过可惜最后授权没强行推销出去几份，反而得了个$CO之名。而Novell在购买UnixWare之后的一个重要举动是将Unix商标赠送给一个非盈利的Unix组织X/Open，结束了USL与BSD以及其他厂商的纷争。
+ */
 // SCO UDK 7 compiler (UnixWare 7x, OSR 5, UnixWare 2x)
 # if defined(__USLC__)
 #     define __GECO_STL_HAS_WCHAR_T 
@@ -336,7 +330,6 @@ SCO Unix是在国内比较有名气的操作系统，因为他是当时能运行
 #     endif
 # endif
 
-
 // GCC
 # ifdef __GNUC__
 #   define __GECO_STL_MEMBER_TEMPLATES
@@ -347,8 +340,7 @@ SCO Unix是在国内比较有名气的操作系统，因为他是当时能运行
 #   define __GECO_STL_HAS_NAMESPACES
 # endif
 
-// Intel compiler, which uses the EDG front end.
-# if defined(__ICL)
+# if defined(__ICL) // Intel compiler, which uses the EDG front end.
 #   define __GECO_STL_LONG_LONG 
 #   define __GECO_STL_MEMBER_TEMPLATES
 #   define __GECO_STL_MEMBER_TEMPLATE_CLASSES
@@ -441,7 +433,6 @@ SCO Unix是在国内比较有名气的操作系统，因为他是当时能运行
 #   endif
 
 # endif // Microsoft compiler. 
-
 
 # if defined(__BORLANDC__)
 #     define __GECO_STL_NO_BAD_ALLOC

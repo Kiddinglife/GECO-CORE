@@ -1,11 +1,16 @@
 #include <iostream>
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include <pthread.h>
+#include <vector>
+#include <chrono>
 
 TEST(testcase1, testHello)
 {
     printf("hello\n");
+    std::vector<ushort> hello;
+    hello.reserve(1000);
+    printf("%d\n",hello.data());
+
 }
 
 #if GTEST_OS_WINDOWS_MOBILE
