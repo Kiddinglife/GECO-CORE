@@ -17,7 +17,7 @@ CPP_DEPS += \
 src/%.o: ../src/%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -I/home/jakez/GECO-CORE/thirdparty/googlemock/include -I/home/jakez/GECO-CORE/thirdparty/googletest/include -I/home/jakez/GECO-CORE/thirdparty/googletest/src -I/home/jakez/GECO-CORE/thirdparty/googlemock/src -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	g++ -std=c++0x -I/home/jakez/GECO-CORE/thirdparty/googlemock/include -I/home/jakez/GECO-CORE/thirdparty/googletest/include -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
