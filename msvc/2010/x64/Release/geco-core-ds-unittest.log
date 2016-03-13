@@ -1,5 +1,6 @@
-﻿Build started 3/13/2016 4:05:17 PM.
+﻿Build started 3/13/2016 4:18:09 PM.
      1>Project "D:\VS2013WorkSpace\geco-core\msvc\2010\geco-core-ds-unittest.vcxproj" on node 2 (Build target(s)).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V120\Microsoft.CppBuild.targets(388,5): warning MSB8028: The intermediate directory (x64\Release\) contains files shared from another project (geco_core_ds_static_lib.vcxproj).  This can lead to incorrect clean and rebuild behavior.
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I../../ /I../../thirdparty/googlemock/include /I../../thirdparty/googletest/include /Zi /nologo /W3 /WX- /O2 /Oi /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MT /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc120.pdb" /Gd /TP /errorReport:prompt "..\..\src\all-tests.cc" "..\..\src\test-main.cc"
          all-tests.cc
@@ -16,4 +17,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:04.44
+Time Elapsed 00:00:03.87

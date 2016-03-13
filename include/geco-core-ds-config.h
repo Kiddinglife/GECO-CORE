@@ -38,220 +38,229 @@
 # ifndef __GECO_CONFIG_H
 # define __GECO_CONFIG_H
 
-// Flags:
+//! Flags.
 
-// __GECO_NO_BOOL
-// defined if the compiler doesn't have bool as a builtin type.
+//! @def __GECO_NO_BOOL
+//! @brief defined if the compiler doesn't have bool as a builtin type.
 
-// __GECO_HAS_WCHAR_T
-// defined if the compier has wchar_t as a builtin type.
+//! @def __GECO_HAS_WCHAR_T
+//! @brief defined if the compier has wchar_t as a builtin type.
 
-// __GECO_NO_DRAND48
-// defined if the compiler doesn't have the drand48 function.
-// @See http://blog.csdn.net/jimmyblind/article/details/5550042 
-// for details about drand48() function
+//! __GECO_NO_DRAND48
+//! @brief defined if the compiler doesn't have the drand48 function.
+//! @See http://!blog.csdn.net/jimmyblind/article/details/5550042 
+//! for details about drand48() function
 
-// __GECO_STATIC_TEMPLATE_MEMBER_BUG
-// defined if the compiler can't handle static members of template classes.
+//! @def __GECO_STATIC_TEMPLATE_MEMBER_BUG
+//! @brief defined if the compiler can't handle static members of template classes.
 
-// __GECO_STATIC_CONST_INIT_BUG: 
-// defined if the compiler can't handle a constant-initializer in the declaration 
-// of a static const data member
+//! @def __GECO_STATIC_CONST_INIT_BUG: 
+//! @brief defined if the compiler can't handle a constant-initializer in the declaration 
+//! of a static const data member
 
-// __GECO_CLASS_PARTIAL_SPECIALIZATION 
-// defined if the compiler supports partial specialization of template classes.
-//\code
-// //generic template
-// template<class I, class O>
-// struct testClass{...};
-// particial-specification 1
-// template <class T>
-// struct testClass <T*, const T&>{...};
-// particial-specification 2
-// template <class T>
-// struct testClass <const T*, T*>{...};
-//\code
+//! @def __GECO_CLASS_PARTIAL_SPECIALIZATION 
+//! @brief defined if the compiler supports partial specialization of template classes.
+//! @code
+//  generic template.
+//  template<class I, class O>
+//  struct testClass{...};
+//  particial-specification 1
+//  template <class T>
+//  struct testClass <T*, const T&>{...};
+//  particial-specification 2
+//  template <class T>
+//  struct testClass <const T*, T*>{...};
+//! @endcode
 
-// __GECO_PARTIAL_SPECIALIZATION_SYNTAX
-// defined if the compiler supports partial specialization syntax for full 
-// specialization of class templates. 
-// (Even if it doesn't actually support partial specialization itself.)
+//! @def __GECO_PARTIAL_SPECIALIZATION_SYNTAX
+//! @brief defined if the compiler supports partial specialization syntax for full 
+//! specialization of class templates. 
+//! (Even if it doesn't actually support partial specialization itself.)
 
-// __GECO_FUNCTION_TMPL_PARTIAL_ORDER 
-// \brief defined if the compiler supports partial ordering of function templates.
-// (a.k.a partial specialization of function templates.)
-//\code
-// template <class T>
-// struct testClass { void swap(vector<T>){...} };
-// #ifdef __GECO_FUNCTION_TMPL_PARTIAL_ORDER
-// template <class T>
-// inline void swap (vector<T>& x, vecotr<T>& y) { x.swap(y); }
-// #endif
-//\code
+//! @def __GECO_FUNCTION_TMPL_PARTIAL_ORDER 
+//! \brief defined if the compiler supports partial ordering of function templates.
+//! (a.k.a partial specialization of function templates.)
+//! @code
+//! template <class T>
+//! struct testClass { void swap(vector<T>){...} };
+//! #ifdef __GECO_FUNCTION_TMPL_PARTIAL_ORDER
+//! template <class T>
+//! inline void swap (vector<T>& x, vecotr<T>& y) { x.swap(y); }
+//! #endif
+//! @endcode
 
-// __GECO_MEMBER_TEMPLATES
-// defined if the compiler supports template member functions of classes.
+//! @def __GECO_MEMBER_TEMPLATES
+//! @brief defined if the compiler supports template member functions of classes.
 
-// __GECO_MEMBER_TEMPLATE_CLASSES
-// defined if the compiler supports nested classes that are member
-// templates of other classes.
+//! @def __GECO_MEMBER_TEMPLATE_CLASSES
+//! @brief defined if the compiler supports nested classes that are member
+//! templates of other classes.
 
-// __GECO_TEMPLATE_FRIENDS
-// defined if the compiler supports templatized friend declarations.
+//! @def  __GECO_TEMPLATE_FRIENDS
+//! @brief  defined if the compiler supports templatized friend declarations.
 
-// __GECO_EXPLICIT_FUNCTION_TMPL_ARGS 
-// defined if the compiler supports calling a function template by providing its 
-// template arguments explicitly.
-//\code
-// template <class T, class Sequence>
-// bool operator==(const stack<T, Sequence>& x);
-//
-// template < class T, class Sequence = deque<T>>
-// class stack {
-// //this is correct
-// friend bool operator== <T> (const stack<T>&, const stack<T>&);
-// //this is alos correct
-// friend bool opeartor==<T> (const statck<T>&, const stack<T>&);
-// //this is alos correct
-// friend bool opeartor==<> (const statck&, const stack&);
-// }
-//\code
+//! @def __GECO_EXPLICIT_FUNCTION_TMPL_ARGS 
+//! @brief defined if the compiler supports calling a function template by providing its 
+//! template arguments explicitly.
+//! @code
+//! template <class T, class Sequence>
+//! bool operator==(const stack<T, Sequence>& x);
+//!
+//! template < class T, class Sequence = deque<T>>
+//! class stack {
+//! //!this is correct
+//! friend bool operator== <T> (const stack<T>&, const stack<T>&);
+//! //!this is alos correct
+//! friend bool opeartor==<T> (const statck<T>&, const stack<T>&);
+//! //!this is alos correct
+//! friend bool opeartor==<> (const statck&, const stack&);
+//! }
+//! @endcode
 
-// __GECO_LIMITED_DEFAULT_TEMPLATES
-// defined if the compiler is unable to handle default template parameters
-// that depend on previous template parameters.
-// \code
-// template<class T, class Sequence = deque<T>>
-//\code
+//! @def  __GECO_LIMITED_DEFAULT_TEMPLATES
+//! @brief defined if the compiler is unable to handle default template parameters
+//! that depend on previous template parameters.
+//! @code
+//! template<class T, class Sequence = deque<T>>
+//!@endcode
 
-// __GECO_NON_TYPE_TMPL_PARAM_BUG
-// defined if the compiler has trouble with
-// function template argument deduction for non-type template parameters.
-// \code
-// template <class T, size_t BufSize = 0>
-// struct __deque_iterator { typedef __deque_iterator<T, BufSize> iterator;};
-// \code
+//! @def  __GECO_NON_TYPE_TMPL_PARAM_BUG
+//! @brief defined if the compiler has trouble with
+//! function template argument deduction for non-type template parameters.
+//! \code
+//! template <class T, size_t BufSize = 0>
+//! struct __deque_iterator { typedef __deque_iterator<T, BufSize> iterator;};
+//! \endcode
 
-// __SGI_GECO_NO_ARROW_OPERATOR
-// defined if the compiler is unable to support the -> operator for iterators.
+//! @def  __SGI_GECO_NO_ARROW_OPERATOR
+//! @brief defined if the compiler is unable to support the -> operator for iterators.
 
-// __GECO_DEFAULT_CONSTRUCTOR_BUG
-// defined if T() does not work properly when T is a builtin type.
+//! @def  __GECO_DEFAULT_CONSTRUCTOR_BUG
+//! @brief defined if T() does not work properly when T is a builtin type.
 
-//  __GECO_USE_EXCEPTIONS
-// defined if the compiler (in the current compilation mode) supports exceptions.
+//! @def  __GECO_USE_EXCEPTIONS
+//! @brief defined if the compiler (in the current compilation mode) supports exceptions.
 
-// __GECO_USE_NAMESPACES
-// defined if the compiler has the necessary support for namespaces.
+//! @def  __GECO_USE_NAMESPACES
+//! @brief defined if the compiler has the necessary support for namespaces.
 
-// __GECO_NO_EXCEPTION_HEADER
-//  defined if the compiler does not have 
-// a standard-conforming header <exception>
+//! @def  s__GECO_NO_EXCEPTION_HEADER
+//! @brief defined if the compiler does not have 
+//! a standard-conforming header <exception>.
 
-//  __GECO_NO_BAD_ALLOC 
-// defined if the compiler does not have a <new> header, 
-// or if <new> does not contain a bad_alloc class. 
-// If a bad_alloc class exists, it is assumed to be in namespace std.
+//! @def  __GECO_NO_BAD_ALLOC 
+//! @brief defined if the compiler does not have a <new> header, 
+//! or if <new> does not contain a bad_alloc class. 
+//! If a bad_alloc class exists, it is assumed to be in namespace geco.
 
-// __GECO_LONG_LONG 
-// if the compiler has long long and unsigned long long
-// types.  (They're not in the C++ standard, but they are expected to be 
-// included in the forthcoming C9X standard.)
+//! @def  __GECO_LONG_LONG 
+//! @brief if the compiler has long long and unsigned long long
+//! types (They're not in the C++ standard, but they are expected to be 
+//! included in the forthcoming C9X standard).
 
-// __GECO_THREADS is defined if thread safety is needed.
+//! @def __GECO_THREADS
+//! @brief defined if thread safety is needed.
 
-// __GECO_VOLATILE is defined to be "volatile" if threads are being
-// used, and the empty string otherwise.
+//! @def  __GECO_VOLATILE 
+//! @brief defined to be "volatile" if threads are being used, and the empty string otherwise.
 
-// __GECO_NO_USING_CLAUSE_IN_CLASS 
-// The compiler does not handle "using" clauses inside of class definitions.
+//! @def  __GECO_NO_USING_CLAUSE_IN_CLASS 
+//! @brief The compiler does not handle "using" clauses inside of class definitions.
 
-//  __GECO_NO_FRIEND_TEMPLATE_CLASS 
-// The compiler does not handle friend declaractions 
-// where the friend is a template class.
+//!  @def  __GECO_NO_FRIEND_TEMPLATE_CLASS 
+//! @brief The compiler does not handle friend declaractions 
+//! where the friend is a template class.
 
-// __GECO_NO_FUNCTION_PTR_IN_CLASS_TEMPLATE
-// The compiler does not support the use of a function pointer type 
-// as the argument for a template.
+//! @def  __GECO_NO_FUNCTION_PTR_IN_CLASS_TEMPLATE
+//! @brief The compiler does not support the use of a function pointer type 
+//! as the argument for a template.
 
-// __GECO_MEMBER_TEMPLATE_KEYWORD 
-// standard C++ requires the template keyword in a few new places (14.2.4).
-// This flag is set for compilers that support (and require) this usage.
+//! @def __GECO_MEMBER_TEMPLATE_KEYWORD 
+//! @brief standard C++ requires the template keyword in a few new places (14.2.4),
+//! this flag is set for compilers that support (and require) this usage.
 
-// __GECO_USE_SGI_ALLOCATORS 
-// User-settable macros that control compilation. if defined, then the GECO 
-// will use older SGI-style allocators, instead of standard-conforming allocators,
-// even if the compiler supports all of the language features needed
-// for standard-conforming allocators.
+//! @def  __GECO_USE_SGI_ALLOCATORS 
+//! @brief User-settable macros that control compilation. 
+//! if defined, then the GECO will use older SGI-style allocators,
+//! instead of standard-conforming allocators,
+//! even if the compiler supports all of the language features needed
+//! for standard-conforming allocators.
 
-// __GECO_NO_NAMESPACES
-// if defined, don't put the library in namespace
-// std, even if the compiler supports namespaces.
+//! @def __GECO_NO_NAMESPACES
+//! @brief if defined, don't put the library in namespace
+//! geco, even if the compiler supports namespaces.
 
-// __GECO_NO_RELOPS_NAMESPACE 
-// if defined, don't put the relational operator templates (>, <=. >=, !=) 
-// in namespace std::rel_ops, even if the compiler supports namespaces 
-// and partial ordering of function templates.
+//! @def  __GECO_NO_RELOPS_NAMESPACE 
+//! @brief if defined, don't put the relational operator templates (>, <=. >=, !=) 
+//! in namespace geco::rel_ops, even if the compiler supports namespaces 
+//! and partial ordering of function templates.
 
-// __GECO_ASSERTIONS
-// if defined, then enable runtime checking through the __GECO_assert macro.
+//! @def  __GECO_ASSERTIONS
+//! @brief if defined, then enable runtime checking through the __GECO_assert macro.
 
-// __GECO_SGI_THREADS
-// defined if this is being compiled for an SGI IRIX
-// system in multithreaded mode, using native SGI threads instead of  pthreads.
-// this is used only for SGI compGECO_GECO's specific system
+//! @def  __GECO_SGI_THREADS
+//! @brief defined if this is being compiled for an SGI IRIX
+//! system in multithreaded mode, using native SGI threads instead of  pthreads,
+//! this is used only for SGI  specific system.
+//! @todo maybe not need,can be deleted
 
-// __GECO_WIN32THREADS
-// defined if this is being compiled on a WIN32 compiler in multithreaded mode.
+//! @def  __GECO_WIN32THREADS
+//! @brief defined if this is being compiled on a WIN32 compiler in multithreaded mode.
 
-// __GECO_PTHREADS
-// defined if we should use portable pthreads synchronization.
+//! @def __GECO_PTHREADS
+//! @brief defined if we should use portable pthreads synchronization.
 
-//  __GECO_UITHREADS 
-// defined if we should use UI / solaris / UnixWare threads
-// synchronization.  UIthreads are similar to pthreads, but are based 
-// on an earlier version of the Posix threads standard.
+//! @def __GECO_UITHREADS 
+//! @brief defined if we should use UI / solaris / UnixWare threads synchronization.  
+//! UIthreads are similar to pthreads, but are based 
+//! on an earlier version of the Posix threads standard.
 
-// _PTHREADS
-// if defined, use Posix threads for multithreading support.
+//! @def  _PTHREADS
+//! @brief if defined, use Posix threads for multithreading support.
 
-// _UITHREADS
-// if defined, use SCO/Solaris/UI threads for multithreading support
+//! @def  _UITHREADS
+//! @brief if defined, use SCO/Solaris/UI threads for multithreading support
 
-//  _NOTHREADS 
-// if defined, don't use GECO_GECO multithreading support. 
+//!  @def  _NOTHREADS 
+//! @brief if defined, don't use GECO_GECO multithreading support. 
 
-//   __GECO_USE_CONCEPT_CHECKS 
-//  enables some extra compile-time error
-//  checking to make sure that user-defined template arguments satisfy
-//  all of the appropriate requirements.  This may result in more
-//  comprehensible error messages.  It incurs no runtime overhead.  This 
-//  feature requires member templates and partial specialization.
+//!  @def  __GECO_USE_CONCEPT_CHECKS 
+//!  enables some extra compile-time error
+//!  checking to make sure that user-defined template arguments satisfy
+//!  all of the appropriate requirements.  This may result in more
+//!  comprehensible error messages.  It incurs no runtime overhead.  This 
+//!  feature requires member templates and partial specialization.
 
-// _GECO_NO_CONCEPT_CHECKS
-// if defined, disables the error checking that
-// we get from __GECO_USE_CONCEPT_CHECKS.
+//! @def _GECO_NO_CONCEPT_CHECKS
+//! @brief if defined, disables the error checking that
+//! we get from __GECO_USE_CONCEPT_CHECKS.
 
-// __GECO_USE_NEW_IOSTREAMS
-// if defined, then the GECO will use new, standard-conforming iostreams
-// (e.g. the <iosfwd> header).  If not defined, the GECO will use old cfront-style 
-// iostreams (e.g. the <iostream.h> header).
+//! @def  __GECO_USE_NEW_IOSTREAMS
+//! if defined, then the GECO will use new, standard-conforming iostreams
+//! (e.g. the <iosfwd> header).  If not defined, the GECO will use old cfront-style 
+//! iostreams (e.g. the <iostream.h> header).
 
-// Other macros defined by this file:
+//! @def __GECO_NO_BOOL 
+//! @brief bool, true, and false, if defined.
 
-// bool, true, and false, if __GECO_NO_BOOL is defined.
+//! typename, as a null macro if it's not already a keyword.
+//! explicit, as a null macro if it's not already a keyword.
 
-// typename, as a null macro if it's not already a keyword.
+//! @def __GECO
+//! @brief namespace-related macros
 
-// explicit, as a null macro if it's not already a keyword.
+//! @def __GECO_BEGIN_NAMESPACE
+//! @brief namespace-related macros
 
-// namespace-related macros (__STD, __GECO_BEGIN_NAMESPACE, etc.)
+//! @def __GECO_TRY
+//! @brief exception-related macros
 
-// exception-related macros (__GECO_TRY, __GECO_UNWIND, etc.)
+//! @def __GECO_UNWIND
+//! @brief exception-related macros
 
-// __GECO_assert
-// either as a test or as a null macro, depending on
-// whether or not __GECO_ASSERTIONS is defined.
+//! @def __GECO_assert
+//! @brief either as a test or as a null macro, depending on
+//! whether or not __GECO_ASSERTIONS is defined.
 
 # if defined(_PTHREADS) && !defined(_NOTHREADS)
 #     define __GECO_PTHREADS
@@ -261,7 +270,7 @@
 #     define __GECO_UITHREADS
 # endif
 
-// SGI complier
+//! SGI complier
 # if defined(__sgi) && !defined(__GNUC__)
 #   include <standards.h>
 #   if !defined(_BOOL)
@@ -331,7 +340,7 @@
 #   if _COMPILER_VERSION >= 730 && defined(_STANDARD_C_PLUS_PLUS)
 #     define __SGI_GECO_USE_AUTO_PTR_CONVERSIONS
 #   endif
-# endif // sgi complier
+# endif //! sgi complier
 
 /*
 * Jochen Schlick '1999  - added new #defines (__GECO)_UITHREADS (for
@@ -341,9 +350,9 @@
 *                       - all UDK7 specific GECO changes are based on the
 *                         macro __USLC__ being defined
 *
-SCO UnixÊÇÔÚ¹úÄÚ±È½ÏÓĞÃûÆøµÄ²Ù×÷ÏµÍ³£¬ÒòÎªËûÊÇµ±Ê±ÄÜÔËĞĞÔÚIntelµÄÆ½Ì¨Ö®Ò»£¬²¢ÇÒ½ÏÔç½øÈëÖĞ¹úÊĞ³¡¡£ËüµÄÀúÊ·¿ÉÒÔ×·Ëİµ½MicroSoft¿ª·¢µÄXienx£¬XienxÊÇÔËĞĞÔÚIntelÆ½Ì¨ÉÏµÄÒ»ÖÖ»ùÓÚUnix V 6µÄÏµÍ³£¬ºóÀ´Xienx¿ª·¢²¿ÃÅ¶ÀÁ¢³öÀ´³ÉÁ¢ÁËSCO¹«Ë¾£¬²¢»ùÓÚAT&T System VR3.2¿ª·¢ÁËSCO Unix£¬Æä×îĞÂµÄ°æ±¾ÎªÔöÇ¿ÁËÍ¼ĞÎ½Ó¿ÚµÄSCO OpenServer 5.0.4¡£´ËÊ±AT&TÒÑ¾­½«ËüÃÇ¸ºÔğUnixµÄ²¿ÃÅUSL(UnixÏµÍ³ÊµÑéÊÒ)£¬Âô¸øÁËNovell¹«Ë¾£¬ËüÃÇµÄUnix±»¸üÃûÎªUnixWare £¬µ«ÊÇNovellÕı·ê¾­ÓªÎÊÌâ£¬²»µÃ²»½«UnixWareÔÙ´ÎÂô¸øSCO¡£SCOÖ®ËùÒÔÄÜÕ¼ÓĞÊĞ³¡£¬²¢²»ÊÇÆä²úÆ·ÌØ±ğ³öÉ«£¬¶øÊÇÒòÎªÔÚĞ¡ĞÍ»úÌØ±ğ°º¹óµÄÄê´ú£¬¶ÔÒ»Ğ©×·ÇóÎÈ¶¨µÄĞĞÒµÀ´Ëµ£¬Ê¹ÓÃSCOÄÜÔÚx86ÉÏÔËĞĞ£¬¿ÉÒÔ½ÚÔ¼´óÁ¿³É±¾¡£Òò´ËÔçÆÚµÄÒøĞĞ¡¢½ğÈÚĞĞÒµµÄÖÕ¶Ë´ó¶àÊÇÊ¹ÓÃSCOµÄ¡£¶ø×î½üSCOµÄÃûÉùÔ½À´Ô½»µ£¬Ö»Òò±»¸ü¼ÓÓÅĞãÇÒÍ¬ÑùÄÜÔËĞĞÓÚx86µÄLinuxÇÀ×ß´óÁ¿·İ¶î£¬´ó¼ÒÖªµÀÖªµÀ³Ô²»±¥µÄ¹·ÊÇ»áÂÒÒ§ÈËµÄ¡£²»¹ı¿ÉÏ§×îºóÊÚÈ¨Ã»Ç¿ĞĞÍÆÏú³öÈ¥¼¸·İ£¬·´¶øµÃÁË¸ö$COÖ®Ãû¡£¶øNovellÔÚ¹ºÂòUnixWareÖ®ºóµÄÒ»¸öÖØÒª¾Ù¶¯ÊÇ½«UnixÉÌ±êÔùËÍ¸øÒ»¸ö·ÇÓ¯ÀûµÄUnix×éÖ¯X/Open£¬½áÊøÁËUSLÓëBSDÒÔ¼°ÆäËû³§ÉÌµÄ·×Õù¡£
+SCO Unixæ˜¯åœ¨å›½å†…æ¯”è¾ƒæœ‰åæ°”çš„æ“ä½œç³»ç»Ÿï¼Œå› ä¸ºä»–æ˜¯å½“æ—¶èƒ½è¿è¡Œåœ¨Intelçš„å¹³å°ä¹‹ä¸€ï¼Œå¹¶ä¸”è¾ƒæ—©è¿›å…¥ä¸­å›½å¸‚åœºã€‚å®ƒçš„å†å²å¯ä»¥è¿½æº¯åˆ°MicroSoftå¼€å‘çš„Xienxï¼ŒXienxæ˜¯è¿è¡Œåœ¨Intelå¹³å°ä¸Šçš„ä¸€ç§åŸºäºUnix V 6çš„ç³»ç»Ÿï¼Œåæ¥Xienxå¼€å‘éƒ¨é—¨ç‹¬ç«‹å‡ºæ¥æˆç«‹äº†SCOå…¬å¸ï¼Œå¹¶åŸºäºAT&T System VR3.2å¼€å‘äº†SCO Unixï¼Œå…¶æœ€æ–°çš„ç‰ˆæœ¬ä¸ºå¢å¼ºäº†å›¾å½¢æ¥å£çš„SCO OpenServer 5.0.4ã€‚æ­¤æ—¶AT&Tå·²ç»å°†å®ƒä»¬è´Ÿè´£Unixçš„éƒ¨é—¨USL(Unixç³»ç»Ÿå®éªŒå®¤)ï¼Œå–ç»™äº†Novellå…¬å¸ï¼Œå®ƒä»¬çš„Unixè¢«æ›´åä¸ºUnixWare ï¼Œä½†æ˜¯Novellæ­£é€¢ç»è¥é—®é¢˜ï¼Œä¸å¾—ä¸å°†UnixWareå†æ¬¡å–ç»™SCOã€‚SCOä¹‹æ‰€ä»¥èƒ½å æœ‰å¸‚åœºï¼Œå¹¶ä¸æ˜¯å…¶äº§å“ç‰¹åˆ«å‡ºè‰²ï¼Œè€Œæ˜¯å› ä¸ºåœ¨å°å‹æœºç‰¹åˆ«æ˜‚è´µçš„å¹´ä»£ï¼Œå¯¹ä¸€äº›è¿½æ±‚ç¨³å®šçš„è¡Œä¸šæ¥è¯´ï¼Œä½¿ç”¨SCOèƒ½åœ¨x86ä¸Šè¿è¡Œï¼Œå¯ä»¥èŠ‚çº¦å¤§é‡æˆæœ¬ã€‚å› æ­¤æ—©æœŸçš„é“¶è¡Œã€é‡‘èè¡Œä¸šçš„ç»ˆç«¯å¤§å¤šæ˜¯ä½¿ç”¨SCOçš„ã€‚è€Œæœ€è¿‘SCOçš„åå£°è¶Šæ¥è¶Šåï¼Œåªå› è¢«æ›´åŠ ä¼˜ç§€ä¸”åŒæ ·èƒ½è¿è¡Œäºx86çš„LinuxæŠ¢èµ°å¤§é‡ä»½é¢ï¼Œå¤§å®¶çŸ¥é“çŸ¥é“åƒä¸é¥±çš„ç‹—æ˜¯ä¼šä¹±å’¬äººçš„ã€‚ä¸è¿‡å¯æƒœæœ€åæˆæƒæ²¡å¼ºè¡Œæ¨é”€å‡ºå»å‡ ä»½ï¼Œåè€Œå¾—äº†ä¸ª$COä¹‹åã€‚è€ŒNovellåœ¨è´­ä¹°UnixWareä¹‹åçš„ä¸€ä¸ªé‡è¦ä¸¾åŠ¨æ˜¯å°†Unixå•†æ ‡èµ é€ç»™ä¸€ä¸ªéç›ˆåˆ©çš„Unixç»„ç»‡X/Openï¼Œç»“æŸäº†USLä¸BSDä»¥åŠå…¶ä»–å‚å•†çš„çº·äº‰ã€‚
 */
-// SCO UDK 7 compiler (UnixWare 7x, OSR 5, UnixWare 2x)
+//! SCO UDK 7 compiler (UnixWare 7x, OSR 5, UnixWare 2x)
 # if defined(__USLC__)
 #     define __GECO_HAS_WCHAR_T 
 #     define __GECO_CLASS_PARTIAL_SPECIALIZATION
@@ -358,14 +367,14 @@ SCO UnixÊÇÔÚ¹úÄÚ±È½ÏÓĞÃûÆøµÄ²Ù×÷ÏµÍ³£¬ÒòÎªËûÊÇµ±Ê±ÄÜÔËĞĞÔÚIntelµÄÆ½Ì¨Ö®Ò»£¬²¢ÇÒ½
 #     if defined(_REENTRANT)
 #           define _UITHREADS     /* if      UnixWare < 7.0.1 */
 #           define __GECO_UITHREADS
-//   use the following defines instead of the UI threads defines when
-//   you want to use POSIX threads
-//#         define _PTHREADS      /* only if UnixWare >=7.0.1 */
-//#         define __GECO_PTHREADS
+//!   use the following defines instead of the UI threads defines when
+//!   you want to use POSIX threads
+//!#         define _PTHREADS      /* only if UnixWare >=7.0.1 */
+//!#         define __GECO_PTHREADS
 #     endif
 # endif
 
-// GCC
+//! GCC
 # ifdef __GNUC__
 #   define __GECO_MEMBER_TEMPLATES
 #   define __GECO_MEMBER_TEMPLATE_CLASSES
@@ -375,7 +384,7 @@ SCO UnixÊÇÔÚ¹úÄÚ±È½ÏÓĞÃûÆøµÄ²Ù×÷ÏµÍ³£¬ÒòÎªËûÊÇµ±Ê±ÄÜÔËĞĞÔÚIntelµÄÆ½Ì¨Ö®Ò»£¬²¢ÇÒ½
 #   define __GECO_HAS_NAMESPACES
 # endif
 
-# if defined(__ICL) // Intel compiler, which uses the EDG front end.
+# if defined(__ICL) //! Intel compiler, which uses the EDG front end.
 #   define __GECO_LONG_LONG 
 #   define __GECO_MEMBER_TEMPLATES
 #   define __GECO_MEMBER_TEMPLATE_CLASSES
@@ -394,7 +403,7 @@ SCO UnixÊÇÔÚ¹úÄÚ±È½ÏÓĞÃûÆøµÄ²Ù×÷ÏµÍ³£¬ÒòÎªËûÊÇµ±Ê±ÄÜÔËĞĞÔÚIntelµÄÆ½Ì¨Ö®Ò»£¬²¢ÇÒ½
 #   endif
 # endif
 
-// Mingw32, egcs compiler using the Microsoft C runtime
+//! Mingw32, egcs compiler using the Microsoft C runtime
 # if defined(__MINGW32__)
 #   define __GECO_NO_DRAND48
 #   ifdef _MT
@@ -402,17 +411,17 @@ SCO UnixÊÇÔÚ¹úÄÚ±È½ÏÓĞÃûÆøµÄ²Ù×÷ÏµÍ³£¬ÒòÎªËûÊÇµ±Ê±ÄÜÔËĞĞÔÚIntelµÄÆ½Ì¨Ö®Ò»£¬²¢ÇÒ½
 #   endif
 # endif
 
-// Cygwin32, egcs compiler on MS Windows
+//! Cygwin32, egcs compiler on MS Windows
 # if defined(__CYGWIN__)
 #   define __GECO_NO_DRAND48
 # endif
 
-// Microsoft compiler. 
+//! Microsoft compiler. 
 # if defined(_MSC_VER) && !defined(__ICL) && !defined(__MWERKS__)
 
-// Because of a Microsoft front end bug, we must not provide a
-// namespace qualifier when declaring a friend function.
-#   define __STD_QUALIFIER
+//! Because of a Microsoft front end bug, we must not provide a
+//! namespace qualifier when declaring a friend function.
+#   define __GECO_QUALIFIER
 
 #   define __GECO_NO_DRAND48
 #   define __GECO_STATIC_CONST_INIT_BUG
@@ -431,9 +440,9 @@ SCO UnixÊÇÔÚ¹úÄÚ±È½ÏÓĞÃûÆøµÄ²Ù×÷ÏµÍ³£¬ÒòÎªËûÊÇµ±Ê±ÄÜÔËĞĞÔÚIntelµÄÆ½Ì¨Ö®Ò»£¬²¢ÇÒ½
 #		define __GECO_WIN32THREADS
 #   endif
 
-// 1000 is version 4.0, 
-// 1100 is 5.0, 
-// 1200 is 6.0.
+//! 1000 is version 4.0, 
+//! 1100 is 5.0, 
+//! 1200 is 6.0.
 #   if _MSC_VER < 1100 
 #     define __GECO_NEED_EXPLICIT
 #     define __GECO_NO_BOOL
@@ -441,8 +450,8 @@ SCO UnixÊÇÔÚ¹úÄÚ±È½ÏÓĞÃûÆøµÄ²Ù×÷ÏµÍ³£¬ÒòÎªËûÊÇµ±Ê±ÄÜÔËĞĞÔÚIntelµÄÆ½Ì¨Ö®Ò»£¬²¢ÇÒ½
 #   endif
 
 #   if _MSC_VER > 1000
-// c standard library header 
-//@see http://blog.csdn.net/acmicpc123/article/details/50205729 for details
+//! c standard library header 
+//!@see http://!blog.csdn.net/acmicpc123/article/details/50205729 for details
 #     include <yvals.h>
 #     define __GECO_DONT_USE_BOOL_TYPEDEF
 #   endif
@@ -454,11 +463,11 @@ SCO UnixÊÇÔÚ¹úÄÚ±È½ÏÓĞÃûÆøµÄ²Ù×÷ÏµÍ³£¬ÒòÎªËûÊÇµ±Ê±ÄÜÔËĞĞÔÚIntelµÄÆ½Ì¨Ö®Ò»£¬²¢ÇÒ½
 #     define NOMINMAX
 #     undef min
 #     undef max
-// disable warning 'initializers put in unrecognized initialization area'
+//! disable warning 'initializers put in unrecognized initialization area'
 #     pragma warning ( disable : 4075 )
-// disable warning 'empty controlled statement found'
+//! disable warning 'empty controlled statement found'
 #     pragma warning ( disable : 4390 )
-// disable warning 'debug symbol greater than 255 chars'
+//! disable warning 'debug symbol greater than 255 chars'
 #     pragma warning ( disable : 4786 )
 #   endif
 
@@ -467,7 +476,7 @@ SCO UnixÊÇÔÚ¹úÄÚ±È½ÏÓĞÃûÆøµÄ²Ù×÷ÏµÍ³£¬ÒòÎªËûÊÇµ±Ê±ÄÜÔËĞĞÔÚIntelµÄÆ½Ì¨Ö®Ò»£¬²¢ÇÒ½
 #     define __GECO_NO_BAD_ALLOC
 #   endif
 
-# endif // Microsoft compiler. 
+# endif //! Microsoft compiler. 
 
 # if defined(__BORLANDC__)
 #     define __GECO_NO_BAD_ALLOC
@@ -503,10 +512,10 @@ typedef int bool;
 #   define typename
 # endif
 
-//for example:
-//template <class _Result,
-//class _Arg1 __GECO_DEPENDENT_DEFAULT_TMPL(_Result),
-//class _Arg2 __GECO_DEPENDENT_DEFAULT_TMPL(_Arg1) >
+//!for example:
+//!template <class _Result,
+//!class _Arg1 __GECO_DEPENDENT_DEFAULT_TMPL(_Result),
+//!class _Arg2 __GECO_DEPENDENT_DEFAULT_TMPL(_Arg1) >
 # ifdef __GECO_LIMITED_DEFAULT_TEMPLATES
 #   define __GECO_DEPENDENT_DEFAULT_TMPL(_Tp)
 # else
@@ -536,10 +545,10 @@ typedef int bool;
 #   define __GECO_TEMPLATE_NULL
 # endif
 
-// Use standard-conforming allocators if we have the necessary language
-// features.  __GECO_USE_SGI_ALLOCATORS is a hook so that users can 
-// disable new-style allocators, and continue to use the same kind of
-// allocators as before, without having to edit library headers.
+//! Use standard-conforming allocators if we have the necessary language
+//! features.  __GECO_USE_SGI_ALLOCATORS is a hook so that users can 
+//! disable new-style allocators, and continue to use the same kind of
+//! allocators as before, without having to edit library headers.
 # if defined(__GECO_CLASS_PARTIAL_SPECIALIZATION) && \
      defined(__GECO_MEMBER_TEMPLATES) && \
      defined(__GECO_MEMBER_TEMPLATE_CLASSES) && \
@@ -547,59 +556,59 @@ typedef int bool;
     !defined(__GECO_NON_TYPE_TMPL_PARAM_BUG) && \
     !defined(__GECO_LIMITED_DEFAULT_TEMPLATES) && \
     !defined(__GECO_USE_SGI_ALLOCATORS) 
-#   define __GECO_USE_STD_ALLOCATORS
+#   define __GECO_USE_GECO_ALLOCATORS
 # endif
 
 # ifndef __GECO_DEFAULT_ALLOCATOR
-#   ifdef __GECO_USE_STD_ALLOCATORS
+#   ifdef __GECO_USE_GECO_ALLOCATORS
 #     define __GECO_DEFAULT_ALLOCATOR(T) allocator< T >
 #   else
 #     define __GECO_DEFAULT_ALLOCATOR(T) alloc
 #   endif
 # endif
 
-// __GECO_NO_NAMESPACES is a hook so that users can disable namespaces
-// without having to edit library headers. 
-// __GECO_NO_RELOPS_NAMESPACE is a hook so that users can disable the
-// std::rel_ops namespace, keeping the relational operator template in namespace std, 
-// without having to edit library headers.
+//! __GECO_NO_NAMESPACES is a hook so that users can disable namespaces
+//! without having to edit library headers. 
+//! __GECO_NO_RELOPS_NAMESPACE is a hook so that users can disable the
+//! geco::rel_ops namespace, keeping the relational operator template in namespace geco, 
+//! without having to edit library headers.
 # if defined(__GECO_HAS_NAMESPACES) && !defined(__GECO_NO_NAMESPACES)
 #   define __GECO_USE_NAMESPACES
-#   define __STD std
-#   define __GECO_BEGIN_NAMESPACE namespace std {
+#   define __GECO geco
+#   define __GECO_BEGIN_NAMESPACE namespace geco {
 #   define __GECO_END_NAMESPACE }
 #   if defined(__GECO_FUNCTION_TMPL_PARTIAL_ORDER) && \
        !defined(__GECO_NO_RELOPS_NAMESPACE)
 #     define __GECO_USE_NAMESPACE_FOR_RELOPS
-#     define __GECO_BEGIN_RELOPS_NAMESPACE namespace std { namespace rel_ops {
+#     define __GECO_BEGIN_RELOPS_NAMESPACE namespace geco { namespace rel_ops {
 #     define __GECO_END_RELOPS_NAMESPACE } }
-#     define __STD_RELOPS std::rel_ops
-#   else /* Use std::rel_ops namespace */
+#     define __GECO_RELOPS geco::rel_ops
+#   else /* Use geco::rel_ops namespace */
 #     define __GECO_USE_NAMESPACE_FOR_RELOPS
-#     define __GECO_BEGIN_RELOPS_NAMESPACE namespace std {
+#     define __GECO_BEGIN_RELOPS_NAMESPACE namespace geco {
 #     define __GECO_END_RELOPS_NAMESPACE }
-#     define __STD_RELOPS std
-#   endif /* Use std::rel_ops namespace */
+#     define __GECO_RELOPS geco
+#   endif /* Use geco::rel_ops namespace */
 # else
-#   define __STD 
+#   define __GECO 
 #   define __GECO_BEGIN_NAMESPACE 
 #   define __GECO_END_NAMESPACE 
 #   undef  __GECO_USE_NAMESPACE_FOR_RELOPS
 #   define __GECO_BEGIN_RELOPS_NAMESPACE 
 #   define __GECO_END_RELOPS_NAMESPACE 
-#   define __STD_RELOPS 
+#   define __GECO_RELOPS 
 #   undef  __GECO_USE_NAMESPACES
 # endif
 
-// Some versions of the EDG front end sometimes require an explicit
-// namespace spec where they shouldn't.  This macro facilitates that.
-// If the bug becomes irrelevant, then all uses of __STD_QUALIFIER
-// should be removed.  The 7.3 beta SGI compiler has this bug, but the
-// MR version is not expected to have it.
-# if defined(__GECO_USE_NAMESPACES) && !defined(__STD_QUALIFIER)
-#   define __STD_QUALIFIER std::
+//! Some versions of the EDG front end sometimes require an explicit
+//! namespace spec where they shouldn't.  This macro facilitates that.
+//! If the bug becomes irrelevant, then all uses of __GECO_QUALIFIER
+//! should be removed.  The 7.3 beta SGI compiler has this bug, but the
+//! MR version is not expected to have it.
+# if defined(__GECO_USE_NAMESPACES) && !defined(__GECO_QUALIFIER)
+#   define __GECO_QUALIFIER geco::
 # else
-#   define __STD_QUALIFIER
+#   define __GECO_QUALIFIER
 # endif
 
 # ifdef __GECO_USE_EXCEPTIONS

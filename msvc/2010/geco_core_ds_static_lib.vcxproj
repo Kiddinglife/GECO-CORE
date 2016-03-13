@@ -18,11 +18,14 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\include\geco-core-ds-config.h" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6930D32F-92C6-4208-A9C5-CF92470E075F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>gecostl</RootNamespace>
-    <ProjectName>gecostlstaticlib</ProjectName>
+    <ProjectName>geco_core_ds_static_lib</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
