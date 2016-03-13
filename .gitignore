@@ -10,6 +10,8 @@
 *.log
 *.pdb
 *.tlog
+*.idb
+*.ilk
 # Compiled Dynamic libraries
 *.dylib
 
