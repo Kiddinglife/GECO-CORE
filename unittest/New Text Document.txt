@@ -1,1 +1,0 @@
-Create new test-1.cc file in this director manually Drag to vs and edit there Add #include "unittest/test-1.cc" into 'all-tests.cc' file and F5 run the unit tes
