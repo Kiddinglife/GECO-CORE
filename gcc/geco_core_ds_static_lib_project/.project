@@ -24,16 +24,4 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>include/geco-core-ds-config.h</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/include/geco-core-ds-config.h</locationURI>
-		</link>
-		<link>
-			<name>include/geco-core-ds-construct.h</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/include/geco-core-ds-construct.h</locationURI>
-		</link>
-	</linkedResources>
 </projectDescription>
