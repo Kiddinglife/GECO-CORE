@@ -9,7 +9,7 @@ TEST(testcase1, testHello)
     printf("hello\n");
     std::vector<ushort> hello;
     hello.reserve(1000);
-    printf("%d\n",hello.data());
+    printf("%d\n", hello.data());
 
 }
 
