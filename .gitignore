@@ -3,15 +3,17 @@
 *.lo
 *.o
 *.obj
-
+*.tlog
 # Precompiled Headers
 *.gch
 *.pch
-
+*.log
+*.pdb
+*.tlog
+*.idb
+*.ilk
 # Compiled Dynamic libraries
-*.so
 *.dylib
-*.dll
 
 # Fortran module files
 *.mod
@@ -19,11 +21,8 @@
 # Compiled Static libraries
 *.lai
 *.la
-*.a
-*.lib
 
 # Executables
-*.exe
 *.out
 *.app
 
@@ -33,8 +32,6 @@
 *.sdf
 *.opensdf
 *.filters
-x64/
-Win32/
 *.user
 *.mk
 *~
