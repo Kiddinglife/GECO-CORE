@@ -1,16 +1,11 @@
-1. gmock.a includes gtest 
-do this to compile mock static library:
+gmock.a includes gtest, so no need to compile gtest again.
 
-jakez@jakez-VirtualBox:~/GECO-CORE/thirdparty/googletest/make$ make
-g++ -isystem ../include -g -Wall -Wextra -pthread -c ../samples/sample1.cc
-g++ -isystem ../include -g -Wall -Wextra -pthread -c ../samples/sample1_unittest.cc
-g++ -isystem ../include -I.. -g -Wall -Wextra -pthread -c \
-            ../src/gtest-all.cc
-g++ -isystem ../include -I.. -g -Wall -Wextra -pthread -c \
-            ../src/gtest_main.cc
-ar rv gtest_main.a gtest-all.o gtest_main.o
-ar: creating gtest_main.a
-a - gtest-all.o
-a - gtest_main.o
-g++ -isystem ../include -g -Wall -Wextra -pthread -lpthread sample1.o sample1_unittest.o gtest_main.a -o sample1_unittest
+do this to compile mock static library:
+go to googlemock directory.
+type:
+g++ -I ../googletest/include/ -I ../googletest/ -I include/ -I ./ -c ../googletest/src/gtest-all.cc 
+g++ -I ../googletest/include/ -I ../gtest/ -I include/ -I ./ -c src/gmock-all.cc       
+ar -rv libgmock.a gtest-all.o gmock-all.o 
+
+         
 
