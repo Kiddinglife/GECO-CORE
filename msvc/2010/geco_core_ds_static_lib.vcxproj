@@ -19,8 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\geco-core-ds-config.h" />
-    <ClInclude Include="..\..\include\geco-core-ds-construct.h" />
+    <ClInclude Include="..\..\include\config.h" />
+    <ClInclude Include="..\..\include\construct.h" />
+    <ClInclude Include="..\..\include\type-traits.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6930D32F-92C6-4208-A9C5-CF92470E075F}</ProjectGuid>

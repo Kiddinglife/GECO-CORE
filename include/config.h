@@ -440,9 +440,13 @@
 #		define __GECO_WIN32THREADS
 #   endif
 
-//! 1000 is version 4.0, 
-//! 1100 is 5.0, 
-//! 1200 is 6.0.
+//! MS VC++ 10.0 _MSC_VER = 1600  
+//! MS VC++ 9.0 _MSC_VER = 1500  
+//! MS VC++ 8.0 _MSC_VER = 1400  
+//! MS VC++ 7.1 _MSC_VER = 1310  
+//! MS VC++ 7.0 _MSC_VER = 1300  
+//! MS VC++ 6.0 _MSC_VER = 1200  
+//! MS VC++ 5.0 _MSC_VER = 1100  
 #   if _MSC_VER < 1100 
 #     define __GECO_NEED_EXPLICIT
 #     define __GECO_NO_BOOL

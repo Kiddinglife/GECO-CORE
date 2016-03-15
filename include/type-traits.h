@@ -38,7 +38,7 @@
 # ifndef __GECO__TYPE_TRAITS_H
 # define __GECO__TYPE_TRAITS_H
 
-# include <config.h>
+# include "config.h"
 
 /*!
  * @brief This header file provides a framework for allowing complile time dispath based
@@ -106,11 +106,11 @@ struct TypeTraits
      *    4. members you add will be treated like regular members UNLESS you add the proper
      *    support in the compiler
      */
-    typedef FalseType has_trivial_default_ctor;
+    typedef FalseType has_trivial_default_ctor; //!< ctor means constructor.
     typedef FalseType has_trivial_copy_ctor;
-    typedef FalseType has_trivial_assign_opt; //!< opt means operator
-    typedef FalseType has_trivial_dtor;
-    typedef FalseType is_POD_type;
+    typedef FalseType has_trivial_assign_opt; //!< opt means operator.
+    typedef FalseType has_trivial_dtor; //!< dtor means destructor.
+    typedef FalseType is_pod_type; //!< @see http://blog.csdn.net/aqtata/article/details/35618709 for details.
 };
 
 

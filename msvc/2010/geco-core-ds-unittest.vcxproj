@@ -163,8 +163,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\all-tests.cc" />
-    <ClCompile Include="..\..\src\test-main.cc" />
+    <ClCompile Include="..\..\unittest\test-1.cc" />
+    <ClCompile Include="..\..\unittest\test-2.cc" />
+    <ClCompile Include="..\..\unittest\test-main.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\unittest\readme.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
