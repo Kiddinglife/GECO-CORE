@@ -35,29 +35,48 @@
  *
  */
 
-/// GECO's allocator is defined in geco-core-ds-memory.h
-/// 1.geco - ctor.h defines global functions construct() and destruct() that
-/// are used for object construction and destruction.
-/// both are geco - standard - conforming functions
-/// 2.geco - alloc.h defines allocator named 'alloc'
 # ifndef __GECO_INTERNAL_CONSTRUCT_H
 # define __GECO_INTERNAL_CONSTRUCT_H
 
-#include <new.h> // for use of placement new 
-#include "geco-core-ds-config.h"
+#include <new> //! for use of placement new
+
+#include "config.h"
 
 __GECO_BEGIN_NAMESPACE
 
-// Only construct and destroy are standard-conforming
-// other functions are not part of the C++ standard,
-// and are provided for backward compatibility with the HP STL.  We also
-// provide internal names _Construct and _Destroy that can be used within
-// the library, so that standard-conforming pieces don't have to rely on
-// non-standard extensions.
+//! GECO's allocator is defined in geco-core-ds-memory.h
+//! @brief geco - ctor.h defines global functions construct() and destruct() that
+//! are used for object construction and destruction,
+//! they are geco - standard - conforming functions.
+//!
+//! Only construct and destroy are standard-conforming
+//! other functions are not part of the C++ standard,
+//! and are provided for backward compatibility with the HP STL.  We also
+//! provide internal names InternalConstruct and InternalDestroy that can be used within
+//! the library, so that standard-conforming pieces don't have to rely on
+//! non-standard extensions.
 
-// Internal names
-template <class T1, class T2>
-inline void Construct
+//! Internal names
+template<class T1, class T2>
+inline void InternalConstruct(T1 pointer, const T2& val) //!_Construct
+{
+    new ((void*) pointer) T1(val);
+}
+template<class T1>
+inline void InternalConstruct(T1* pointer) //!_Construct
+{
+    new ((void*) pointer) T1();
+}
+
+template<class Tp>
+inline void InternalDestroy(Tp* pointer) //!_Destroy
+{
+    pointer->~Tp();
+}
+template<class ForwardIterator>
+void InternalDestroy(ForwardIterator first, ForwardIterator last)
+{
+}
+
 __GECO_END_NAMESPACE
-
 # endif

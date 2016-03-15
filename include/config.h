@@ -202,7 +202,7 @@
 //! @brief defined if this is being compiled for an SGI IRIX
 //! system in multithreaded mode, using native SGI threads instead of  pthreads,
 //! this is used only for SGI  specific system.
-//! @todo maybe not need,can be deleted
+//! @todo maybe not need,can be deleted.
 
 //! @def  __GECO_WIN32THREADS
 //! @brief defined if this is being compiled on a WIN32 compiler in multithreaded mode.
