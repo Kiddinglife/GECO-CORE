@@ -93,12 +93,14 @@
  * @endcode
  */
 
-struct TrueType
-{
-};
-struct FalseType
-{
-};
+typedef signed int TrueType;
+typedef unsigned int FalseType;
+//struct TrueType
+//{
+//};
+//struct FalseType
+//{
+//};
 
 template<class Type>
 struct TypeTraits
@@ -199,7 +201,7 @@ TypeTraitTrueTypeSpecialization(const unsigned char*);
 
 //! The following could be written in terms of numeric_limits.  
 //! We're doing it separately to reduce the number of dependencies.
-template<class Type> 
+template<class Type>
 struct IsInteger
 {
     typedef FalseType Integer;

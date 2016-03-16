@@ -2,7 +2,12 @@
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
 #include <vector>
-
+struct TestStruct
+{
+    TestStruct()
+    {
+    }
+};
 #if GTEST_OS_WINDOWS_MOBILE
 # include <tchar.h>  // NOLINT
 GTEST_API_ int _tmain(int argc, TCHAR** argv) {
@@ -15,5 +20,8 @@ GTEST_API_ int main(int argc, char** argv)
     // also responsible for initializing Google Test.  Therefore there's
     // no need for calling testing::InitGoogleTest() separately.
     testing::InitGoogleMock(&argc, argv);
-    return RUN_ALL_TESTS();
+    TestStruct st;
+    int retval = 0;
+    //retval = RUN_ALL_TESTS();
+    return retval;
 }
