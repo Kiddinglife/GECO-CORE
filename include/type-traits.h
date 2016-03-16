@@ -197,3 +197,50 @@ TypeTraitTrueTypeSpecialization(const unsigned char*);
 # endif //! GECO_CLASS_PARTIAL_SPECIALIZATION
 
 
+//! The following could be written in terms of numeric_limits.  
+//! We're doing it separately to reduce the number of dependencies.
+template<class Tp> 
+struct IsInteger
+{
+    typedef FalseType Integer;
+};
+
+//! Macro that make life easier ....
+#define IsIntegerTrueTypeSpecialization(T); \
+    GECO_TEMPLATE_NULL \
+    struct IsInteger<T>\
+    {\
+        typedef TrueType Integer;\
+    };
+
+# ifndef GECO_NO_BOOL
+IsIntegerTrueTypeSpecialization(bool);
+# endif
+
+# ifdef GECO_HAS_WCHAR_T
+IsIntegerTrueTypeSpecialization(wchar_t);
+# endif
+
+IsIntegerTrueTypeSpecialization(char);
+IsIntegerTrueTypeSpecialization(signed char);
+IsIntegerTrueTypeSpecialization(unsigned char);
+
+IsIntegerTrueTypeSpecialization(short);
+IsIntegerTrueTypeSpecialization(unsigned short);
+
+IsIntegerTrueTypeSpecialization(int);
+IsIntegerTrueTypeSpecialization(unsigned int);
+
+IsIntegerTrueTypeSpecialization(int);
+IsIntegerTrueTypeSpecialization(unsigned int);
+
+IsIntegerTrueTypeSpecialization(long);
+IsIntegerTrueTypeSpecialization(unsigned long);
+
+# ifndef GECO_LONG_LONG
+IsIntegerTrueTypeSpecialization(long long);
+IsIntegerTrueTypeSpecialization(unsigned long long);
+# endif
+
+# endif //! __GECO__TYPE_TRAITS_H
+
