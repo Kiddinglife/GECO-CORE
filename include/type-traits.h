@@ -51,8 +51,24 @@
  * mTrueType or mFalseType.
  * The argument to TypeTraits can be any type. The typedefs within this template will attain
  * their correct values by one of these means:
- *    1. the gerneral instantiation contain conservative values which work for all types.
- *    2. Specializations may be delared to make distinctions between types.
+ *    1. TypeTraits' gerneral instantiation contain conservative values which work for all types.
+ *        @example
+ *        If given:
+ *        TypeTraits<class T>{tyodef typename T::value_type value_type;}
+ *        A gerneral instantiation look like this:
+ *        TypeTraits<std::vector<int>::iterator>::value_type;
+ *        You will get type of int.
+ *        @example
+ *    2. TypeTraits' template specializations may be delared to make distinctions between types.
+ *        @example
+ *        If given:
+ *        TypeTraits<class T>{tyodef typename T::value_type value_type;}
+ *        A specification template looks like this:
+ *        TypeTraits<T*>{tyodef typename T value_type;}
+ *        when instantiated like this;
+ *        TypeTraits<int*>::value_type;
+ *        You will also get type of int.
+ *        @example
  *    3. Some compilers (such as the Silicon Graphics N32 and N64 compilers)
  *        will automatically provide the appropriate specializations for all types.
  *
@@ -69,7 +85,6 @@
  * //copy an array of elements by using the most efficient copy mechanism.
  * template<class T> inline void copy(T* source, T* destination, int n)
  * {
- *      // refer to 2. Specializations may be delared to make distinctions between types.
  *      // typename TypeTraits<T>::has_trivial_copy_ctor is known based on type of T
  *      // If T is int, TypeTraits<int>::has_trivial_copy_ctor = FalseType
  *      // if T is a class or struct, TypeTraits<int>::has_trivial_copy_ctor = TrueType
@@ -113,5 +128,72 @@ struct TypeTraits
     typedef FalseType is_pod_type; //!< @see http://blog.csdn.net/aqtata/article/details/35618709 for details.
 };
 
+/*!
+ * @brief Provide some specilizations for @struct TypeTraits.
+ * This is harmless for comlilers that have built0in type traits support,
+ * and essential for those that do not have it.
+ */
 
+//! Macro that make life easier ....
+#define TypeTraitTrueTypeSpecialization(T); \
+        GECO_TEMPLATE_NULL \
+        struct TypeTraits<T>\
+        {\
+            typedef TrueType has_trivial_default_ctor;\
+            typedef TrueType has_trivial_copy_ctor;\
+            typedef TrueType has_trivial_assign_opt;\
+            typedef TrueType has_trivial_dtor;\
+            typedef TrueType is_pod_type;\
+        };
+
+# ifndef GECO_NO_BOOL
+TypeTraitTrueTypeSpecialization(bool);
 # endif
+
+# ifdef GECO_HAS_WCHAR_T
+TypeTraitTrueTypeSpecialization(wchar_t);
+# endif
+
+TypeTraitTrueTypeSpecialization(char);
+TypeTraitTrueTypeSpecialization(signed char);
+TypeTraitTrueTypeSpecialization(unsigned char);
+
+TypeTraitTrueTypeSpecialization(short);
+TypeTraitTrueTypeSpecialization(unsigned short);
+
+TypeTraitTrueTypeSpecialization(int);
+TypeTraitTrueTypeSpecialization(unsigned int);
+
+TypeTraitTrueTypeSpecialization(long);
+TypeTraitTrueTypeSpecialization(unsigned long);
+
+# ifndef GECO_LONG_LONG
+TypeTraitTrueTypeSpecialization(long long);
+TypeTraitTrueTypeSpecialization(unsigned long long);
+# endif
+
+TypeTraitTrueTypeSpecialization(float);
+TypeTraitTrueTypeSpecialization(double);
+TypeTraitTrueTypeSpecialization(long double);
+
+//! pointer is also basic type, and so the trait result is always @struct TrueType
+# ifdef GECO_CLASS_PARTIAL_SPECIALIZATION
+template<class T>
+struct TypeTraits<T*>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
+# else
+TypeTraitTrueTypeSpecialization(char*);
+TypeTraitTrueTypeSpecialization(signed char*);
+TypeTraitTrueTypeSpecialization(unsigned char*);
+TypeTraitTrueTypeSpecialization(const char*);
+TypeTraitTrueTypeSpecialization(const signed char*);
+TypeTraitTrueTypeSpecialization(const unsigned char*);
+# endif //! GECO_CLASS_PARTIAL_SPECIALIZATION
+
+
