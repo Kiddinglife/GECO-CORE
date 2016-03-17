@@ -3,14 +3,14 @@
 
 //copy an array of elments which have non-trivial copy ctors.
 template<class Type>
-inline bool copy(Type* source, Type* destination, int n, FalseType falseType)
+inline bool copy(Type* source, Type* destination, int n, false_type falseType)
 {
     return false;
 }
 
 //copy an array of elments which have trivial copy ctors. this function will use memcpy().
 template<class Type>
-inline bool copy(Type* source, Type* destination, int n, TrueType trueType)
+inline bool copy(Type* source, Type* destination, int n, true_type trueType)
 {
     return true;
 }
@@ -19,7 +19,7 @@ inline bool copy(Type* source, Type* destination, int n, TrueType trueType)
 template<class Type>
 inline bool copy(Type* source, Type* destination, int n)
 {
-    typedef typename TypeTraits<Type>::has_trivial_copy_ctor has_trivial_copy_ctor;
+    typedef typename type_traitor<Type>::has_trivial_copy_ctor has_trivial_copy_ctor;
     return copy(source, destination, n, has_trivial_copy_ctor());
 }
 

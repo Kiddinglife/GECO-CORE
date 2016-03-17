@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\include\geco-config.h" />
     <ClInclude Include="..\..\include\geco-construct.h" />
+    <ClInclude Include="..\..\include\geco-iterator-base.h" />
     <ClInclude Include="..\..\include\geco-type-traits.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

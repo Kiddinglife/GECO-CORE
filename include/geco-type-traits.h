@@ -93,14 +93,13 @@
  * @endcode
  */
 
-enum TrueType
+enum true_type
 {
 };
-enum FalseType
+enum false_type
 {
 };
-//typedef signed int TrueType;
-//typedef unsigned int FalseType;
+
 //struct TrueType
 //{
 //};
@@ -109,7 +108,7 @@ enum FalseType
 //};
 
 template<class Type>
-struct TypeTraits
+struct type_traitor
 {
     /*!
      * Do not remove this member. It informs a compiler who is automatically specializing
@@ -117,7 +116,7 @@ struct TypeTraits
      *  It just makes sure that things work if an implementation is using a template
      *  called TypeTraits for something unrelated.
      */
-    typedef TrueType this_dummy_member_must_be_first;
+    typedef true_type this_dummy_member_must_be_first;
 
     /*!
      * The following restrictions should be observed for the sake of compiliers which
@@ -129,11 +128,11 @@ struct TypeTraits
      *    4. members you add will be treated like regular members UNLESS you add the proper
      *    support in the compiler
      */
-    typedef FalseType has_trivial_default_ctor; //!< ctor means constructor.
-    typedef FalseType has_trivial_copy_ctor;
-    typedef FalseType has_trivial_assign_opt; //!< opt means operator.
-    typedef FalseType has_trivial_dtor; //!< dtor means destructor.
-    typedef FalseType is_pod_type; //!< @see http://blog.csdn.net/aqtata/article/details/35618709 for details.
+    typedef false_type has_trivial_default_ctor; //!< ctor means constructor.
+    typedef false_type has_trivial_copy_ctor;
+    typedef false_type has_trivial_assign_opt; //!< opt means operator.
+    typedef false_type has_trivial_dtor; //!< dtor means destructor.
+    typedef false_type is_pod_type; //!< @see http://blog.csdn.net/aqtata/article/details/35618709 for details.
 };
 
 /*!
@@ -144,206 +143,206 @@ struct TypeTraits
 
 
 # ifndef GECO_NO_BOOL
-GECO_TEMPLATE_NULL struct TypeTraits<bool>
+GECO_TEMPLATE_NULL struct type_traitor<bool>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
 # endif
 
 # ifdef GECO_HAS_WCHAR_T
-GECO_TEMPLATE_NULL struct TypeTraits<wchar_t>
+GECO_TEMPLATE_NULL struct type_traitor<wchar_t>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
 # endif
 
-GECO_TEMPLATE_NULL struct TypeTraits<char>
+GECO_TEMPLATE_NULL struct type_traitor<char>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
-GECO_TEMPLATE_NULL struct TypeTraits<signed char>
+GECO_TEMPLATE_NULL struct type_traitor<signed char>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
-GECO_TEMPLATE_NULL struct TypeTraits<unsigned char>
+GECO_TEMPLATE_NULL struct type_traitor<unsigned char>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
-};
-
-GECO_TEMPLATE_NULL struct TypeTraits<short>
-{
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
-};
-GECO_TEMPLATE_NULL struct TypeTraits<unsigned short>
-{
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
 
-GECO_TEMPLATE_NULL struct TypeTraits<int>
+GECO_TEMPLATE_NULL struct type_traitor<short>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
-GECO_TEMPLATE_NULL struct TypeTraits<unsigned int>
+GECO_TEMPLATE_NULL struct type_traitor<unsigned short>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
 
-GECO_TEMPLATE_NULL struct TypeTraits<long>
+GECO_TEMPLATE_NULL struct type_traitor<int>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
-GECO_TEMPLATE_NULL struct TypeTraits<unsigned long>
+GECO_TEMPLATE_NULL struct type_traitor<unsigned int>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
+};
+
+GECO_TEMPLATE_NULL struct type_traitor<long>
+{
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
+};
+GECO_TEMPLATE_NULL struct type_traitor<unsigned long>
+{
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
 
 # ifndef GECO_LONG_LONG
-GECO_TEMPLATE_NULL struct TypeTraits<long long>
+GECO_TEMPLATE_NULL struct type_traitor<long long>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
-GECO_TEMPLATE_NULL struct TypeTraits<unsigned long long>
+GECO_TEMPLATE_NULL struct type_traitor<unsigned long long>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
 # endif
 
-GECO_TEMPLATE_NULL struct TypeTraits<float>
+GECO_TEMPLATE_NULL struct type_traitor<float>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
-GECO_TEMPLATE_NULL struct TypeTraits<double>
+GECO_TEMPLATE_NULL struct type_traitor<double>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
-GECO_TEMPLATE_NULL struct TypeTraits<long double>
+GECO_TEMPLATE_NULL struct type_traitor<long double>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
 
 //! pointer is also basic type, and so the trait result is always @struct TrueType
 # ifdef GECO_CLASS_PARTIAL_SPECIALIZATION
 template<class Type>
-struct TypeTraits<Type*>
+struct type_traitor<Type*>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
 # else
-GECO_TEMPLATE_NULL struct TypeTraits<char*>
+GECO_TEMPLATE_NULL struct type_traitor<char*>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
-GECO_TEMPLATE_NULL struct TypeTraits<signed char*>
+GECO_TEMPLATE_NULL struct type_traitor<signed char*>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
-GECO_TEMPLATE_NULL struct TypeTraits<unsigned char*>
+GECO_TEMPLATE_NULL struct type_traitor<unsigned char*>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
-GECO_TEMPLATE_NULL struct TypeTraits<const char*>
+GECO_TEMPLATE_NULL struct type_traitor<const char*>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
-GECO_TEMPLATE_NULL struct TypeTraits<const signed char*>
+GECO_TEMPLATE_NULL struct type_traitor<const signed char*>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
-GECO_TEMPLATE_NULL struct TypeTraits<const unsigned char*>
+GECO_TEMPLATE_NULL struct type_traitor<const unsigned char*>
 {
-    typedef TrueType has_trivial_default_ctor;
-    typedef TrueType has_trivial_copy_ctor;
-    typedef TrueType has_trivial_assign_opt;
-    typedef TrueType has_trivial_dtor;
-    typedef TrueType is_pod_type;
+    typedef true_type has_trivial_default_ctor;
+    typedef true_type has_trivial_copy_ctor;
+    typedef true_type has_trivial_assign_opt;
+    typedef true_type has_trivial_dtor;
+    typedef true_type is_pod_type;
 };
 # endif //! GECO_CLASS_PARTIAL_SPECIALIZATION
 
@@ -352,71 +351,71 @@ GECO_TEMPLATE_NULL struct TypeTraits<const unsigned char*>
 template<class Type>
 struct IsInteger
 {
-    typedef FalseType Integer;
+    typedef false_type Integer;
 };
 
 # ifndef GECO_NO_BOOL
 GECO_TEMPLATE_NULL struct IsInteger<bool>
 {
-    typedef TrueType Integer;
+    typedef true_type Integer;
 };
 # endif
 
 # ifdef GECO_HAS_WCHAR_T
 GECO_TEMPLATE_NULL struct IsInteger<wchar_t>
 {
-    typedef TrueType Integer;
+    typedef true_type Integer;
 };
 # endif
 
 GECO_TEMPLATE_NULL struct IsInteger<char>
 {
-    typedef TrueType Integer;
+    typedef true_type Integer;
 };
 GECO_TEMPLATE_NULL struct IsInteger<unsigned char>
 {
-    typedef TrueType Integer;
+    typedef true_type Integer;
 };
 GECO_TEMPLATE_NULL struct IsInteger<signed char>
 {
-    typedef TrueType Integer;
+    typedef true_type Integer;
 };
 
 GECO_TEMPLATE_NULL struct IsInteger<unsigned short>
 {
-    typedef TrueType Integer;
+    typedef true_type Integer;
 };
 GECO_TEMPLATE_NULL struct IsInteger<short>
 {
-    typedef TrueType Integer;
+    typedef true_type Integer;
 };
 
 GECO_TEMPLATE_NULL struct IsInteger<unsigned int>
 {
-    typedef TrueType Integer;
+    typedef true_type Integer;
 };
 GECO_TEMPLATE_NULL struct IsInteger<int>
 {
-    typedef TrueType Integer;
+    typedef true_type Integer;
 };
 
 GECO_TEMPLATE_NULL struct IsInteger<unsigned long>
 {
-    typedef TrueType Integer;
+    typedef true_type Integer;
 };
 GECO_TEMPLATE_NULL struct IsInteger<long>
 {
-    typedef TrueType Integer;
+    typedef true_type Integer;
 };
 
 # ifndef GECO_LONG_LONG
 GECO_TEMPLATE_NULL struct IsInteger<unsigned long long>
 {
-    typedef TrueType Integer;
+    typedef true_type Integer;
 };
 GECO_TEMPLATE_NULL struct IsInteger<long long>
 {
-    typedef TrueType Integer;
+    typedef true_type Integer;
 };
 # endif
 
