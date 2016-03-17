@@ -60,7 +60,7 @@ GECO_BEGIN_NAMESPACE
 template<class Type1, class Type2>
 inline void InternalConstruct(Type1 pointer, const Type2& val) //!_Construct
 {
-    new ((void*) pointer) T1(val);
+    new ((void*) pointer) Type1(val);
 }
 template<class Type1>
 inline void InternalConstruct(Type1* pointer) //!_Construct

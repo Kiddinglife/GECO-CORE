@@ -93,8 +93,14 @@
  * @endcode
  */
 
-typedef signed int TrueType;
-typedef unsigned int FalseType;
+enum TrueType
+{
+};
+enum FalseType
+{
+};
+//typedef signed int TrueType;
+//typedef unsigned int FalseType;
 //struct TrueType
 //{
 //};
@@ -135,48 +141,150 @@ struct TypeTraits
  * This is harmless for comlilers that have built0in type traits support,
  * and essential for those that do not have it.
  */
-
-//! Macro that make life easier ....
-#define TypeTraitTrueTypeSpecialization(Type); \
-        GECO_TEMPLATE_NULL \
-        struct TypeTraits<Type>\
-        {\
-            typedef TrueType has_trivial_default_ctor;\
-            typedef TrueType has_trivial_copy_ctor;\
-            typedef TrueType has_trivial_assign_opt;\
-            typedef TrueType has_trivial_dtor;\
-            typedef TrueType is_pod_type;\
-        };
+#undef GECO_TEMPLATE_NULL
+#define GECO_TEMPLATE_NULL template<>
 
 # ifndef GECO_NO_BOOL
-TypeTraitTrueTypeSpecialization(bool);
+GECO_TEMPLATE_NULL struct TypeTraits<bool>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
 # endif
 
 # ifdef GECO_HAS_WCHAR_T
-TypeTraitTrueTypeSpecialization(wchar_t);
+GECO_TEMPLATE_NULL struct TypeTraits<wchar_t>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
 # endif
 
-TypeTraitTrueTypeSpecialization(char);
-TypeTraitTrueTypeSpecialization(signed char);
-TypeTraitTrueTypeSpecialization(unsigned char);
+GECO_TEMPLATE_NULL struct TypeTraits<char>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
+GECO_TEMPLATE_NULL struct TypeTraits<signed char>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
+GECO_TEMPLATE_NULL struct TypeTraits<unsigned char>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
 
-TypeTraitTrueTypeSpecialization(short);
-TypeTraitTrueTypeSpecialization(unsigned short);
+GECO_TEMPLATE_NULL struct TypeTraits<short>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
+GECO_TEMPLATE_NULL struct TypeTraits<unsigned short>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
 
-TypeTraitTrueTypeSpecialization(int);
-TypeTraitTrueTypeSpecialization(unsigned int);
+GECO_TEMPLATE_NULL struct TypeTraits<int>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
+GECO_TEMPLATE_NULL struct TypeTraits<unsigned int>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
 
-TypeTraitTrueTypeSpecialization(long);
-TypeTraitTrueTypeSpecialization(unsigned long);
+GECO_TEMPLATE_NULL struct TypeTraits<long>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
+GECO_TEMPLATE_NULL struct TypeTraits<unsigned long>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
 
 # ifndef GECO_LONG_LONG
-TypeTraitTrueTypeSpecialization(long long);
-TypeTraitTrueTypeSpecialization(unsigned long long);
+GECO_TEMPLATE_NULL struct TypeTraits<long long>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
+GECO_TEMPLATE_NULL struct TypeTraits<unsigned long long>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
 # endif
 
-TypeTraitTrueTypeSpecialization(float);
-TypeTraitTrueTypeSpecialization(double);
-TypeTraitTrueTypeSpecialization(long double);
+GECO_TEMPLATE_NULL struct TypeTraits<float>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
+GECO_TEMPLATE_NULL struct TypeTraits<double>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
+GECO_TEMPLATE_NULL struct TypeTraits<long double>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
 
 //! pointer is also basic type, and so the trait result is always @struct TrueType
 # ifdef GECO_CLASS_PARTIAL_SPECIALIZATION
@@ -190,14 +298,55 @@ struct TypeTraits<Type*>
     typedef TrueType is_pod_type;
 };
 # else
-TypeTraitTrueTypeSpecialization(char*);
-TypeTraitTrueTypeSpecialization(signed char*);
-TypeTraitTrueTypeSpecialization(unsigned char*);
-TypeTraitTrueTypeSpecialization(const char*);
-TypeTraitTrueTypeSpecialization(const signed char*);
-TypeTraitTrueTypeSpecialization(const unsigned char*);
+GECO_TEMPLATE_NULL struct TypeTraits<char*>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
+GECO_TEMPLATE_NULL struct TypeTraits<signed char*>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
+GECO_TEMPLATE_NULL struct TypeTraits<unsigned char*>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
+GECO_TEMPLATE_NULL struct TypeTraits<const char*>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
+GECO_TEMPLATE_NULL struct TypeTraits<const signed char*>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
+GECO_TEMPLATE_NULL struct TypeTraits<const unsigned char*>
+{
+    typedef TrueType has_trivial_default_ctor;
+    typedef TrueType has_trivial_copy_ctor;
+    typedef TrueType has_trivial_assign_opt;
+    typedef TrueType has_trivial_dtor;
+    typedef TrueType is_pod_type;
+};
 # endif //! GECO_CLASS_PARTIAL_SPECIALIZATION
-
 
 //! The following could be written in terms of numeric_limits.  
 //! We're doing it separately to reduce the number of dependencies.
@@ -207,41 +356,69 @@ struct IsInteger
     typedef FalseType Integer;
 };
 
-//! Macro that make life easier ....
-#define IsIntegerTrueTypeSpecialization(Type); \
-    GECO_TEMPLATE_NULL \
-    struct IsInteger<Type>\
-    {\
-        typedef TrueType Integer;\
-    };
-
 # ifndef GECO_NO_BOOL
-IsIntegerTrueTypeSpecialization(bool);
+GECO_TEMPLATE_NULL struct IsInteger<bool>
+{
+    typedef TrueType Integer;
+};
 # endif
 
 # ifdef GECO_HAS_WCHAR_T
-IsIntegerTrueTypeSpecialization(wchar_t);
+GECO_TEMPLATE_NULL struct IsInteger<wchar_t>
+{
+    typedef TrueType Integer;
+};
 # endif
 
-IsIntegerTrueTypeSpecialization(char);
-IsIntegerTrueTypeSpecialization(signed char);
-IsIntegerTrueTypeSpecialization(unsigned char);
+GECO_TEMPLATE_NULL struct IsInteger<char>
+{
+    typedef TrueType Integer;
+};
+GECO_TEMPLATE_NULL struct IsInteger<unsigned char>
+{
+    typedef TrueType Integer;
+};
+GECO_TEMPLATE_NULL struct IsInteger<signed char>
+{
+    typedef TrueType Integer;
+};
 
-IsIntegerTrueTypeSpecialization(short);
-IsIntegerTrueTypeSpecialization(unsigned short);
+GECO_TEMPLATE_NULL struct IsInteger<unsigned short>
+{
+    typedef TrueType Integer;
+};
+GECO_TEMPLATE_NULL struct IsInteger<short>
+{
+    typedef TrueType Integer;
+};
 
-IsIntegerTrueTypeSpecialization(int);
-IsIntegerTrueTypeSpecialization(unsigned int);
+GECO_TEMPLATE_NULL struct IsInteger<unsigned int>
+{
+    typedef TrueType Integer;
+};
+GECO_TEMPLATE_NULL struct IsInteger<int>
+{
+    typedef TrueType Integer;
+};
 
-IsIntegerTrueTypeSpecialization(int);
-IsIntegerTrueTypeSpecialization(unsigned int);
-
-IsIntegerTrueTypeSpecialization(long);
-IsIntegerTrueTypeSpecialization(unsigned long);
+GECO_TEMPLATE_NULL struct IsInteger<unsigned long>
+{
+    typedef TrueType Integer;
+};
+GECO_TEMPLATE_NULL struct IsInteger<long>
+{
+    typedef TrueType Integer;
+};
 
 # ifndef GECO_LONG_LONG
-IsIntegerTrueTypeSpecialization(long long);
-IsIntegerTrueTypeSpecialization(unsigned long long);
+GECO_TEMPLATE_NULL struct IsInteger<unsigned long long>
+{
+    typedef TrueType Integer;
+};
+GECO_TEMPLATE_NULL struct IsInteger<long long>
+{
+    typedef TrueType Integer;
+};
 # endif
 
 # endif //! __GECO__TYPE_TRAITS_H

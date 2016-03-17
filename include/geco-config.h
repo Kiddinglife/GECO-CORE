@@ -350,7 +350,24 @@
  *                       - all UDK7 specific GECO changes are based on the
  *                         macro USLC being defined
  *
- SCO Unix是在国内比较有名气的操作系统，因为他是当时能运行在Intel的平台之一，并且较早进入中国市场。它的历史可以追溯到MicroSoft开发的Xienx，Xienx是运行在Intel平台上的一种基于Unix V 6的系统，后来Xienx开发部门独立出来成立了SCO公司，并基于AT&Type System VR3.2开发了SCO Unix，其最新的版本为增强了图形接口的SCO OpenServer 5.0.4。此时AT&Type已经将它们负责Unix的部门USL(Unix系统实验室)，卖给了Novell公司，它们的Unix被更名为UnixWare ，但是Novell正逢经营问题，不得不将UnixWare再次卖给SCO。SCO之所以能占有市场，并不是其产品特别出色，而是因为在小型机特别昂贵的年代，对一些追求稳定的行业来说，使用SCO能在x86上运行，可以节约大量成本。因此早期的银行、金融行业的终端大多是使用SCO的。而最近SCO的名声越来越坏，只因被更加优秀且同样能运行于x86的Linux抢走大量份额，大家知道知道吃不饱的狗是会乱咬人的。不过可惜最后授权没强行推销出去几份，反而得了个$CO之名。而Novell在购买UnixWare之后的一个重要举动是将Unix商标赠送给一个非盈利的Unix组织X/Open，结束了USL与BSD以及其他厂商的纷争。
+ SCO Unix是在国内比较有名气的操作系统，因为他是当时能运行在Intel的平台之一，
+ 并且较早进入中国市场. 它的历史可以追溯到MicroSoft开发的Xienx，
+ Xienx是运行在Intel平台上的一种基于Unix V 6的系统，
+ 后来Xienx开发部门独立出来成立了SCO公司，
+ 并基于AT&Type System VR3.2开发了SCO Unix，
+ 其最新的版本为增强了图形接口的SCO OpenServer 5.0.4。
+ 此时AT&Type已经将它们负责Unix的部门USL(Unix系统实验室)，
+ 卖给了Novell公司，它们的Unix被更名为UnixWare ，
+ 但是Novell正逢经营问题，不得不将UnixWare再次卖给SCO。
+ SCO之所以能占有市场，并不是其产品特别出色，
+ 而是因为在小型机特别昂贵的年代，对一些追求稳定的行业来说，
+ 使用SCO能在x86上运行，可以节约大量成本。
+ 因此早期的银行、金融行业的终端大多是使用SCO的。
+ 而最近SCO的名声越来越坏，只因被更加优秀且同样能运行于x86的Linux抢走大量份额，
+ 大家知道知道吃不饱的狗是会乱咬人的。不过可惜最后授权没强行推销出去几份，
+ 反而得了个$CO之名。
+ 而Novell在购买UnixWare之后的一个重要举动是将Unix商标赠送给一个非盈利的Unix组织X/Open，
+ 结束了USL与BSD以及其他厂商的纷争。
  */
 //! SCO UDK 7 compiler (UnixWare 7x, OSR 5, UnixWare 2x)
 # if defined(USLC)
