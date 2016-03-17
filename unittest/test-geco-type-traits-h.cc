@@ -1,5 +1,5 @@
 #include "gtest/gtest.h"
-#include "geco-type-traits.h"
+#include "include/geco-type-traits.h"
 
 //copy an array of elments which have non-trivial copy ctors.
 template<class Type>

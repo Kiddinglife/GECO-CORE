@@ -392,7 +392,61 @@
 # endif
 
 //! GCC
-# ifdef GNUC
+# ifdef __GNUC__
+#   if __GNUC__ == 2 && __GNUC_MINOR__ <= 7
+#     define GECO_STATIC_TEMPLATE_MEMBER_BUG
+#   endif
+#   if __GNUC__ < 2 
+#     define GECO_NEED_TYPENAME
+#     define GECO_NEED_EXPLICIT
+#   endif
+#   if __GNUC__ == 2 && __GNUC_MINOR__ <= 8
+#     define GECO_NO_EXCEPTION_HEADER
+#     define GECO_NO_BAD_ALLOC
+#   endif
+#   if __GNUC__ == 2 && __GNUC_MINOR__ >= 8
+#     define GECO_CLASS_PARTIAL_SPECIALIZATION
+#     define GECO_FUNCTION_TMPL_PARTIAL_ORDER
+#     define GECO_EXPLICIT_FUNCTION_TMPL_ARGS
+#     define GECO_MEMBER_TEMPLATES
+#     define GECO_CAN_THROW_RANGE_ERRORS
+//    g++ 2.8.1 supports member template functions, but not member
+//    template nested classes.
+#     if __GNUC_MINOR__ >= 9
+#       define GECO_MEMBER_TEMPLATE_CLASSES
+#       define GECO_TEMPLATE_FRIENDS
+#       define __SGI_STL_USE_AUTO_PTR_CONVERSIONS
+#       define GECO_HAS_NAMESPACES
+//#       define GECO_USE_NEW_IOSTREAMS
+#     endif
+#   endif
+#   define GECO_DEFAULT_CONSTRUCTOR_BUG
+#   ifdef __EXCEPTIONS
+#     define GECO_USE_EXCEPTIONS
+#   endif
+#   ifdef _REENTRANT
+#     define GECO_PTHREADS
+#   endif
+#   if (__GNUC__ < 2) || (__GNUC__ == 2 && __GNUC_MINOR__ < 95)
+#     define GECO_NO_FUNCTION_PTR_IN_CLASS_TEMPLATE
+#   endif
+# endif
+
+# if defined(__SUNPRO_CC) 
+#   define GECO_NO_BOOL
+#   define GECO_NEED_TYPENAME
+#   define GECO_NEED_EXPLICIT
+#   define GECO_USE_EXCEPTIONS
+#   ifdef _REENTRANT
+#     define GECO_PTHREADS
+#   endif
+#   define __SGI_STL_NO_ARROW_OPERATOR
+#   define GECO_PARTIAL_SPECIALIZATION_SYNTAX
+#   define GECO_NO_EXCEPTION_HEADER
+#   define GECO_NO_BAD_ALLOC
+# endif
+
+# if defined(__COMO__)
 #   define GECO_MEMBER_TEMPLATES
 #   define GECO_MEMBER_TEMPLATE_CLASSES
 #   define GECO_TEMPLATE_FRIENDS
@@ -435,10 +489,6 @@
 
 //! Microsoft compiler. 
 # if defined(_MSC_VER) && !defined(ICL) && !defined(MWERKS)
-
-//! Because of a Microsoft front end bug, we must not provide a
-//! namespace qualifier when declaring a friend function.
-#   define GECO_QUALIFIER
 
 #   define GECO_NO_DRAND48
 #   define GECO_STATIC_CONST_INIT_BUG
@@ -496,6 +546,10 @@
 #     define GECO_NO_EXCEPTION_HEADER
 #     define GECO_NO_BAD_ALLOC
 #   endif
+
+//! Because of a Microsoft front end bug, we must not provide a
+//! namespace qualifier when declaring a friend function.
+#   define GECO_QUALIFIER
 
 # endif //! Microsoft compiler. 
 
