@@ -141,8 +141,7 @@ struct TypeTraits
  * This is harmless for comlilers that have built0in type traits support,
  * and essential for those that do not have it.
  */
-#undef GECO_TEMPLATE_NULL
-#define GECO_TEMPLATE_NULL template<>
+
 
 # ifndef GECO_NO_BOOL
 GECO_TEMPLATE_NULL struct TypeTraits<bool>

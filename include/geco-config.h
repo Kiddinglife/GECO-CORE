@@ -396,14 +396,17 @@
 #   if __GNUC__ == 2 && __GNUC_MINOR__ <= 7
 #     define GECO_STATIC_TEMPLATE_MEMBER_BUG
 #   endif
+
 #   if __GNUC__ < 2 
 #     define GECO_NEED_TYPENAME
 #     define GECO_NEED_EXPLICIT
 #   endif
+
 #   if __GNUC__ == 2 && __GNUC_MINOR__ <= 8
 #     define GECO_NO_EXCEPTION_HEADER
 #     define GECO_NO_BAD_ALLOC
 #   endif
+
 #   if __GNUC__ == 2 && __GNUC_MINOR__ >= 8
 #     define GECO_CLASS_PARTIAL_SPECIALIZATION
 #     define GECO_FUNCTION_TMPL_PARTIAL_ORDER
@@ -417,19 +420,32 @@
 #       define GECO_TEMPLATE_FRIENDS
 #       define __SGI_STL_USE_AUTO_PTR_CONVERSIONS
 #       define GECO_HAS_NAMESPACES
-//#       define GECO_USE_NEW_IOSTREAMS
+#       define GECO_USE_NEW_IOSTREAMS
 #     endif
 #   endif
+
 #   define GECO_DEFAULT_CONSTRUCTOR_BUG
+
 #   ifdef __EXCEPTIONS
 #     define GECO_USE_EXCEPTIONS
 #   endif
+
 #   ifdef _REENTRANT
 #     define GECO_PTHREADS
 #   endif
+
 #   if (__GNUC__ < 2) || (__GNUC__ == 2 && __GNUC_MINOR__ < 95)
 #     define GECO_NO_FUNCTION_PTR_IN_CLASS_TEMPLATE
 #   endif
+
+# if (__GNUC__ > 2)
+#     define GECO_CLASS_PARTIAL_SPECIALIZATION
+#     define GECO_FUNCTION_TMPL_PARTIAL_ORDER
+#     define GECO_EXPLICIT_FUNCTION_TMPL_ARGS
+#     define GECO_MEMBER_TEMPLATES
+#     define GECO_CAN_THROW_RANGE_ERRORS
+# endif
+
 # endif
 
 # if defined(__SUNPRO_CC) 
