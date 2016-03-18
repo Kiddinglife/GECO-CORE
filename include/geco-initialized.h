@@ -75,14 +75,12 @@
 //! uninitialized_copy_n and unitialized_fill have something common to above
 //! and so they are not drawn individually.
 //! +++++++++++++++++++++++++++++++++++++++
-
 #ifndef INCLUDE_GECO_INITIALIZED_H_
 #define INCLUDE_GECO_INITIALIZED_H_
 
 #include <cstring>
 #include "geco-config.h"
 #include "geco-ctor-dtor.h"
-
 GECO_BEGIN_NAMESPACE
 
 //! @brief valid if copy ctor is equivalent to assignment when dtor is trivial
@@ -145,8 +143,9 @@ uninitialized_copy(const wchar_t* copy_start_pos, const wchar_t* copy_end_pos,
 
 //! @brief uninitialized_copy_n (not part of the C++ standard)
 template<class InputIter, class ForwardIter>
-inline pair<InputIter,ForwardIter> uninitialized_copy_n(InputIter copy_start_pos,
-        InputIter copy_end_pos, ForwardIter destination, true_type is_pod)
+inline pair<InputIter, ForwardIter> uninitialized_copy_n(
+        InputIter copy_start_pos, InputIter copy_end_pos,
+        ForwardIter destination, true_type is_pod)
 {
     copy(copy_start_pos, copy_end_pos, destination);
 }

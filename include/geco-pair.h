@@ -42,10 +42,13 @@
  *      Author: jakez
  */
 
+// make_pair(0 uses return value optimization
+
 #ifndef INCLUDE_GECO_PAIR_H_
 #define INCLUDE_GECO_PAIR_H_
 
 #include "geco-config.h"
+
 GECO_BEGIN_NAMESPACE
 
 template<class Type1, class Type2>
@@ -76,30 +79,75 @@ struct pair
 # endif
 };
 
-template<class _T1, class _T2>
-inline bool operator==(const pair<_T1, _T2>& __x, const pair<_T1, _T2>& __y)
+template<class Type1, class Type2>
+inline bool operator==(const pair<Type1, Type2>& __x,
+        const pair<Type1, Type2>& __y)
 {
     return __x.first == __y.first && __x.second == __y.second;
 }
-template<class _T1, class _T2>
-inline bool operator<(const pair<_T1, _T2>& __x, const pair<_T1, _T2>& __y)
+template<class Type1, class Type2>
+inline bool operator<(const pair<Type1, Type2>& __x,
+        const pair<Type1, Type2>& __y)
 {
     return __x.first < __y.first
             || (!(__y.first < __x.first) && __x.second < __y.second);
 }
 
 # ifdef GECO_FUNCTION_TMPL_PARTIAL_ORDER
-template<class T1, class T2>
-inline bool operator!=(const pair<T1, T2>& x, const pair<T1, T2>& y)
+template<class Type1, class Type2>
+inline bool operator!=(const pair<Type1, Type2>& __x,
+        const pair<Type1, Type2>& __y)
 {
-    return x.first < y.first || (!(y.first < x.first) && x.second < y.second);
+    return !(__x == __y);
 }
-# endif
 
-template<class _T1, class _T2>
-inline pair<_T1, _T2> make_pair(const _T1& __x, const _T2& __y)
+template<class Type1, class Type2>
+inline bool operator>(const pair<Type1, Type2>& __x,
+        const pair<Type1, Type2>& __y)
 {
-    return pair<_T1, _T2>(__x, __y);
+    return __y < __x;
+}
+
+template<class Type1, class Type2>
+inline bool operator<=(const pair<Type1, Type2>& __x,
+        const pair<Type1, Type2>& __y)
+{
+    return !(__y < __x);
+}
+
+template<class Type1, class Type2>
+inline bool operator>=(const pair<Type1, Type2>& __x,
+        const pair<Type1, Type2>& __y)
+{
+    return !(__x < __y);
+}
+
+# endif /* __STL_FUNCTION_TMPL_PARTIAL_ORDER */
+
+//! return value optimization
+//! @see http://www.programlife.net/cpp-return-value-optimization.html
+// call ctor ->copy ctor->dtor
+//const Rational operator*(const Rational& lhs,
+//                       const Rational& rhs)
+//{
+//  return Rational(lhs.numerator() * rhs.numerator(),
+//                  lhs.denominator() * rhs.denominator());
+//}
+
+// only call ctor so most effcient
+//const Rational operator*(const Rational& lhs,
+//                         const Rational& rhs)
+//{
+//    cout << "----------- Enter operator* -----------" << endl;
+//    Rational tmp(lhs.numerator() * rhs.numerator(),
+//        lhs.denominator() * rhs.denominator());
+//    cout << "----------- Leave operator* -----------" << endl;
+//    return tmp;
+//}
+template<class Type1, class Type2>
+inline pair<Type1, Type2> make_pair(const Type1& __x, const Type2& __y)
+{
+    return pair<Type1, Type2>(__x, __y);
 }
 
 GECO_END_NAMESPACE
