@@ -3,17 +3,23 @@
 
 //copy an array of elments which have non-trivial copy ctors.
 template<class Type>
-inline bool copy(Type* source, Type* destination, int n, false_type falseType)
+inline bool copy(Type* source, Type* destination, int n, false_type)
 {
     return false;
 }
 
 //copy an array of elments which have trivial copy ctors. this function will use memcpy().
 template<class Type>
-inline bool copy(Type* source, Type* destination, int n, true_type trueType)
+inline bool copy(Type* source, Type* destination, int n, true_type)
 {
     return true;
 }
+
+template<class Type>
+struct int_type_traitor
+{
+    typedef Type dummy;
+};
 
 //copy an array of elements by using the most efficient copy mechanism.
 template<class Type>

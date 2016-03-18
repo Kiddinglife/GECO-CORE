@@ -35,8 +35,8 @@
  *
  */
 
-# ifndef GECO_CONFIG_H
-# define GECO_CONFIG_H
+# ifndef __INCLUDE_GECO_CONFIG_H
+# define __INCLUDE_GECO_CONFIG_H
 
 //! Flags.
 
@@ -81,12 +81,13 @@
 //! \brief defined if the compiler supports partial ordering of function templates.
 //! (a.k.a partial specialization of function templates.)
 //! @code
-//! template <class Type>
-//! struct testClass { void swap(vector<Type>){...} };
-//! #ifdef GECO_FUNCTION_TMPL_PARTIAL_ORDER
-//! template <class Type>
-//! inline void swap (vector<Type>& x, vecotr<Type>& y) { x.swap(y); }
-//! #endif
+//! template <class T> void f(T) testfunction();
+//! template <class T*> void f(T) testfunction();
+//! template <const class T*> void f(T) testfunction();
+//! partial_ordering_of_function_templates.cpp
+//! f(i);   // Calls less specialized function.
+//! f(pi);  // Calls more specialized function.
+//! f(cpi); // Calls even more specialized function.
 //! @endcode
 
 //! @def GECO_MEMBER_TEMPLATES
@@ -393,6 +394,9 @@
 
 //! GCC
 # ifdef __GNUC__
+
+#   define GECO_DEFAULT_CONSTRUCTOR_BUG
+
 #   if __GNUC__ == 2 && __GNUC_MINOR__ <= 7
 #     define GECO_STATIC_TEMPLATE_MEMBER_BUG
 #   endif
@@ -420,6 +424,7 @@
 #   endif
 
 #   if __GNUC__ > 2
+#     undef  GECO_DEFAULT_CONSTRUCTOR_BUG
 #     define GECO_CLASS_PARTIAL_SPECIALIZATION
 #     define GECO_FUNCTION_TMPL_PARTIAL_ORDER
 #     define GECO_EXPLICIT_FUNCTION_TMPL_ARGS
@@ -431,8 +436,6 @@
 #     define GECO_HAS_NAMESPACES
 #     define GECO_USE_NEW_IOSTREAMS
 #   endif
-
-#   define GECO_DEFAULT_CONSTRUCTOR_BUG
 
 #   ifdef __EXCEPTIONS
 #     define GECO_USE_EXCEPTIONS
@@ -555,12 +558,15 @@
 #     define NOMINMAX
 #     undef min
 #     undef max
+#     undef GECO_DEFAULT_CONSTRUCTOR_BUG
+
 //! disable warning 'initializers put in unrecognized initialization area'
 #     pragma warning ( disable : 4075 )
 //! disable warning 'empty controlled statement found'
 #     pragma warning ( disable : 4390 )
 //! disable warning 'debug symbol greater than 255 chars'
 #     pragma warning ( disable : 4786 )
+
 #   endif
 
 #   if _MSC_VER < 1100
@@ -651,12 +657,12 @@ typedef int bool;
     !defined(GECO_NO_BOOL) && \
     !defined(GECO_NON_TYPE_TMPL_PARAM_BUG) && \
     !defined(GECO_LIMITED_DEFAULT_TEMPLATES) && \
-    !defined(GECO_USE_SGI_ALLOCATORS)
-#   define GECO_USE_GECO_ALLOCATORS
+    !defined(GECO_NOT_USE_POOL_ALLOCATOR)
+#   define GECO_USE_POOL_ALLOCATORS
 # endif
 
 # ifndef GECO_DEFAULT_ALLOCATOR
-#   ifdef GECO_USE_GECO_ALLOCATORS
+#   ifdef GECO_USE_POOL_ALLOCATORS
 #     define GECO_DEFAULT_ALLOCATOR(Type) allocator< Type >
 #   else
 #     define GECO_DEFAULT_ALLOCATOR(Type) alloc

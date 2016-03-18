@@ -35,48 +35,72 @@
  *
  */
 
-# ifndef __GECO_INTERNAL_CONSTRUCT_H
-# define __GECO_INTERNAL_CONSTRUCT_H
+/*
+ * geco-pair.h
+ *
+ *  Created on: 18 Mar 2016
+ *      Author: jakez
+ */
 
-#include <new> //! for use of placement new
+#ifndef INCLUDE_GECO_PAIR_H_
+#define INCLUDE_GECO_PAIR_H_
 
 #include "geco-config.h"
-
 GECO_BEGIN_NAMESPACE
 
-//! GECO's allocator is defined in geco-core-ds-memory.h
-//! @brief geco - ctor.h defines global functions construct() and destruct() that
-//! are used for object construction and destruction,
-//! they are geco - standard - conforming functions.
-//!
-//! Only construct and destroy are standard-conforming
-//! other functions are not part of the C++ standard,
-//! and are provided for backward compatibility with the HP STL.  We also
-//! provide internal names InternalConstruct and InternalDestroy that can be used within
-//! the library, so that standard-conforming pieces don't have to rely on
-//! non-standard extensions.
-
-//! Internal names
 template<class Type1, class Type2>
-inline void InternalConstruct(Type1 pointer, const Type2& val) //!_Construct
+struct pair
 {
-    new ((void*)pointer) Type1(val);
+    typedef Type1 first_type;
+    typedef Type2 second_type;
+
+    Type1 first_;
+    Type2 second_;
+
+    pair() :
+            first_(Type1()), second_(Type2())
+    {
+    }
+
+    pair(const Type1& first, const Type2& second) :
+            first_(first), second_(second)
+    {
+    }
+
+# ifdef GECO_MEMBER_TEMPLATES
+    template<class U1, class U2>
+    pair(const pair<U1, U2>& p) :
+            first_(p.first_), second_(p.second_)
+    {
+    }
+# endif
+};
+
+template<class _T1, class _T2>
+inline bool operator==(const pair<_T1, _T2>& __x, const pair<_T1, _T2>& __y)
+{
+    return __x.first == __y.first && __x.second == __y.second;
 }
-template<class Type1>
-inline void InternalConstruct(Type1* pointer) //!_Construct
+template<class _T1, class _T2>
+inline bool operator<(const pair<_T1, _T2>& __x, const pair<_T1, _T2>& __y)
 {
-    new ((void*)pointer) Type1();
+    return __x.first < __y.first
+            || (!(__y.first < __x.first) && __x.second < __y.second);
 }
 
-template<class Type>
-inline void InternalDestroy(Type* pointer) //!_Destroy
+# ifdef GECO_FUNCTION_TMPL_PARTIAL_ORDER
+template<class T1, class T2>
+inline bool operator!=(const pair<T1, T2>& x, const pair<T1, T2>& y)
 {
-    pointer->~Type();
+    return x.first < y.first || (!(y.first < x.first) && x.second < y.second);
 }
-template<class ForwardIterator>
-void InternalDestroy(ForwardIterator first, ForwardIterator last)
+# endif
+
+template<class _T1, class _T2>
+inline pair<_T1, _T2> make_pair(const _T1& __x, const _T2& __y)
 {
+    return pair<_T1, _T2>(__x, __y);
 }
 
 GECO_END_NAMESPACE
-# endif
+#endif /* INCLUDE_GECO_PAIR_H_ */

@@ -35,22 +35,22 @@
  *
  */
 
-# ifndef __GECO__TYPE_TRAITS_H
-# define __GECO__TYPE_TRAITS_H
+# ifndef __INCLUDE_GECO__TYPE_TRAITS_H
+# define __INCLUDE_GECO__TYPE_TRAITS_H
 
 # include "geco-config.h"
 
 /*!
- * @brief This header file provides a framework for allowing complile time dispath based
- * on type attribute. This is useful when writing template code.
+ * @brief This header file provides a framework for allowing complile time dispath
+ * based on type attribute. This is useful when writing template code.
  *
- * when making a copy of an array of an unknown type, it helps to konw if the type has a
- * trivial copy ctor or not, to help decide if a memcpy can be used.
+ * when making a copy of an array of an unknown type, it helps to konw if the type
+ * has a trivial copy ctor or not, to help decide if a memcpy can be used.
  *
- * The template TypeTraits(see below) provides a series of typedefs each of which is either
- * mTrueType or mFalseType.
- * The argument to TypeTraits can be any type. The typedefs within this template will attain
- * their correct values by one of these means:
+ * The template TypeTraits(see below) provides a series of typedefs each of which is
+ * eitherm TrueType or mFalseType.
+ * The argument to TypeTraits can be any type. The typedefs within this template
+ * will attain their correct values by one of these means:
  *    1. TypeTraits' gerneral instantiation contain conservative values which work for all types.
  *        @example
  *        If given:
@@ -59,15 +59,21 @@
  *        TypeTraits<std::vector<int>::iterator>::value_type;
  *        You will get type of int.
  *        @example
- *    2. TypeTraits' template paritial specializations may be delared to make distinctions between types.
+ *    2. TypeTraits' template partial or full specializations may be delared to make distinctions between types.
  *        @example
  *        If given:
- *        TypeTraits<class Type>{tyodef typename Type::value_type value_type;}
- *        A specification template looks like this:
- *        TypeTraits<Type*>{tyodef typename Type value_type;}
+ *          - TypeTraits<class Type>{typedef typename Type::value_type value_type;}
+ *        A partialspecification template looks like this:
+ *          - TypeTraits<Type*>{typedef typename Type value_type;}
  *        when instantiated like this;
- *        TypeTraits<int*>::value_type;
- *        You will also get type of int.
+ *          - TypeTraits<int*>::value_type;
+ *          - You will also get type of int.
+ *
+ *        A full specification template looks like this:
+ *          - template<> TypeTraits<int>{typedef typename int value_type;}
+ *        when instantiated like this;
+ *          - TypeTraits<int>::value_type;
+ *          - You will also get type of int.
  *        @example
  *    3. Some compilers (such as the Silicon Graphics N32 and N64 compilers)
  *        will automatically provide the appropriate specializations for all types.
@@ -93,19 +99,21 @@
  * @endcode
  */
 
+# ifndef GECO_DEFAULT_CONSTRUCTOR_BUG
 enum true_type
 {
 };
 enum false_type
 {
 };
-
-//struct TrueType
-//{
-//};
-//struct FalseType
-//{
-//};
+# else
+struct true_type
+{
+};
+struct false_type
+{
+};
+# endif
 
 template<class Type>
 struct type_traitor
@@ -140,7 +148,6 @@ struct type_traitor
  * This is harmless for comlilers that have built0in type traits support,
  * and essential for those that do not have it.
  */
-
 
 # ifndef GECO_NO_BOOL
 GECO_TEMPLATE_NULL struct type_traitor<bool>
