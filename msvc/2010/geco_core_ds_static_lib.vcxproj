@@ -19,9 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\include\geco-algo-base.h" />
     <ClInclude Include="..\..\include\geco-config.h" />
-    <ClInclude Include="..\..\include\geco-construct.h" />
-    <ClInclude Include="..\..\include\geco-iterator-base.h" />
+    <ClInclude Include="..\..\include\geco-ctor-dtor.h" />
+    <ClInclude Include="..\..\include\geco-initialized.h" />
+    <ClInclude Include="..\..\include\geco-iter-base.h" />
+    <ClInclude Include="..\..\include\geco-iter.h" />
+    <ClInclude Include="..\..\include\geco-pair.h" />
     <ClInclude Include="..\..\include\geco-type-traits.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

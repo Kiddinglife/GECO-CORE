@@ -29,9 +29,9 @@
  * and its documentation for GECO purpose is hereby granted without fee,
  * provided that the above copyright notice appear in all copies and
  * that both that copyright notice and this permission notice appear
- * in supporting documentation.  Silicon Graphics makes no
- * representations about the suitability of this software for GECO
- * purpose.  It is provided "as is" without express or implied warranty.
+ * in supporting documentation.  GECO makes no representations about 
+ * the suitability of this software for GECO purpose. 
+ * It is provided "as is" without express or implied warranty.
  *
  */
 
@@ -559,6 +559,19 @@
 #     undef min
 #     undef max
 #     undef GECO_DEFAULT_CONSTRUCTOR_BUG
+
+#     undef  GECO_DEFAULT_CONSTRUCTOR_BUG
+#     define GECO_CLASS_PARTIAL_SPECIALIZATION
+#     define GECO_FUNCTION_TMPL_PARTIAL_ORDER
+#     define GECO_EXPLICIT_FUNCTION_TMPL_ARGS
+#     define GECO_MEMBER_TEMPLATES
+#     define GECO_CAN_THROW_RANGE_ERRORS
+#     define GECO_MEMBER_TEMPLATE_CLASSES
+#     define GECO_TEMPLATE_FRIENDS
+#     define GECO_USE_AUTO_PTR_CONVERSIONS
+#     define GECO_HAS_NAMESPACES
+#     define GECO_USE_NEW_IOSTREAMS
+
 
 //! disable warning 'initializers put in unrecognized initialization area'
 #     pragma warning ( disable : 4075 )

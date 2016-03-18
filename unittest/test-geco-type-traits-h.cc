@@ -1,6 +1,10 @@
 #include "gtest/gtest.h"
 #include "include/geco-type-traits.h"
 
+#ifdef GECO_USE_NAMESPACES
+using namespace GECO;
+#endif
+
 //copy an array of elments which have non-trivial copy ctors.
 template<class Type>
 inline bool copy(Type* source, Type* destination, int n, false_type)

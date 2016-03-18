@@ -35,11 +35,47 @@ GECO_BEGIN_NAMESPACE
 // are permitted to overlap.)
 // (2) If we're using random access iterators, then write the loop as
 // a for loop with an explicit count.
-template<class InputIter, class OutputIter, class Distance>
-inline OutputIter copy(InputIter copy_start_pos, InputIter copy_end_pos,
-        OutputIter destination, input_iterator_tag, Distance*)
+template<class _InputIter, class _OutputIter, class _Distance>
+inline _OutputIter
+__copy(
+_InputIter __first,
+_InputIter __last,
+_OutputIter __result,
+input_iterator_tag,
+_Distance*)
 {
+    for (; __first != __last; ++__result, ++__first)
+        *__result = *__first;
+    return __result;
+}
 
+template<class _RandomAccessIter, class _OutputIter, class _Distance>
+inline _OutputIter
+__copy(
+_RandomAccessIter __first,
+_RandomAccessIter __last,
+_OutputIter __result,
+random_access_iterator_tag,
+_Distance*)
+{
+    for (_Distance __n = __last - __first; __n > 0; --__n) {
+        *__result = *__first;
+        ++__first;
+        ++__result;
+    }
+    return __result;
+}
+
+template <class _InputIter, class _OutputIter>
+inline _OutputIter copy(_InputIter __first, _InputIter __last,
+    _OutputIter __result)
+{
+    return __copy(
+        __first,
+        __last,
+        __result,
+        GET_ITER_CATEGORY(__first),
+        GET_DISTANCE_TYPE(__first));
 }
 GECO_END_NAMESPACE
 #endif /* INCLUDE_GECO_ALGO_BASE_H_ */
