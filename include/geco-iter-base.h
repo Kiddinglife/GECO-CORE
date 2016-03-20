@@ -47,7 +47,7 @@
 #include "geco-config.h"
 GECO_BEGIN_NAMESPACE
 
-#define GECO_REQUIRES()
+#define GECO_REQUIRES(a,b)
 
 struct input_iterator_tag {};
 struct output_iterator_tag {};
