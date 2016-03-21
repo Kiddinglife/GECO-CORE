@@ -150,147 +150,47 @@ struct type_traitor
  * This is harmless for comlilers that have built0in type traits support,
  * and essential for those that do not have it.
  */
+
+//! define that makes life easier
+#define delc_type_traitor_specialization(Type) \
+struct type_traitor<Type>\
+{\
+    typedef true_type has_trivial_default_ctor;\
+    typedef true_type has_trivial_copy_ctor;\
+    typedef true_type has_trivial_assign_opt;\
+    typedef true_type has_trivial_dtor;\
+    typedef true_type is_pod_type;\
+}
+
 # ifndef GECO_NO_BOOL
-GECO_TEMPLATE_NULL struct type_traitor<bool>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(bool);
 # endif
 
 # ifdef GECO_HAS_WCHAR_T
-GECO_TEMPLATE_NULL struct type_traitor<wchar_t>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(wchar_t);
 # endif
 
-GECO_TEMPLATE_NULL struct type_traitor<char>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
-GECO_TEMPLATE_NULL struct type_traitor<signed char>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
-GECO_TEMPLATE_NULL struct type_traitor<unsigned char>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(char);
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(unsigned char);
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(signed char);
 
-GECO_TEMPLATE_NULL struct type_traitor<short>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
-GECO_TEMPLATE_NULL struct type_traitor<unsigned short>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(short);
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(unsigned short);
 
-GECO_TEMPLATE_NULL struct type_traitor<int>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
-GECO_TEMPLATE_NULL struct type_traitor<unsigned int>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(int);
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(unsigned int);
 
-GECO_TEMPLATE_NULL struct type_traitor<long>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
-GECO_TEMPLATE_NULL struct type_traitor<unsigned long>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(long);
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(unsigned long);
 
 # ifndef GECO_LONG_LONG
-GECO_TEMPLATE_NULL struct type_traitor<long long>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
-GECO_TEMPLATE_NULL struct type_traitor<unsigned long long>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(long long);
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(unsigned long long);
 # endif
 
-GECO_TEMPLATE_NULL struct type_traitor<float>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
-GECO_TEMPLATE_NULL struct type_traitor<double>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
-GECO_TEMPLATE_NULL struct type_traitor<long double>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(float);
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(double);
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(long double);
 
 //! pointer is also basic type, and so the trait result is always @struct TrueType
 # ifdef GECO_CLASS_PARTIAL_SPECIALIZATION
@@ -304,54 +204,13 @@ struct type_traitor<Type*>
     typedef true_type is_pod_type;
 };
 # else
-GECO_TEMPLATE_NULL struct type_traitor<char*>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
-GECO_TEMPLATE_NULL struct type_traitor<signed char*>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
-GECO_TEMPLATE_NULL struct type_traitor<unsigned char*>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
-GECO_TEMPLATE_NULL struct type_traitor<const char*>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
-GECO_TEMPLATE_NULL struct type_traitor<const signed char*>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
-GECO_TEMPLATE_NULL struct type_traitor<const unsigned char*>
-{
-    typedef true_type has_trivial_default_ctor;
-    typedef true_type has_trivial_copy_ctor;
-    typedef true_type has_trivial_assign_opt;
-    typedef true_type has_trivial_dtor;
-    typedef true_type is_pod_type;
-};
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(char*);
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(signed char*);
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(unsigned char*);
+
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(const char*);
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(const signed char*);
+GECO_TEMPLATE_NULL delc_type_traitor_specialization(const unsigned char*);
 # endif //! GECO_CLASS_PARTIAL_SPECIALIZATION
 
 //! The following could be written in terms of numeric_limits.  
