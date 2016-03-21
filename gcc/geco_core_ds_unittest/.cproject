@@ -30,9 +30,9 @@
 								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.661671853" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.dialect.std.461564549" name="Language standard" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.c++11" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.250609173" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="/home/jakez/2016209/GECO-CORE-Data-Structure/thirdparty/googletest/include"/>
-									<listOptionValue builtIn="false" value="/home/jakez/2016209/GECO-CORE-Data-Structure/"/>
-									<listOptionValue builtIn="false" value="/home/jakez/2016209/GECO-CORE-Data-Structure/thirdparty/googlemock/include"/>
+									<listOptionValue builtIn="false" value="/home/jakez/2016209/geco-ds/thirdparty/googletest/include"/>
+									<listOptionValue builtIn="false" value="/home/jakez/2016209/geco-ds/"/>
+									<listOptionValue builtIn="false" value="/home/jakez/2016209/geco-ds/thirdparty/googlemock/include"/>
 								</option>
 								<option id="gnu.cpp.compiler.option.other.other.2109403696" name="Other flags" superClass="gnu.cpp.compiler.option.other.other" value="-c -fmessage-length=0" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.include.files.218507645" name="Include files (-include)" superClass="gnu.cpp.compiler.option.include.files"/>
@@ -54,7 +54,7 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1239326831" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.597904095" name="GCC C++ Linker" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
 								<option id="gnu.cpp.link.option.paths.752523141" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="/home/jakez/2016209/GECO-CORE-Data-Structure/thirdparty/googlemock"/>
+									<listOptionValue builtIn="false" value="/home/jakez/2016209/geco-ds/thirdparty/googlemock"/>
 								</option>
 								<option id="gnu.cpp.link.option.libs.199037230" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="gmock"/>
