@@ -211,91 +211,77 @@ value_type(const Iter& i)
 #define GET_VALUE_TYPE(i)           __value_type(i)
 #else 
 //!! make life easier
-#define delc_traitor_function(iterator_tag, name, iterator_type) \
+#define delc_iterator_category(iterator_tag, name, iterator_type) \
 inline iterator_tag name(const iterator_type<Type, Distance>&) \
 {\
     return iterator_tag();\
 }
 
 template <class Type, class Distance>
-delc_traitor_function(input_iterator_tag, iterator_category, input_iterator)
+delc_iterator_category(input_iterator_tag, iterator_category, input_iterator)
 template <class Type, class Distance>
-delc_traitor_function(output_iterator_tag, iterator_category, output_iterator)
+delc_iterator_category(output_iterator_tag, iterator_category, output_iterator)
 template <class Type, class Distance>
-delc_traitor_function(forward_iterator_tag, iterator_category, forward_iterator)
+delc_iterator_category(forward_iterator_tag, iterator_category, forward_iterator)
 template <class Type, class Distance>
-delc_traitor_function(bidirectional_iterator_tag, iterator_category, bidirectional_iterator)
+delc_iterator_category(bidirectional_iterator_tag, iterator_category, bidirectional_iterator)
 template <class Type, class Distance>
-delc_traitor_function(random_access_iterator_tag, iterator_category, random_access_iterator)
+delc_iterator_category(random_access_iterator_tag, iterator_category, random_access_iterator)
 
-//! the
-template <class Type>
-inline random_access_iterator_tag iterator_category(const Type*)
-{
-    return random_access_iterator_tag();
+// raw pointer is special iterator, you cannnot use :: to get inside iterator_category
+// and so, we have to handle it individually
+template <class Type> inline random_access_iterator_tag 
+iterator_category(const Type*){ return random_access_iterator_tag(); }
+
+
+// macro mmakes life easier
+// template <class Type, class Distance>
+// if given delc_value_type(random_access_iterator)
+// after opening it, you can get
+// template <class Type, class Distance>
+// inline Type* 
+// value_type(const random_access_iterator<Type, Distance>&)
+// {
+//     return (Type*)(0);
+// }
+#define delc_value_type(iterator_type) \
+inline Type*  \
+value_type(const iterator_type<Type, Distance>&) \
+{\
+    return (Type*)(0);\
 }
 
 template <class Type, class Distance>
-inline Type* value_type(const input_iterator<Type, Distance>&)
-{
-    return (Type*)(0);
+delc_value_type(input_iterator)
+template <class Type, class Distance>
+delc_value_type(forward_iterator)
+template <class Type, class Distance>
+delc_value_type(bidirectional_iterator)
+template <class Type, class Distance>
+delc_value_type(random_access_iterator)
+// raw pointer is special iterator, you cannnot use :: to get inside value type
+// and so, we have to handle it individually
+template <class Type> inline Type*  value_type(const Type*){ return (Type*)(0); }
+
+
+#define delc_distance_type(iterator_type) \
+inline Distance* \
+distance_type(const iterator_type<Type, Distance>&)\
+{\
+    return (Distance*)(0);\
 }
 
 template <class Type, class Distance>
-inline Type* value_type(const forward_iterator<Type, Distance>&)
-{
-    return (Type*)(0);
-}
-
+delc_distance_type(input_iterator)
 template <class Type, class Distance>
-inline Type* value_type(const bidirectional_iterator<Type, Distance>&)
-{
-    return (Type*)(0);
-}
-
+delc_distance_type(forward_iterator)
 template <class Type, class Distance>
-inline Type* value_type(const random_access_iterator<Type, Distance>&)
-{
-    return (Type*)(0);
-}
-
-template <class Type>
-inline Type* value_type(const Type*)
-{
-    return (Type*)(0);
-}
-
+delc_distance_type(bidirectional_iterator)
 template <class Type, class Distance>
-inline Distance* distance_type(const input_iterator<Type, Distance>&)
-{
-    return (Distance*)(0);
-}
-
-template <class Type, class Distance>
-inline Distance* distance_type(const forward_iterator<Type, Distance>&)
-{
-    return (Distance*)(0);
-}
-
-template <class Type, class Distance>
-inline Distance*
-distance_type(const bidirectional_iterator<Type, Distance>&)
-{
-    return (Distance*)(0);
-}
-
-template <class Type, class Distance>
-inline Distance*
-distance_type(const random_access_iterator<Type, Distance>&)
-{
-    return (Distance*)(0);
-}
-
-template <class Type>
-inline ptrdiff_t* distance_type(const Type*)
-{
-    return (ptrdiff_t*)(0);
-}
+delc_distance_type(random_access_iterator)
+// raw pointer is special iterator, you cannnot use :: to get inside distance_type
+// and so, we have to handle it individually
+template <class Type> inline ptrdiff_t* distance_type(const Type*){ return (ptrdiff_t*)(0); }
 
 //! Without partial specialization we can't use iterator_traitor, so
 //! we must keep the old iterator query functions around.
