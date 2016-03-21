@@ -425,7 +425,8 @@
 
 #   if __GNUC__ > 2
 #     undef  GECO_DEFAULT_CONSTRUCTOR_BUG
-#     define GECO_CLASS_PARTIAL_SPECIALIZATION
+//#     define GECO_CLASS_PARTIAL_SPECIALIZATION
+#     define GECO_PARTIAL_SPECIALIZATION_SYNTAX
 #     define GECO_FUNCTION_TMPL_PARTIAL_ORDER
 #     define GECO_EXPLICIT_FUNCTION_TMPL_ARGS
 #     define GECO_MEMBER_TEMPLATES
@@ -572,7 +573,6 @@
 #     define GECO_HAS_NAMESPACES
 #     define GECO_USE_NEW_IOSTREAMS
 
-
 //! disable warning 'initializers put in unrecognized initialization area'
 #     pragma warning ( disable : 4075 )
 //! disable warning 'empty controlled statement found'
@@ -689,9 +689,9 @@ typedef int bool;
 //! without having to edit library headers.
 # if defined(GECO_HAS_NAMESPACES) && !defined(GECO_NO_NAMESPACES)
 #   define GECO_USE_NAMESPACES
-#   define GECO geco
-#   define GECO_BEGIN_NAMESPACE namespace geco {
-#   define GECO_END_NAMESPACE }
+//#   define GECO geco
+#   define GECO_BEGIN_NAMESPACE namespace geco {namespace ds {
+#   define GECO_END_NAMESPACE }}
 #   if defined(GECO_FUNCTION_TMPL_PARTIAL_ORDER) && \
        !defined(GECO_NO_RELOPS_NAMESPACE)
 #     define GECO_USE_NAMESPACE_FOR_RELOPS

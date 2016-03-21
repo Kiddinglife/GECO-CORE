@@ -150,7 +150,6 @@ struct type_traitor
  * This is harmless for comlilers that have built0in type traits support,
  * and essential for those that do not have it.
  */
-
 # ifndef GECO_NO_BOOL
 GECO_TEMPLATE_NULL struct type_traitor<bool>
 {

@@ -1,8 +1,10 @@
 #include "gtest/gtest.h"
+#include "include/geco-config.h"
 #include "include/geco-type-traits.h"
+#include "include/geco-iter-base.h"
 
 #ifdef GECO_USE_NAMESPACES
-using namespace GECO;
+using namespace geco::ds;
 #endif
 
 //copy an array of elments which have non-trivial copy ctors.
@@ -19,12 +21,6 @@ inline bool copy(Type* source, Type* destination, int n, true_type)
     return true;
 }
 
-template<class Type>
-struct int_type_traitor
-{
-    typedef Type dummy;
-};
-
 //copy an array of elements by using the most efficient copy mechanism.
 template<class Type>
 inline bool copy(Type* source, Type* destination, int n)
@@ -33,7 +29,7 @@ inline bool copy(Type* source, Type* destination, int n)
     return copy(source, destination, n, has_trivial_copy_ctor());
 }
 
-TEST(testcase2, testHello2)
+TEST(TypeTraitor, test_trait_type)
 {
     int *s = 0;
     int *d = 0;
