@@ -46,7 +46,6 @@
 
 #include "geco-config.h"
 GECO_BEGIN_NAMESPACE
-
 #define GECO_REQUIRES(a,b)
 
 //++++++++++ ITERATOR TAG ++++++++++++
@@ -56,13 +55,13 @@ struct input_iterator_tag
 struct output_iterator_tag
 {
 };
-struct forward_iterator_tag: public input_iterator_tag
+struct forward_iterator_tag : public input_iterator_tag
 {
 };
-struct bidirectional_iterator_tag: public forward_iterator_tag
+struct bidirectional_iterator_tag : public forward_iterator_tag
 {
 };
-struct random_access_iterator_tag: public bidirectional_iterator_tag
+struct random_access_iterator_tag : public bidirectional_iterator_tag
 {
 };
 //++++++++++ ITERATOR TAG ++++++++++++
@@ -78,7 +77,7 @@ struct random_access_iterator_tag: public bidirectional_iterator_tag
 //! to get iterator type instance.
 
 //! define to make life easier, used for declare iterators
-#define delc_interator(iterator_name,valuetype, itertag, distance)\
+#define delc_iterator(iterator_name,valuetype, itertag, distance)\
 struct iterator_name\
 {\
     typedef itertag iterator_category;\
@@ -89,15 +88,15 @@ struct iterator_name\
 };
 
 template<class Type, class Distance>
-delc_interator(input_iterator, Type, input_iterator_tag,Distance)
+delc_iterator(input_iterator, Type, input_iterator_tag, Distance)
 template<class Type, class Distance>
-delc_interator(output_iterator, Type, output_iterator_tag,Distance)
+delc_iterator(output_iterator, Type, output_iterator_tag, Distance)
 template<class Type, class Distance>
-delc_interator(forward_iterator, Type, forward_iterator_tag,Distance)
+delc_iterator(forward_iterator, Type, forward_iterator_tag, Distance)
 template<class Type, class Distance>
-delc_interator(bidirectional_iterator, Type, bidirectional_iterator_tag,Distance)
+delc_iterator(bidirectional_iterator, Type, bidirectional_iterator_tag, Distance)
 template<class Type, class Distance>
-delc_interator(random_access_iterator, Type, random_access_iterator_tag,Distance)
+delc_iterator(random_access_iterator, Type, random_access_iterator_tag, Distance)
 
 //! stl standard confirming iterator delc
 //! you can inheritat from this struct to make your own iterator
@@ -165,8 +164,8 @@ struct iterator_traitor<const Type*>
 //! backward compatibility with the HP STL.
 //! We introduce internal names for these functions.
 template<class Iter>
-inline typename iterator_traitor<Iter>::iterator_category __iterator_category(
-        const Iter&)
+inline typename iterator_traitor<Iter>::iterator_category
+__iterator_category(const Iter&)
 {
     typedef typename iterator_traitor<Iter>::iterator_category _Category;
     return _Category();
@@ -187,8 +186,8 @@ __value_type(const Iter&)
 }
 
 template<class Iter>
-inline typename iterator_traitor<Iter>::iterator_category iterator_category(
-        const Iter& i)
+inline typename iterator_traitor<Iter>::iterator_category
+iterator_category(const Iter& i)
 {
     return __iterator_category(i);
 }
@@ -207,10 +206,10 @@ value_type(const Iter& i)
     return __value_type(i);
 }
 
-#define GET_ITER_CATEGORY(i) __iterator_category(i)
+#define GET_ITER_CATEGORY(i)     __iterator_category(i)
 #define GET_DISTANCE_TYPE(i)     __distance_type(i)
-#define GET_VALUE_TYPE(i)        __value_type(i)
-#else
+#define GET_VALUE_TYPE(i)           __value_type(i)
+#else 
 //!! make life easier
 #define delc_traitor_function(iterator_tag, name, iterator_type) \
 inline iterator_tag name(const iterator_type<Type, Distance>&) \
@@ -219,15 +218,15 @@ inline iterator_tag name(const iterator_type<Type, Distance>&) \
 }
 
 template <class Type, class Distance>
-delc_traitor_function(input_iterator_tag,iterator_category,input_iterator)
+delc_traitor_function(input_iterator_tag, iterator_category, input_iterator)
 template <class Type, class Distance>
-delc_traitor_function(output_iterator_tag,iterator_category,output_iterator)
+delc_traitor_function(output_iterator_tag, iterator_category, output_iterator)
 template <class Type, class Distance>
-delc_traitor_function(forward_iterator_tag,iterator_category,forward_iterator)
+delc_traitor_function(forward_iterator_tag, iterator_category, forward_iterator)
 template <class Type, class Distance>
-delc_traitor_function(bidirectional_iterator_tag,iterator_category,bidirectional_iterator)
+delc_traitor_function(bidirectional_iterator_tag, iterator_category, bidirectional_iterator)
 template <class Type, class Distance>
-delc_traitor_function(random_access_iterator_tag,iterator_category,random_access_iterator)
+delc_traitor_function(random_access_iterator_tag, iterator_category, random_access_iterator)
 
 //! the
 template <class Type>
@@ -262,7 +261,9 @@ inline Type* value_type(const random_access_iterator<Type, Distance>&)
 
 template <class Type>
 inline Type* value_type(const Type*)
-{   return (Type*)(0);}
+{
+    return (Type*)(0);
+}
 
 template <class Type, class Distance>
 inline Distance* distance_type(const input_iterator<Type, Distance>&)
@@ -292,7 +293,9 @@ distance_type(const random_access_iterator<Type, Distance>&)
 
 template <class Type>
 inline ptrdiff_t* distance_type(const Type*)
-{   return (ptrdiff_t*)(0);}
+{
+    return (ptrdiff_t*)(0);
+}
 
 //! Without partial specialization we can't use iterator_traitor, so
 //! we must keep the old iterator query functions around.
@@ -305,9 +308,9 @@ inline ptrdiff_t* distance_type(const Type*)
 
 template<class InputIter, class Distance>
 inline void __distance(InputIter first, InputIter last, Distance& n,
-        input_iterator_tag)
+    input_iterator_tag)
 {
-    while (first !=last)
+    while (first != last)
     {
         ++first;
         ++n;
@@ -316,7 +319,7 @@ inline void __distance(InputIter first, InputIter last, Distance& n,
 
 template<class _RandomAccessIterator, class Distance>
 inline void __distance(_RandomAccessIterator __first,
-        _RandomAccessIterator __last, Distance& n, random_access_iterator_tag)
+    _RandomAccessIterator __last, Distance& n, random_access_iterator_tag)
 {
     GECO_REQUIRES(_RandomAccessIterator, _RandomAccessIterator);
     n += __last - __first;
@@ -332,7 +335,7 @@ inline void distance(InputIter __first, InputIter __last, Distance& n)
 #ifdef GECO_CLASS_PARTIAL_SPECIALIZATION
 template<class InputIter>
 inline typename iterator_traitor<InputIter>::difference_type __distance(
-        InputIter __first, InputIter __last, input_iterator_tag)
+    InputIter __first, InputIter __last, input_iterator_tag)
 {
     typename iterator_traitor<InputIter>::difference_type n = 0;
     while (__first != __last)
@@ -345,8 +348,8 @@ inline typename iterator_traitor<InputIter>::difference_type __distance(
 
 template<class _RandomAccessIterator>
 inline typename iterator_traitor<_RandomAccessIterator>::difference_type __distance(
-        _RandomAccessIterator __first, _RandomAccessIterator __last,
-        random_access_iterator_tag)
+    _RandomAccessIterator __first, _RandomAccessIterator __last,
+    random_access_iterator_tag)
 {
     GECO_REQUIRES(_RandomAccessIterator, _RandomAccessIterator);
     return __last - __first;
@@ -357,7 +360,7 @@ inline typename iterator_traitor<_RandomAccessIterator>::difference_type __dista
 //!! to __distance(..., input_iterator_tag)
 template<class InputIter>
 inline typename iterator_traitor<InputIter>::difference_type distance(
-        InputIter __first, InputIter __last)
+    InputIter __first, InputIter __last)
 {
     typedef typename iterator_traitor<InputIter>::iterator_category _Category;
     GECO_REQUIRES(InputIter, InputIter);
@@ -369,7 +372,7 @@ template<class InputIter, class Distance>
 inline void __advance(InputIter& i, Distance n, input_iterator_tag)
 {
     while (n--)
-    ++i;
+        ++i;
 }
 
 #if defined(__sgi) && !defined(__GNUC__) && (_MIPS_SIM != _MIPS_SIM_ABI32)
@@ -378,15 +381,15 @@ inline void __advance(InputIter& i, Distance n, input_iterator_tag)
 
 template<class BidirectionalIter, class Distance>
 inline void __advance(BidirectionalIter& i, Distance n,
-        bidirectional_iterator_tag)
+    bidirectional_iterator_tag)
 {
     GECO_REQUIRES(BidirectionalIter, BidirectionalIter);
     if (n >= 0)
-    while (n--)
-    ++i;
+        while (n--)
+            ++i;
     else
-    while (n++)
-    --i;
+        while (n++)
+            --i;
 }
 
 #if defined(__sgi) && !defined(__GNUC__) && (_MIPS_SIM != _MIPS_SIM_ABI32)
@@ -395,7 +398,7 @@ inline void __advance(BidirectionalIter& i, Distance n,
 
 template<class _RandomAccessIterator, class Distance>
 inline void __advance(_RandomAccessIterator& i, Distance n,
-        random_access_iterator_tag)
+    random_access_iterator_tag)
 {
     GECO_REQUIRES(_RandomAccessIterator, _RandomAccessIterator);
     i += n;
@@ -409,5 +412,4 @@ inline void advance(InputIter& i, Distance n)
 }
 
 GECO_END_NAMESPACE
-;
 #endif

@@ -81,6 +81,7 @@
 #include <cstring>
 #include "geco-config.h"
 #include "geco-ctor-dtor.h"
+
 GECO_BEGIN_NAMESPACE
 
 //! @brief valid if copy ctor is equivalent to assignment when dtor is trivial

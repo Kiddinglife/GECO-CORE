@@ -168,7 +168,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\unittest\test-2.cc" />
+    <ClCompile Include="..\..\unittest\test-geco-iter-base-h.cc" />
     <ClCompile Include="..\..\unittest\test-geco-type-traits-h.cc" />
     <ClCompile Include="..\..\unittest\test-main.cc" />
   </ItemGroup>

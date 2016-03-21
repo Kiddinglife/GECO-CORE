@@ -29,8 +29,8 @@
  * and its documentation for GECO purpose is hereby granted without fee,
  * provided that the above copyright notice appear in all copies and
  * that both that copyright notice and this permission notice appear
- * in supporting documentation.  GECO makes no representations about 
- * the suitability of this software for GECO purpose. 
+ * in supporting documentation.  GECO makes no representations about
+ * the suitability of this software for GECO purpose.
  * It is provided "as is" without express or implied warranty.
  *
  */
@@ -425,7 +425,7 @@
 
 #   if __GNUC__ > 2
 #     undef  GECO_DEFAULT_CONSTRUCTOR_BUG
-//#     define GECO_CLASS_PARTIAL_SPECIALIZATION
+#     define GECO_CLASS_PARTIAL_SPECIALIZATION
 #     define GECO_PARTIAL_SPECIALIZATION_SYNTAX
 #     define GECO_FUNCTION_TMPL_PARTIAL_ORDER
 #     define GECO_EXPLICIT_FUNCTION_TMPL_ARGS
@@ -557,12 +557,7 @@
 #     define GECO_HAS_NAMESPACES
 #     define GECO_CAN_THROW_RANGE_ERRORS
 #     define NOMINMAX
-#     undef min
-#     undef max
-#     undef GECO_DEFAULT_CONSTRUCTOR_BUG
 
-#     undef  GECO_DEFAULT_CONSTRUCTOR_BUG
-#     define GECO_CLASS_PARTIAL_SPECIALIZATION
 #     define GECO_FUNCTION_TMPL_PARTIAL_ORDER
 #     define GECO_EXPLICIT_FUNCTION_TMPL_ARGS
 #     define GECO_MEMBER_TEMPLATES
@@ -572,6 +567,11 @@
 #     define GECO_USE_AUTO_PTR_CONVERSIONS
 #     define GECO_HAS_NAMESPACES
 #     define GECO_USE_NEW_IOSTREAMS
+
+#     undef min
+#     undef max
+#     undef  GECO_DEFAULT_CONSTRUCTOR_BUG // support DEFAULT_CONSTRUCTOR
+#     undef  GECO_CLASS_PARTIAL_SPECIALIZATION  // not support
 
 //! disable warning 'initializers put in unrecognized initialization area'
 #     pragma warning ( disable : 4075 )
@@ -671,11 +671,12 @@ typedef int bool;
     !defined(GECO_NON_TYPE_TMPL_PARAM_BUG) && \
     !defined(GECO_LIMITED_DEFAULT_TEMPLATES) && \
     !defined(GECO_NOT_USE_POOL_ALLOCATOR)
-#   define GECO_USE_POOL_ALLOCATORS
+#   define GECO_USE_C_STANDARD_MALLOC
 # endif
 
+//! default is geco pool allocator
 # ifndef GECO_DEFAULT_ALLOCATOR
-#   ifdef GECO_USE_POOL_ALLOCATORS
+#   ifdef GECO_USE_C_STANDARD_MALLOC
 #     define GECO_DEFAULT_ALLOCATOR(Type) allocator< Type >
 #   else
 #     define GECO_DEFAULT_ALLOCATOR(Type) alloc

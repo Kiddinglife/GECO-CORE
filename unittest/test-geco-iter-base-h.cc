@@ -15,14 +15,14 @@ inline void advance(InputIter& i, Distance n, input_iterator_tag)
 
 template<class BidirectionalIter, class Distance>
 inline void advance(BidirectionalIter& i, Distance n,
-        bidirectional_iterator_tag)
+    bidirectional_iterator_tag)
 {
     printf("bidirectional_iterator_tag advance\n");
 }
 
 template<class _RandomAccessIterator, class Distance>
 inline void advance(_RandomAccessIterator& i, Distance n,
-        random_access_iterator_tag)
+    random_access_iterator_tag)
 {
     printf("random_access_iterator_tag advance\n");
 }
@@ -50,12 +50,12 @@ TEST(IteratorTraitor, test_trait_assciated_types)
     //class Pointer = Type*, class Reference = Type&>
     //struct iterator {....}
 
+    //! first use standard iterator
     typedef iterator<random_access_iterator<int, ptrdiff_t>, int> iter;
-    typedef iter::iterator_category cat;
-    advance_(cat(), 12);
+    typedef iter::iterator_category itertype; // is actually random_access_iterator<int, ptrdiff_t>
+    advance_(itertype(), 12);
 
-    typedef iterator<input_iterator<int, ptrdiff_t>, int> iter1;
-    typedef iter1::iterator_category cat1;
-    advance_(cat1(), 12);
+    //! second one uses refined iterator
+    advance_(random_access_iterator<int, ptrdiff_t>(), 12);
 
 }

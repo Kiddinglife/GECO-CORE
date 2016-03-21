@@ -101,21 +101,27 @@
 
 GECO_BEGIN_NAMESPACE
 
-# ifndef GECO_DEFAULT_CONSTRUCTOR_BUG
 enum true_type
 {
 };
 enum false_type
 {
 };
-# else
-struct true_type
-{
-};
-struct false_type
-{
-};
-# endif
+//# ifndef GECO_DEFAULT_CONSTRUCTOR_BUG
+//enum true_type
+//{
+//};
+//enum false_type
+//{
+//};
+//# else
+//struct true_type
+//{
+//};
+//struct false_type
+//{
+//};
+//# endif
 
 template<class Type>
 struct type_traitor
@@ -213,77 +219,48 @@ GECO_TEMPLATE_NULL delc_type_traitor_specialization(const signed char*);
 GECO_TEMPLATE_NULL delc_type_traitor_specialization(const unsigned char*);
 # endif //! GECO_CLASS_PARTIAL_SPECIALIZATION
 
+
+
+
 //! The following could be written in terms of numeric_limits.  
 //! We're doing it separately to reduce the number of dependencies.
+
 template<class Type>
 struct IsInteger
 {
     typedef false_type Integer;
 };
 
+#define delc_is_integer_true(Type)\
+struct IsInteger<Type>\
+{\
+    typedef true_type Integer;\
+}
+
 # ifndef GECO_NO_BOOL
-GECO_TEMPLATE_NULL struct IsInteger<bool>
-{
-    typedef true_type Integer;
-};
+GECO_TEMPLATE_NULL delc_is_integer_true(bool);
 # endif
 
 # ifdef GECO_HAS_WCHAR_T
-GECO_TEMPLATE_NULL struct IsInteger<wchar_t>
-{
-    typedef true_type Integer;
-};
+GECO_TEMPLATE_NULL delc_is_integer_true(wchar_t);
 # endif
 
-GECO_TEMPLATE_NULL struct IsInteger<char>
-{
-    typedef true_type Integer;
-};
-GECO_TEMPLATE_NULL struct IsInteger<unsigned char>
-{
-    typedef true_type Integer;
-};
-GECO_TEMPLATE_NULL struct IsInteger<signed char>
-{
-    typedef true_type Integer;
-};
+GECO_TEMPLATE_NULL delc_is_integer_true(char);
+GECO_TEMPLATE_NULL delc_is_integer_true(unsigned char);
+GECO_TEMPLATE_NULL delc_is_integer_true(signed char);
 
-GECO_TEMPLATE_NULL struct IsInteger<unsigned short>
-{
-    typedef true_type Integer;
-};
-GECO_TEMPLATE_NULL struct IsInteger<short>
-{
-    typedef true_type Integer;
-};
+GECO_TEMPLATE_NULL delc_is_integer_true(unsigned short);
+GECO_TEMPLATE_NULL delc_is_integer_true(short);
 
-GECO_TEMPLATE_NULL struct IsInteger<unsigned int>
-{
-    typedef true_type Integer;
-};
-GECO_TEMPLATE_NULL struct IsInteger<int>
-{
-    typedef true_type Integer;
-};
+GECO_TEMPLATE_NULL delc_is_integer_true(unsigned int);
+GECO_TEMPLATE_NULL delc_is_integer_true(int);
 
-GECO_TEMPLATE_NULL struct IsInteger<unsigned long>
-{
-    typedef true_type Integer;
-};
-GECO_TEMPLATE_NULL struct IsInteger<long>
-{
-    typedef true_type Integer;
-};
+GECO_TEMPLATE_NULL delc_is_integer_true(unsigned long);
+GECO_TEMPLATE_NULL delc_is_integer_true(long);
 
-# ifndef GECO_LONG_LONG
-GECO_TEMPLATE_NULL struct IsInteger<unsigned long long>
-{
-    typedef true_type Integer;
-};
-GECO_TEMPLATE_NULL struct IsInteger<long long>
-{
-    typedef true_type Integer;
-};
+# ifdef GECO_LONG_LONG
+GECO_TEMPLATE_NULL delc_is_integer_true(unsigned long long);
+GECO_TEMPLATE_NULL delc_is_integer_true(long long);
 # endif
 
 GECO_END_NAMESPACE
