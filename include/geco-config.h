@@ -465,7 +465,7 @@
 #   ifdef _REENTRANT
 #     define GECO_PTHREADS
 #   endif
-#   define __SGI_STL_NO_ARROW_OPERATOR
+#   define GECO_NO_ARROW_OPERATOR
 #   define GECO_PARTIAL_SPECIALIZATION_SYNTAX
 #   define GECO_NO_EXCEPTION_HEADER
 #   define GECO_NO_BAD_ALLOC
@@ -660,6 +660,7 @@ typedef int bool;
 #   define GECO_TEMPLATE_NULL
 # endif
 
+//#define GECO_USE_POOL_ALLOCATOR
 //! Use standard-conforming allocators if we have the necessary language
 //! features.  GECO_USE_SGI_ALLOCATORS is a hook so that users can
 //! disable new-style allocators, and continue to use the same kind of
@@ -670,7 +671,7 @@ typedef int bool;
     !defined(GECO_NO_BOOL) && \
     !defined(GECO_NON_TYPE_TMPL_PARAM_BUG) && \
     !defined(GECO_LIMITED_DEFAULT_TEMPLATES) && \
-    !defined(GECO_NOT_USE_POOL_ALLOCATOR)
+    !defined(GECO_USE_POOL_ALLOCATOR)
 #   define GECO_USE_C_STANDARD_MALLOC
 # endif
 
@@ -691,8 +692,12 @@ typedef int bool;
 # if defined(GECO_HAS_NAMESPACES) && !defined(GECO_NO_NAMESPACES)
 #   define GECO_USE_NAMESPACES
 //#   define GECO geco
-#   define GECO_BEGIN_NAMESPACE namespace geco {namespace ds {
-#   define GECO_END_NAMESPACE }}
+#   define GECO_BEGIN_NAMESPACE \
+namespace geco {\
+    namespace ds {
+#   define GECO_END_NAMESPACE \
+                            }\
+                              }
 #   if defined(GECO_FUNCTION_TMPL_PARTIAL_ORDER) && \
        !defined(GECO_NO_RELOPS_NAMESPACE)
 #     define GECO_USE_NAMESPACE_FOR_RELOPS
@@ -749,6 +754,14 @@ typedef int bool;
 if (!(expr)){ fprintf(stderr, "%s:%d GECO assertion failure: %s\n",FILE,LINE,# expr);abort(); }
 #else
 # define GECO_assert(expr)
+#endif
+
+#if defined(GECO_WIN32THREADS) || defined(GECO_SGI_THREADS) \
+    || defined(GECO_PTHREADS)  || defined(GECO_UITHREADS)
+#   define GECO_USE_STL_THREADS
+#   define GECO_VOLATILE volatile
+#else
+#   define GECO_VOLATILE
 #endif
 
 # endif /* GECO_CONFIG_H */

@@ -31,7 +31,8 @@ inline bool copy(Type* source, Type* destination, int n)
 
 TEST(TypeTraitor, test_trait_type)
 {
-    int();
+    int a = int();
+    printf("int a '%d'\n", a);
     int *s = 0;
     int *d = 0;
     bool val = copy<int>(s, d, 12);
