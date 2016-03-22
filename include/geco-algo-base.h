@@ -14,17 +14,15 @@
 #include <cstddef>
 #include <new>
 
-#include "geco-pair.h"
-#include "geco-type-traits.h"
-
-#ifdef __STL_USE_NEW_IOSTREAMS
+#ifdef GECO_USE_NEW_IOSTREAMS
 #include <iosfwd>
 #else /* __STL_USE_NEW_IOSTREAMS */
 #include <iostream>
 #endif /* __STL_USE_NEW_IOSTREAMS */
 
-//#include <geco-iterator-base.h>
-//#include <geco-iterator.h>
+#include "geco-pair.h"
+#include "geco-iter.h"
+#include "geco-iter-base.h"
 
 GECO_BEGIN_NAMESPACE
 

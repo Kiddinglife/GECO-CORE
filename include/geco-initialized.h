@@ -81,6 +81,7 @@
 #include <cstring>
 #include "geco-config.h"
 #include "geco-ctor-dtor.h"
+
 GECO_BEGIN_NAMESPACE
 
 //! @brief valid if copy ctor is equivalent to assignment when dtor is trivial
@@ -88,7 +89,7 @@ template<class InputIter, class ForwardIter>
 inline ForwardIter uninitialized_copy(InputIter copy_start_pos,
     InputIter copy_end_pos, ForwardIter destination, true_type is_pod)
 {
-    GECO::copy(copy_start_pos, copy_end_pos, destination);
+    copy(copy_start_pos, copy_end_pos, destination);
 }
 
 //! copy data in range [first, last) to the range satrting from result
@@ -147,7 +148,7 @@ inline pair<InputIter, ForwardIter> uninitialized_copy_n(
     InputIter copy_start_pos, InputIter copy_end_pos,
     ForwardIter destination, true_type is_pod)
 {
-    GECO::copy(copy_start_pos, copy_end_pos, destination);
+    copy(copy_start_pos, copy_end_pos, destination);
 }
 
 GECO_END_NAMESPACE
