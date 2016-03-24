@@ -154,7 +154,7 @@
 //! or if <new> does not contain a bad_alloc class. 
 //! If a bad_alloc class exists, it is assumed to be in namespace geco.
 
-//! @def  GECO_LONG_LONG
+//! @def  GECO_HAS_LONG_LONG
 //! @brief if the compiler has long long and unsigned long long
 //! types (They're not in the C++ standard, but they are expected to be 
 //! included in the forthcoming C9X standard).
@@ -263,6 +263,8 @@
 //! @brief either as a test or as a null macro, depending on
 //! whether or not GECO_ASSERTIONS is defined.
 
+#define GECO_REQUIRES(a,b)
+
 # if defined(_PTHREADS) && !defined(_NOTHREADS)
 #     define GECO_PTHREADS
 # endif
@@ -330,7 +332,7 @@
 #     define GECO_SGI_THREADS
 #   endif
 #   if defined(_LONGLONG) && defined(_SGIAPI) && _SGIAPI
-#     define GECO_LONG_LONG
+#     define GECO_HAS_LONG_LONG
 #   endif
 #   if _COMPILER_VERSION >= 730 && defined(_STANDARD_C_PLUS_PLUS)
 #     define GECO_USE_NEW_IOSTREAMS
@@ -381,7 +383,7 @@
 #     define GECO_USE_EXCEPTIONS
 #     define GECO_HAS_NAMESPACES
 #     define GECO_USE_NAMESPACES
-#     define GECO_LONG_LONG
+#     define GECO_HAS_LONG_LONG
 #     if defined(_REENTRANT)
 #           define _UITHREADS     /* if      UnixWare < 7.0.1 */
 #           define GECO_UITHREADS
@@ -481,7 +483,7 @@
 # endif
 
 # if defined(ICL) //! Intel compiler, which uses the EDG front end.
-#   define GECO_LONG_LONG
+#   define GECO_HAS_LONG_LONG
 #   define GECO_MEMBER_TEMPLATES
 #   define GECO_MEMBER_TEMPLATE_CLASSES
 #   define GECO_TEMPLATE_FRIENDS

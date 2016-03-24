@@ -31,10 +31,10 @@
  *      Author: jakie zhang
  */
 
-#ifndef INCLUDE_GECO_MALLOC_H_
-#define INCLUDE_GECO_MALLOC_H_
+#ifndef INCLUDE_GECO_DS_MALLOC_H_
+#define INCLUDE_GECO_DS_MALLOC_H_
 
-#include "geco-config.h"
+#include "geco-ds-config.h"
 GECO_BEGIN_NAMESPACE
 
 #ifdef __SUNPRO_CC
@@ -124,4 +124,4 @@ if (threads && __us_rsthread_malloc)
 #endif
 
 GECO_END_NAMESPACE
-#endif /* INCLUDE_GECO_MALLOC_H_ */
+#endif /* INCLUDE_GECO_DS_MALLOC_H_ */

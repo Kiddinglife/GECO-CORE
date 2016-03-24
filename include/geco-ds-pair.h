@@ -44,10 +44,10 @@
 
 // make_pair(0 uses return value optimization
 
-#ifndef INCLUDE_GECO_PAIR_H_
-#define INCLUDE_GECO_PAIR_H_
+#ifndef INCLUDE_GECO_DS_PAIR_H_
+#define INCLUDE_GECO_DS_PAIR_H_
 
-#include "geco-config.h"
+#include "geco-ds-config.h"
 
 GECO_BEGIN_NAMESPACE
 
@@ -151,4 +151,4 @@ inline pair<Type1, Type2> make_pair(const Type1& __x, const Type2& __y)
 }
 
 GECO_END_NAMESPACE
-#endif /* INCLUDE_GECO_PAIR_H_ */
+#endif /* INCLUDE_GECO_DS_PAIR_H_ */

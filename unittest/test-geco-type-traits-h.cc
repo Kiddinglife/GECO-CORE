@@ -1,7 +1,7 @@
+#include "include/geco-ds-config.h"
+#include "include/geco-ds-iter-base.h"
+#include "include/geco-ds-type-traitor.h"
 #include "gtest/gtest.h"
-#include "include/geco-config.h"
-#include "include/geco-type-traits.h"
-#include "include/geco-iter-base.h"
 
 #ifdef GECO_USE_NAMESPACES
 using namespace geco::ds;
@@ -38,4 +38,5 @@ TEST(TypeTraitor, test_trait_type)
     bool val = copy<int>(s, d, 12);
     EXPECT_EQ(true, val);
 }
+
 

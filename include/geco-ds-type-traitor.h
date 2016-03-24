@@ -38,7 +38,7 @@
 # ifndef __INCLUDE_GECO__TYPE_TRAITS_H
 # define __INCLUDE_GECO__TYPE_TRAITS_H
 
-# include "geco-config.h"
+#include "geco-ds-config.h"
 
 /*!
  * @brief This header file provides a framework for allowing complile time dispath
@@ -151,6 +151,7 @@ struct type_traitor
     typedef false_type is_pod_type; //!< @see http://blog.csdn.net/aqtata/article/details/35618709 for details.
 };
 
+
 /*!
  * @brief Provide some specilizations for @struct TypeTraits.
  * This is harmless for comlilers that have built0in type traits support,
@@ -158,7 +159,7 @@ struct type_traitor
  */
 
 //! define that makes life easier
-#define delc_type_traitor_specialization(Type) \
+#define delc_true_type(Type) \
 struct type_traitor<Type>\
 {\
     typedef true_type has_trivial_default_ctor;\
@@ -168,35 +169,47 @@ struct type_traitor<Type>\
     typedef true_type is_pod_type;\
 }
 
+#define delc_false_type(Type) \
+struct type_traitor<Type>\
+{\
+    typedef false_type has_trivial_default_ctor;\
+    typedef false_type has_trivial_copy_ctor;\
+    typedef false_type has_trivial_assign_opt;\
+    typedef false_type has_trivial_dtor;\
+    typedef false_type is_pod_type;\
+}
+
+#include "ext/geco-ds-type-traitor-ext.h"
+
 # ifndef GECO_NO_BOOL
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(bool);
+GECO_TEMPLATE_NULL delc_true_type(bool);
 # endif
 
 # ifdef GECO_HAS_WCHAR_T
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(wchar_t);
+GECO_TEMPLATE_NULL delc_true_type(wchar_t);
 # endif
 
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(char);
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(unsigned char);
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(signed char);
+GECO_TEMPLATE_NULL delc_true_type(char);
+GECO_TEMPLATE_NULL delc_true_type(unsigned char);
+GECO_TEMPLATE_NULL delc_true_type(signed char);
 
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(short);
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(unsigned short);
+GECO_TEMPLATE_NULL delc_true_type(short);
+GECO_TEMPLATE_NULL delc_true_type(unsigned short);
 
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(int);
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(unsigned int);
+GECO_TEMPLATE_NULL delc_true_type(int);
+GECO_TEMPLATE_NULL delc_true_type(unsigned int);
 
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(long);
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(unsigned long);
+GECO_TEMPLATE_NULL delc_true_type(long);
+GECO_TEMPLATE_NULL delc_true_type(unsigned long);
 
 # ifndef GECO_LONG_LONG
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(long long);
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(unsigned long long);
+GECO_TEMPLATE_NULL delc_true_type(long long);
+GECO_TEMPLATE_NULL delc_true_type(unsigned long long);
 # endif
 
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(float);
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(double);
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(long double);
+GECO_TEMPLATE_NULL delc_true_type(float);
+GECO_TEMPLATE_NULL delc_true_type(double);
+GECO_TEMPLATE_NULL delc_true_type(long double);
 
 //! pointer is also basic type, and so the trait result is always @struct TrueType
 # ifdef GECO_CLASS_PARTIAL_SPECIALIZATION
@@ -210,13 +223,13 @@ struct type_traitor<Type*>
     typedef true_type is_pod_type;
 };
 # else
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(char*);
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(signed char*);
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(unsigned char*);
+GECO_TEMPLATE_NULL delc_true_type(char*);
+GECO_TEMPLATE_NULL delc_true_type(signed char*);
+GECO_TEMPLATE_NULL delc_true_type(unsigned char*);
 
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(const char*);
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(const signed char*);
-GECO_TEMPLATE_NULL delc_type_traitor_specialization(const unsigned char*);
+GECO_TEMPLATE_NULL delc_true_type(const char*);
+GECO_TEMPLATE_NULL delc_true_type(const signed char*);
+GECO_TEMPLATE_NULL delc_true_type(const unsigned char*);
 # endif //! GECO_CLASS_PARTIAL_SPECIALIZATION
 
 

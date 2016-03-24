@@ -44,7 +44,9 @@
 #ifndef __INCLUDE_GECO_ITERATOR_BASE_H
 #define __INCLUDE_GECO_ITERATOR_BASE_H
 
-#include "geco-config.h"
+#include "geco-ds-config.h"
+#include <cstddef>
+
 GECO_BEGIN_NAMESPACE
 #define GECO_REQUIRES(a,b)
 
