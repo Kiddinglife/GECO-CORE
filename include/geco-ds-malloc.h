@@ -31,8 +31,8 @@
  *      Author: jakie zhang
  */
 
-#ifndef INCLUDE_GECO_DS_MALLOC_H_
-#define INCLUDE_GECO_DS_MALLOC_H_
+#ifndef __INCLUDE_GECO_DS_MALLOC_H
+#define __INCLUDE_GECO_DS_MALLOC_H
 
 #include "geco-ds-config.h"
 GECO_BEGIN_NAMESPACE
@@ -66,16 +66,16 @@ GECO_BEGIN_NAMESPACE
 #  endif
 #endif
 
-#include <cstddef>
-#include <cstdlib>
-#include <cstring>
-#include <cassert>
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+#include <assert.h>
 #ifndef __RESTRICT
 #  define __RESTRICT
 #endif
 
 #ifdef GECO_USE_STL_THREADS
-#include <stl_threads.h>
+#include "geco-stl-thread.h"
 #define GECO_ALLOC_IF_USES_THREAD true
 # ifdef GECO_SGI_THREADS
 // We test whether threads are in use before locking.
@@ -116,10 +116,10 @@ if (threads && __us_rsthread_malloc)
 // Typically thread-safe and more storage efficient.
 #ifdef GECO_STATIC_TEMPLATE_MEMBER_BUG
 # ifdef __DECLARE_GLOBALS_HERE
-    void (* __malloc_alloc_oom_handler)() = 0;
-    // g++ 2.7.2 does not handle static template data members.
+void (* __malloc_alloc_oom_handler)() = 0;
+// g++ 2.7.2 does not handle static template data members.
 # else
-    extern void (* __malloc_alloc_oom_handler)();
+extern void (* __malloc_alloc_oom_handler)();
 # endif
 #endif
 

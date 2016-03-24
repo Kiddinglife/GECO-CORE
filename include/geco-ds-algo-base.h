@@ -45,10 +45,16 @@
 #ifndef INCLUDE_GECO_DS_ALGO_BASE_H_
 #define INCLUDE_GECO_DS_ALGO_BASE_H_
 
-#include <cstring>
-#include <climits>
-#include <cstdlib>
-#include <cstddef>
+
+#include "geco-ds-pair.h"
+#include "geco-ds-iter.h"
+#include "geco-ds-iter-base.h"
+#include "geco-ds-type-traitor.h"
+
+#include <string.h>
+#include <limits.h>
+#include <stdlib.h>
+#include <stddef.h>
 #include <new>
 
 #ifdef GECO_USE_NEW_IOSTREAMS
@@ -56,11 +62,6 @@
 #else /* STL_USE_NEW_IOSTREAMS */
 #include <iostream>
 #endif /* STL_USE_NEW_IOSTREAMS */
-
-#include "geco-ds-pair.h"
-#include "geco-ds-iter.h"
-#include "geco-ds-iter-base.h"
-#include "geco-ds-type-traitor.h"
 
 GECO_BEGIN_NAMESPACE
 

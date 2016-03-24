@@ -100,6 +100,9 @@ delc_iterator(bidirectional_iterator, Type, bidirectional_iterator_tag, Distance
 template<class Type, class Distance>
 delc_iterator(random_access_iterator, Type, random_access_iterator_tag, Distance)
 
+// @question whicj one should be used? iterator or input_iterator....and so on?
+// if iterator is used, unitialized and copy functions only accept detailed type of iterator like input_iterator declared above
+// ?????
 //! stl standard confirming iterator delc
 //! you can inheritat from this struct to make your own iterator
 template<class Category,

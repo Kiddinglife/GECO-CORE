@@ -44,8 +44,8 @@
 
 // make_pair(0 uses return value optimization
 
-#ifndef INCLUDE_GECO_DS_PAIR_H_
-#define INCLUDE_GECO_DS_PAIR_H_
+#ifndef __INCLUDE_GECO_DS_PAIR_H
+#define __INCLUDE_GECO_DS_PAIR_H
 
 #include "geco-ds-config.h"
 
@@ -61,19 +61,19 @@ struct pair
     Type2 second_;
 
     pair() :
-            first_(Type1()), second_(Type2())
+        first_(Type1()), second_(Type2())
     {
     }
 
     pair(const Type1& first, const Type2& second) :
-            first_(first), second_(second)
+        first_(first), second_(second)
     {
     }
 
 # ifdef GECO_MEMBER_TEMPLATES
     template<class U1, class U2>
     pair(const pair<U1, U2>& p) :
-            first_(p.first_), second_(p.second_)
+        first_(p.first_), second_(p.second_)
     {
     }
 # endif
@@ -81,43 +81,43 @@ struct pair
 
 template<class Type1, class Type2>
 inline bool operator==(const pair<Type1, Type2>& __x,
-        const pair<Type1, Type2>& __y)
+    const pair<Type1, Type2>& __y)
 {
     return __x.first == __y.first && __x.second == __y.second;
 }
 template<class Type1, class Type2>
 inline bool operator<(const pair<Type1, Type2>& __x,
-        const pair<Type1, Type2>& __y)
+    const pair<Type1, Type2>& __y)
 {
     return __x.first < __y.first
-            || (!(__y.first < __x.first) && __x.second < __y.second);
+        || (!(__y.first < __x.first) && __x.second < __y.second);
 }
 
 # ifdef GECO_FUNCTION_TMPL_PARTIAL_ORDER
 template<class Type1, class Type2>
 inline bool operator!=(const pair<Type1, Type2>& __x,
-        const pair<Type1, Type2>& __y)
+    const pair<Type1, Type2>& __y)
 {
     return !(__x == __y);
 }
 
 template<class Type1, class Type2>
 inline bool operator>(const pair<Type1, Type2>& __x,
-        const pair<Type1, Type2>& __y)
+    const pair<Type1, Type2>& __y)
 {
     return __y < __x;
 }
 
 template<class Type1, class Type2>
 inline bool operator<=(const pair<Type1, Type2>& __x,
-        const pair<Type1, Type2>& __y)
+    const pair<Type1, Type2>& __y)
 {
     return !(__y < __x);
 }
 
 template<class Type1, class Type2>
 inline bool operator>=(const pair<Type1, Type2>& __x,
-        const pair<Type1, Type2>& __y)
+    const pair<Type1, Type2>& __y)
 {
     return !(__x < __y);
 }

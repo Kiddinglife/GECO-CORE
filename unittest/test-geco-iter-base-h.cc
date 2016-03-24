@@ -1,7 +1,8 @@
+// !!! remmber myself must put gtest header at the front otherwise you get xltmath errors noted at 24-March-2016
+#include "gtest/gtest.h"
 #include "include/geco-ds-config.h"
 #include "include/geco-ds-iter-base.h"
 #include "include/geco-ds-type-traitor.h"
-#include "gtest/gtest.h"
 
 #ifdef GECO_USE_NAMESPACES
 using namespace geco::ds;

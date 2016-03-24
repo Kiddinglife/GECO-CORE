@@ -168,12 +168,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\unittest\test-geco-alog-h.cc" />
     <ClCompile Include="..\..\unittest\test-geco-iter-base-h.cc" />
     <ClCompile Include="..\..\unittest\test-geco-type-traits-h.cc" />
     <ClCompile Include="..\..\unittest\test-main.cc" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\unittest\readme.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

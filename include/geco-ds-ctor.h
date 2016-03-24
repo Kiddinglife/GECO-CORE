@@ -39,7 +39,6 @@
 # define __INCLUDE_GECO_CONSTRUCT_H
 
 #include <new> //! for use of placement new
-
 #include "geco-ds-config.h"
 
 GECO_BEGIN_NAMESPACE

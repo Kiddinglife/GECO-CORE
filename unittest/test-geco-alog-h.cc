@@ -5,10 +5,10 @@
  *      Author: jakez
  */
 
+#include "gtest/gtest.h"
 #include "include/geco-ds-config.h"
 #include "include/geco-ds-algo-base.h"
 #include "include/geco-ds-iter-base.h"
-#include "gtest/gtest.h"
 
 #ifdef GECO_USE_NAMESPACES
 using namespace geco::ds;
@@ -16,7 +16,7 @@ using namespace geco::ds;
 
 TEST(CopyTests, test_how_copy_is_used)
 {
-    typedef iterator<random_access_iterator<int, ptrdiff_t>, int> iter;
+    typedef random_access_iterator<int, ptrdiff_t> iter;
     iter start;
     iter end;
     iter dest;

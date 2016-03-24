@@ -42,13 +42,10 @@
  *      Author: jakez zhang
  */
 
-#ifndef INCLUDE_GECO_DS_INITIALIZED_H_
-#define INCLUDE_GECO_DS_INITIALIZED_H_
+#ifndef __INCLUDE_GECO_DS_INITIALIZED_H
+#define __INCLUDE_GECO_DS_INITIALIZED_H
 
-#include <cstring>
-
-#include "geco-ds-config.h"
-#include "geco-ds-ctor.h"
+#include <string.h>
 #include "geco-ds-algo-base.h"
 
 GECO_BEGIN_NAMESPACE
@@ -61,56 +58,56 @@ GECO_BEGIN_NAMESPACE
  * term of copy used for the case.
  */
 
-/*! +++++++++++++++++++++++++++++++++++++++
- *                                uninitialized_copy()
- * +++++++++++++++++++++++++++++++++++++++
- //!                      |---------------> call memmove() for highest effciency
- //!                      |---------------> (char *, ...)   <--- partial specialization char
- //!                      |---------------> (wchar_t, ...) <--- partial specialization wchar_t
- //!                      |
- //!                      | Call
- //!                      | tempalte uninitialized_copy(start, end, ValueType* is_pod_type)
- //!                      |----->function overloaded
- //!                                           |
- //!                                           |  Is POD?
- //!                                          ↓
- //!               ++++++++++++++++++++++
- //!           No |                                                    | yes
- //!               ↓                                                   | handled by algo function copy
- //!      construct(&*cur, *start);               copy(start, end, dest)
- *                                                                      |
- *                                                                      |  has_trivial_assign_opt ? (based on function overload)
- *                                                                     ↓
- *                                             yes +++++++++++++++++ No
- *                                                    |                                          |
- *                                   use memmove                                      |
- *                                            copy_aux3()           copy_aux3(...,)
- *
- *
- *
- //! uninitialized_copy_n and unitialized_fill have something common to above
- //! and so they are not drawn individually.
- */
-/*!
- * this method can seperate object construction with its mallocation,
- * if iterator within [dest, distination+(end-start)) point to an
- * unnitialized memory block, copy ctor will be called on every object
- * within [start, end) and put the copy of that object into range
- * container's range constructor often follow the below steps:
- *  - allocate enough memory to hold all elements in the range
- *  - call uninitialized_copy() to construct elment in the memory range.
- */
-template<class InputIter, class ForwardIter>
+ /*! +++++++++++++++++++++++++++++++++++++++
+  *                                uninitialized_copy()
+  * +++++++++++++++++++++++++++++++++++++++
+  //!                      |---------------> call memmove() for highest effciency
+  //!                      |---------------> (char *, ...)   <--- partial specialization char
+  //!                      |---------------> (wchar_t, ...) <--- partial specialization wchar_t
+  //!                      |
+  //!                      | Call
+  //!                      | tempalte uninitialized_copy(start, end, ValueType* is_pod_type)
+  //!                      |----->function overloaded
+  //!                                           |
+  //!                                           |  Is POD?
+  //!                                          ↓
+  //!               ++++++++++++++++++++++
+  //!           No |                                                    | yes
+  //!               ↓                                                   | handled by algo function copy
+  //!      construct(&*cur, *start);               copy(start, end, dest)
+  *                                                                      |
+  *                                                                      |  has_trivial_assign_opt ? (based on function overload)
+  *                                                                     ↓
+  *                                             yes +++++++++++++++++ No
+  *                                                    |                                          |
+  *                                   use memmove                                      |
+  *                                            copy_aux3()           copy_aux3(...,)
+  *
+  *
+  *
+  //! uninitialized_copy_n and unitialized_fill have something common to above
+  //! and so they are not drawn individually.
+  */
+  /*!
+   * this method can seperate object construction with its mallocation,
+   * if iterator within [dest, distination+(end-start)) point to an
+   * unnitialized memory block, copy ctor will be called on every object
+   * within [start, end) and put the copy of that object into range
+   * container's range constructor often follow the below steps:
+   *  - allocate enough memory to hold all elements in the range
+   *  - call uninitialized_copy() to construct elment in the memory range.
+   */
+   template<class InputIter, class ForwardIter>
 inline ForwardIter
-uninitialized_copy(InputIter start,InputIter end, ForwardIter dest)
+uninitialized_copy(InputIter start, InputIter end, ForwardIter dest)
 {
-    return uninitialized_copy(start, end, dest,VALUE_TYPE(dest));
+    return uninitialized_copy(start, end, dest, GET_VALUE_TYPE(dest));
     // use value_type() to fetch the value type of start
 }
 
 //! full specialization of template uninitialized_copy()
 inline char*
-uninitialized_copy(const char* start,const char* end, char* dest)
+uninitialized_copy(const char* start, const char* end, char* dest)
 {
     ::memmove(dest, start, end - start);
     return dest + (end - start);
@@ -127,20 +124,20 @@ uninitialized_copy(const wchar_t* start, const wchar_t* end, wchar_t* dest)
 
 template<class InputIter, class ForwardIter, class ValueType>
 inline ForwardIter
-uninitialized_copy(InputIter start,InputIter end,
-        ForwardIter dest, ValueType* is_pod_type)
+uninitialized_copy(InputIter start, InputIter end,
+ForwardIter dest, ValueType* is_pod_type)
 {
     typedef typename type_traitor<ValueType>::is_POD_type _Is_POD;
-    return uninitialize_copy(start, end, dest,_Is_POD());
+    return uninitialize_copy(start, end, dest, _Is_POD());
 }
 
 //! @brief valid if copy ctor is equivalent to assignment when dtor is trivial
 template<class InputIter, class ForwardIter>
 inline ForwardIter
-uninitialized_copy(InputIter start,InputIter end,
-        ForwardIter dest, true_type is_pod)
+uninitialized_copy(InputIter start, InputIter end,
+ForwardIter dest, true_type is_pod)
 {
-    copy(start, end, dest);
+    return copy(start, end, dest);
 }
 
 //! copy data in range [start, end) to the range satrting from dest
@@ -148,7 +145,7 @@ uninitialized_copy(InputIter start,InputIter end,
 template<class InputIter, class ForwardIter>
 inline ForwardIter
 uninitialized_copy(InputIter start, InputIter end,
-        ForwardIter dest, false_type is_not_pod)
+ForwardIter dest, false_type is_not_pod)
 {
     ForwardIter cur = dest;
     GECO_TRY
@@ -162,15 +159,15 @@ uninitialized_copy(InputIter start, InputIter end,
 }
 
 //! @brief uninitialized_copy_n (not part of the C++ standard)
-template<class InputIter, class ForwardIter,class Size>
+template<class InputIter, class ForwardIter, class Size>
 inline pair<InputIter, ForwardIter>
 uninitialized_copy_n(InputIter start, Size copy_size,
-        ForwardIter dest, input_iterator_tag)
+ForwardIter dest, input_iterator_tag)
 {
     ForwardIter cur = dest;
     GECO_TRY
     {
-        for(; copy_size > 0; --copy_size, ++start, ++cur)
+        for (; copy_size > 0; --copy_size, ++start, ++cur)
         {
             construct(&*cur, *cur);
         }
@@ -178,12 +175,12 @@ uninitialized_copy_n(InputIter start, Size copy_size,
     }GECO_UNWIND(destroy(dest, cur));
 }
 
-template<class InputIter, class ForwardIter>
-pair<InputIter, ForwardIter>
-uninitialized_copy_n(InputIter start, InputIter end,
-        ForwardIter dest, true_type is_pod)
-{
-
-}
+//template<class InputIter, class ForwardIter>
+//pair<InputIter, ForwardIter>
+//uninitialized_copy_n(InputIter start, InputIter end,
+//ForwardIter dest, true_type is_pod)
+//{
+//
+//}
 GECO_END_NAMESPACE
 #endif /* INCLUDE_GECO_DS_INITIALIZED_H_ */

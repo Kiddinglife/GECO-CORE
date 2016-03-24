@@ -694,12 +694,8 @@ typedef int bool;
 # if defined(GECO_HAS_NAMESPACES) && !defined(GECO_NO_NAMESPACES)
 #   define GECO_USE_NAMESPACES
 //#   define GECO geco
-#   define GECO_BEGIN_NAMESPACE \
-namespace geco {\
-    namespace ds {
-#   define GECO_END_NAMESPACE \
-                            }\
-                              }
+#   define GECO_BEGIN_NAMESPACE namespace geco { namespace ds {
+#   define GECO_END_NAMESPACE  }}
 #   if defined(GECO_FUNCTION_TMPL_PARTIAL_ORDER) && \
        !defined(GECO_NO_RELOPS_NAMESPACE)
 #     define GECO_USE_NAMESPACE_FOR_RELOPS

@@ -19,14 +19,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\include\geco-algo-base.h" />
-    <ClInclude Include="..\..\include\geco-config.h" />
-    <ClInclude Include="..\..\include\geco-ctor-dtor.h" />
-    <ClInclude Include="..\..\include\geco-initialized.h" />
-    <ClInclude Include="..\..\include\geco-iter-base.h" />
-    <ClInclude Include="..\..\include\geco-iter.h" />
-    <ClInclude Include="..\..\include\geco-pair.h" />
-    <ClInclude Include="..\..\include\geco-type-traits.h" />
+    <ClInclude Include="..\..\include\ext\geco-ds-type-traitor-ext.h" />
+    <ClInclude Include="..\..\include\geco-ds-algo-base.h" />
+    <ClInclude Include="..\..\include\geco-ds-config.h" />
+    <ClInclude Include="..\..\include\geco-ds-ctor.h" />
+    <ClInclude Include="..\..\include\geco-ds-initialized.h" />
+    <ClInclude Include="..\..\include\geco-ds-iter-base.h" />
+    <ClInclude Include="..\..\include\geco-ds-iter.h" />
+    <ClInclude Include="..\..\include\geco-ds-malloc.h" />
+    <ClInclude Include="..\..\include\geco-ds-pair.h" />
+    <ClInclude Include="..\..\include\geco-ds-type-traitor.h" />
+    <ClInclude Include="..\..\include\geco-stl-thread.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6930D32F-92C6-4208-A9C5-CF92470E075F}</ProjectGuid>

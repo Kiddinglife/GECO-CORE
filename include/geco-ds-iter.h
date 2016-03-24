@@ -34,3 +34,8 @@
 * It is provided "as is" without express or implied warranty.
 *
 */
+
+
+#ifndef __INCLUDE_GECO_DS_ITER_H
+#define __INCLUDE_GECO_DS_ITER_H
+#endif
