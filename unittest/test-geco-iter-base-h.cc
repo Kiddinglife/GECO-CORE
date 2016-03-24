@@ -1,7 +1,8 @@
+// !!! remmber myself must put gtest header at the front otherwise you get xltmath errors noted at 24-March-2016
 #include "gtest/gtest.h"
-#include "include/geco-config.h"
-#include "include/geco-type-traits.h"
-#include "include/geco-iter-base.h"
+#include "include/geco-ds-config.h"
+#include "include/geco-ds-iter-base.h"
+#include "include/geco-ds-type-traitor.h"
 
 #ifdef GECO_USE_NAMESPACES
 using namespace geco::ds;
@@ -15,14 +16,14 @@ inline void advance(InputIter& i, Distance n, input_iterator_tag)
 
 template<class BidirectionalIter, class Distance>
 inline void advance(BidirectionalIter& i, Distance n,
-    bidirectional_iterator_tag)
+        bidirectional_iterator_tag)
 {
     printf("bidirectional_iterator_tag advance\n");
 }
 
 template<class _RandomAccessIterator, class Distance>
 inline void advance(_RandomAccessIterator& i, Distance n,
-    random_access_iterator_tag)
+        random_access_iterator_tag)
 {
     printf("random_access_iterator_tag advance\n");
 }
@@ -44,6 +45,7 @@ inline void advance_(const IteType& i, Distance n)
  */
 TEST(IteratorTraitor, test_trait_assciated_types)
 {
+
     //iterator delc
     //template<class Category,
     //class Type, class Distance = ptrdiff_t,
