@@ -43,9 +43,8 @@
  *+++++++++++++++++++++++++++++++++++++++
  * @brief
  * there are two things we can do to fill unnitialized memory spaces:
- * 1.fill memory with a same value, term of fill used for the case;
- * 2.fill memory by copying data from other palces;
- * term of copy used for the case.
+ * 1.fill memory with a given value
+ * 2.copy data from other palces;
  *+++++++++++++++++++++++++++++++++++++++
  *                                uninitialized_copy()
  *+++++++++++++++++++++++++++++++++++++++
@@ -67,9 +66,9 @@
  *                                                                      |  has_trivial_assign_opt ? (function overload)
  *                                                                     ↓
  *                                             yes +++++++++++++++++ No
- *                                                    |                                          |
- *                                   use memmove                                      |
- *                                            copy_aux3()           copy_aux3(...,)
+ *                                                   ↓                                         |
+ *                                   use memmove                                  ↓
+ *                                            copy_aux3()                   copy_aux3(...,)
  *
  *
  *
