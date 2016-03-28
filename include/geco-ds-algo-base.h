@@ -45,17 +45,16 @@
 #ifndef INCLUDE_GECO_DS_ALGO_BASE_H_
 #define INCLUDE_GECO_DS_ALGO_BASE_H_
 
+#include <cstring>
+#include <climits>
+#include <cstdlib>
+#include <cstddef>
+#include <new>
 
 #include "geco-ds-pair.h"
 #include "geco-ds-iter.h"
 #include "geco-ds-iter-base.h"
 #include "geco-ds-type-traitor.h"
-
-#include <string.h>
-#include <limits.h>
-#include <stdlib.h>
-#include <stddef.h>
-#include <new>
 
 #ifdef GECO_USE_NEW_IOSTREAMS
 #include <iosfwd>
@@ -72,7 +71,7 @@ GECO_BEGIN_NAMESPACE
 template<class Type>
 inline const Type& min(const Type& a, const Type& b)
 {
-    GECO_REQUIRES(a,b);
+    GECO_REQUIRES(a, b);
     return b < a ? b : a;
 }
 template<class Type>
@@ -105,8 +104,8 @@ inline const _Tp& max(const _Tp& __a, const _Tp& __b, _Compare __comp)
 
 template<class InputIter, class OutputIter, class Distance>
 inline OutputIter
-copy_aux3(InputIter first,InputIter last,OutputIter result,
-        input_iterator_tag,Distance*)
+copy_aux3(InputIter first, InputIter last, OutputIter result,
+input_iterator_tag, Distance*)
 {
     for (; first != last; ++result, ++first)
     {
@@ -117,8 +116,8 @@ copy_aux3(InputIter first,InputIter last,OutputIter result,
 
 template<class RandomAccessIter, class OutputIter, class Distance>
 inline OutputIter
-copy_aux3(RandomAccessIter first,RandomAccessIter last,OutputIter result,
-        random_access_iterator_tag,Distance*)
+copy_aux3(RandomAccessIter first, RandomAccessIter last, OutputIter result,
+random_access_iterator_tag, Distance*)
 {
     for (Distance n = last - first; n > 0; --n)
     {
@@ -134,35 +133,35 @@ template <class Type>
 inline Type*
 copy_aux3(const Type* start, const Type* end, Type* dest)
 {
-    ::memmove(dest, start, sizeof(Type)*(end-start));
-    return dest+(end - start);
+    memmove(dest, start, sizeof(Type)*(end - start));
+    return dest + (end - start);
 }
 
 #if defined(GECO_FUNCTION_TMPL_PARTIAL_ORDER)
 template <class InputIter, class OutputIter>
 inline OutputIter
-copy_aux2(InputIter start, InputIter end,OutputIter dest,
-        false_type non_trivial_assign_opt)
+copy_aux2(InputIter start, InputIter end, OutputIter dest,
+false_type non_trivial_assign_opt)
 {
     return copy_aux3(start, end, dest,
-            GET_ITER_CATEGORY(start),
-            GET_DISTANCE_TYPE(start));
+        GET_ITER_CATEGORY(start),
+        GET_DISTANCE_TYPE(start));
 }
 
 template <class InputIter, class OutputIter>
 inline OutputIter
 copy_aux2(InputIter start, InputIter end, OutputIter dest,
-        true_type trivial_assign_opt)
+true_type trivial_assign_opt)
 {
     return copy_aux3(start, end, dest,
-            GET_ITER_CATEGORY(start),
-            GET_DISTANCE_TYPE(start));
+        GET_ITER_CATEGORY(start),
+        GET_DISTANCE_TYPE(start));
 }
 
 #ifndef __USLC__
 template <class Type>
 inline Type* copy_aux2(Type* start, Type* end, Type* dest,
-        true_type trivial_assign_opt)
+    true_type trivial_assign_opt)
 {
     return copy_aux3(start, end, dest);
 }
@@ -170,7 +169,7 @@ inline Type* copy_aux2(Type* start, Type* end, Type* dest,
 
 template <class Type>
 inline Type* copy_aux2(const Type* start, const Type* end, Type* dest,
-        true_type trivial_assign_opt)
+    true_type trivial_assign_opt)
 {
     return copy_aux3(start, end, dest);
 }

@@ -20,5 +20,5 @@ TEST(CopyTests, test_how_copy_is_used)
     iter start;
     iter end;
     iter dest;
-    copy(start, end, dest);
+    //copy(start, end, dest);
 }
