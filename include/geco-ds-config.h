@@ -655,8 +655,7 @@ typedef int bool;
 #   define GECO_NULL_TMPL_ARGS
 # endif
 
-# if defined(GECO_CLASS_PARTIAL_SPECIALIZATION) \
-|| defined (GECO_PARTIAL_SPECIALIZATION_SYNTAX)
+# if defined(GECO_CLASS_PARTIAL_SPECIALIZATION) || defined (GECO_PARTIAL_SPECIALIZATION_SYNTAX)
 #   define GECO_TEMPLATE_NULL template<>
 # else
 #   define GECO_TEMPLATE_NULL
