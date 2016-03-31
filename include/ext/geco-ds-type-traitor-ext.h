@@ -49,9 +49,8 @@
 #ifndef INCLUDE_GECO_DS_TYPE_TRAITOR_EXT_H_
 #define INCLUDE_GECO_DS_TYPE_TRAITOR_EXT_H_
 
-#include "geco-ds-config.h"
-
 using namespace geco::ds;
+
 
 struct test
 {
