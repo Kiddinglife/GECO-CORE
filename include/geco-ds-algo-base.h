@@ -42,10 +42,9 @@
  *      Author: jakez
  */
 
-// @Caution when copying non-tricial-assignment-opt-types, like custom class defined by users
-// it will depent on the user-defined-assign-opt's implementations. if you have pointer members
-// in class, if you implement copying data in overwrittn assign-opt method,
-// this copy() will also do same thing
+// @Caution when copying non-trivial-assignment-opt-types,
+// copy() will call user-customiszed assign operator implementation
+// where user may have a ptr member and copy data
 
 #ifndef INCLUDE_GECO_DS_ALGO_BASE_H_
 #define INCLUDE_GECO_DS_ALGO_BASE_H_
@@ -147,7 +146,6 @@ copy_aux3(InputIter first, InputIter last, OutputIter result,
     return result;
 }
 
-// hashtable supports random iter but cannot be copied using memmove()
 template<class RandomAccessIter, class OutputIter, class Distance>
 inline OutputIter
 copy_aux3(RandomAccessIter first, RandomAccessIter last, OutputIter result,
@@ -162,16 +160,18 @@ copy_aux3(RandomAccessIter first, RandomAccessIter last, OutputIter result,
     return result;
 }
 
-// @remember myself,
-// for trivial type copy, for example, builtin basic types int* char* and so on.
-// use memmove for highest efficiency.
-// @remember myself, I was wondering why the two copy_aux3() above does not use
-// memove() as we can do &*iter to get the value_type raw pointer formate.
-// now reason is that memove or memcpy() functions only work on continuesous memory
-//so this method only works for continusous memory copy,
-// for example, vector. but for list, even though its value type is basic types like int, we
-// have to go through the elment one by one and copy it simply by = just as the above
-// copy_aux3(0 functions do.
+// @Remember just record a query that cofused me a bit
+// why the two copy_aux3() above does not use memmove() to copy trivial types for highest efficiency?
+// I once thought they should use  memmove() because we can get the value_type raw pointer formate
+// by dereferencing iterator like (&*iter). Actually I was wrong because memove() only works on
+// for continusous memory copy, For example:
+// vector can use memmove() to copy trivial types for highest efficiency by deferencing elements
+// or we can still use one-by-one-copy because memove() copy one byte after another, which may not be
+// be fastr than assignment-copy eg. long long value type. so the only case where memmove() is faster
+// than assign-opt-copy is vector contains raw byte blocks or chars
+// like vector<char[256]> char_blocks; OR vector<char> chars;
+// But for list with trivial value type, we have to use iterator to go through each element and copy value
+// by assignment '=', just like the above two copy_aux3() functions do.
 template <class Type>
 inline Type*
 copy_aux3(const Type* start, const Type* end, Type* dest)
@@ -277,8 +277,9 @@ copy(_InputIter __first, _InputIter __last,_OutputIter __result)
     return copy_dispatcher_::copy(__first, __last, __result);
 }
 #else
-// fallback for compilers with neither partial ordering nor partial specialization.
-// in order to define faster version of copy() for the basic builtin types
+// fallback for compilers with neither func partial ordering nor partial specialization.
+// in order to define faster version of copy() for the basic builtin types using full specialization
+// full specialization is supported by all compilers
 template<class _InputIter, class _OutputIter>
 inline _OutputIter
 copy(_InputIter start, _InputIter end,_OutputIter dest)
