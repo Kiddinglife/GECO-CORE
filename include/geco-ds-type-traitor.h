@@ -223,14 +223,6 @@ struct type_traitor<Type*>
     typedef true_type is_pod_type;
 };
 # else
-GECO_TEMPLATE_NULL delc_true_type(char*);
-GECO_TEMPLATE_NULL delc_true_type(signed char*);
-GECO_TEMPLATE_NULL delc_true_type(unsigned char*);
-
-GECO_TEMPLATE_NULL delc_true_type(const char*);
-GECO_TEMPLATE_NULL delc_true_type(const signed char*);
-GECO_TEMPLATE_NULL delc_true_type(const unsigned char*);
-
 # ifndef GECO_NO_BOOL
 GECO_TEMPLATE_NULL delc_true_type(bool*);
 # endif
