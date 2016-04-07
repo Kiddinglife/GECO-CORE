@@ -264,6 +264,7 @@
 //! whether or not GECO_ASSERTIONS is defined.
 
 #define GECO_REQUIRES(a,b)
+#define GECO_CONVERTIBLE(a,b)
 
 # if defined(_PTHREADS) && !defined(_NOTHREADS)
 #     define GECO_PTHREADS

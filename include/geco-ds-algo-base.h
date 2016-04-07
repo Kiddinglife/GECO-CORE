@@ -45,7 +45,6 @@
 // @Caution when copying non-trivial-assignment-opt-types,
 // copy() will call user-customiszed assign operator implementation
 // where user may have a ptr member and copy data
-
 #ifndef INCLUDE_GECO_DS_ALGO_BASE_H_
 #define INCLUDE_GECO_DS_ALGO_BASE_H_
 
@@ -97,10 +96,12 @@ inline const _Tp& max(const _Tp& __a, const _Tp& __b, _Compare __comp)
 #endif
 
 // swap and iter swap
+// 第三个参数为什么为指针参见<stl_iterator.h>
 template <class ForwardIter1, class ForwardIter2, class Type>
 inline void
 iter_swap_aux1(ForwardIter1 a, ForwardIter2 b, Type*)
 {
+    // swap the value type
     Type tmp = *a;
     *a = *b;
     *b = tmp;
@@ -118,6 +119,7 @@ inline void iter_swap(_ForwardIter1 a, _ForwardIter2 b)
     iter_swap_aux1(a, b, GET_VALUE_TYPE(a));
 }
 
+// use opt=() to swap value
 template<class Type>
 inline void swap(Type& a, Type& b)
 {
@@ -139,6 +141,7 @@ inline OutputIter
 copy_aux3(InputIter first, InputIter last, OutputIter result,
         input_iterator_tag, Distance*)
 {
+    // first != last导致要进行迭代器的比较, 效率低
     for (; first != last; ++result, ++first)
     {
         *result = *first;
@@ -151,6 +154,7 @@ inline OutputIter
 copy_aux3(RandomAccessIter first, RandomAccessIter last, OutputIter result,
         random_access_iterator_tag, Distance*)
 {
+    // 不进行迭代器间的比较, 直接指定循环次数, 高效
     for (Distance n = last - first; n > 0; --n)
     {
         *result = *first;
@@ -182,7 +186,6 @@ copy_aux3(const Type* start, const Type* end, Type* dest)
 
 // tmpl function partial order is used for the RAW POINTER VALUE
 #if defined(GECO_FUNCTION_TMPL_PARTIAL_ORDER)
-
 // even through it is non_trivial_assign_opt, it does matter,
 // because we reply on user-defined-assig-opt implementation when assigning it in aux3
 template <class InputIter, class OutputIter>
@@ -317,7 +320,153 @@ delc_memmove_copy(long double)
 #endif
 
 //--------------------------------------------------
-// copy_backward 从后往前拷贝
+// copy_backward 从后往前拷贝 similar to copy will not expalin it again
+template <class BidirectionalIter1, class BidirectionalIter2, class Distance>
+inline BidirectionalIter2
+copy_backward_aux3(BidirectionalIter1 start,BidirectionalIter1 end,
+        BidirectionalIter2 dest, bidirectional_iterator_tag,Distance*)
+{
+    while(start != end)
+    {
+        *--dest = *--end;
+    }
+    return dest;
+}
+
+template <class RandomAccessIter, class BidirectionalIter, class Distance>
+inline BidirectionalIter
+copy_backward_aux3(RandomAccessIter start, RandomAccessIter end,
+        BidirectionalIter dest, random_access_iterator_tag, Distance*)
+{
+    for(Distance n = end-start; n > 0; --n)
+    {
+        *--dest = *--end;
+    }
+    return dest;
+}
+#ifdef GECO_FUNCTION_TMPL_PARTIAL_ORDER
+template<class BidirectionalIter1, class BidirectionalIter2>
+inline BidirectionalIter1
+copy_backward_aux2(BidirectionalIter1 start, BidirectionalIter1 end, BidirectionalIter2 dest, false_type not_trivial_type)
+{
+    return copy_backward_aux3(start, end, dest, GET_ITER_CATEGORY(start), GET_DISTANCE_TYPE(start));
+}
+template<class BidirectionalIter1, class BidirectionalIter2>
+inline BidirectionalIter1
+copy_backward_aux2(BidirectionalIter1 start, BidirectionalIter1 end, BidirectionalIter2 dest, true_type trivial_type)
+{
+    return copy_backward_aux3(start, end, dest, GET_ITER_CATEGORY(start), GET_DISTANCE_TYPE(start));
+}
+template<class Type>
+Type* copy(const Type* __first, const Type* __last, Type* __result, true_type trivial_type)
+{
+    const ptrdiff_t _Num = __last - __first;
+    memmove(__result - _Num, __first, sizeof(Type) * _Num);
+    return __result - _Num;
+}
+#ifndef __USLC__
+template<class Type>
+Type* copy( Type* __first, Type* __last, Type* __result, true_type trivial_type)
+{
+    const ptrdiff_t _Num = __last - __first;
+    memmove(__result - _Num, __first, sizeof(Type) * _Num);
+    return __result - _Num;
+}
+template<class BidirectionalIter1, class BidirectionalIter2,class Type>
+inline BidirectionalIter1
+copy_backward_aux1(BidirectionalIter1 start, BidirectionalIter1 end, BidirectionalIter2 dest, Type* value_type_)
+{
+    typedef typename type_traitor<Type>::has_trivial_assign_opt assopt;
+    return copy_backward_aux2(start, end, dest, assopt());
+}
+template<class BidirectionalIter1, class BidirectionalIter2>
+inline BidirectionalIter1
+copy_backward(BidirectionalIter1 start, BidirectionalIter1 end, BidirectionalIter2 dest)
+{
+    return copy_backward_aux1(start, end, dest, GET_VALUE_TYPE(start));
+}
+#endif
+#elif defined(GECO_CLASS_PARTIAL_SPECIALIZATION)
+// This dispatch class is a workaround for compilers that do not
+// have partial ordering of function templates.  All we're doing is
+// creating a specialization so that we can turn a call to copy_backward
+// into a memmove whenever possible.
+template<class BidirectionalIter1, class BidirectionalIter2, class trivial_value_type>
+struct copy_backward_dispatcher
+{
+    typedef typename iterator_traitor<BidirectionalIter1>::iterator_category Cat;
+    typedef typename iterator_traitor<BidirectionalIter1>::difference_type Distance;
+
+    static BidirectionalIter2 copy(BidirectionalIter1 first,
+            BidirectionalIter1 last, BidirectionalIter2 result)
+    {
+        return copy_backward_aux3(first, last, result, Cat(),(Distance*) 0);
+    }
+};
+template<class Type>
+struct copy_backward_dispatcher<Type*, Type*, true_type>
+{
+    static Type* copy(const Type* __first, const Type* __last, Type* __result)
+    {
+        const ptrdiff_t _Num = __last - __first;
+        memmove(__result - _Num, __first, sizeof(Type) * _Num);
+        return __result - _Num;
+    }
+};
+
+template<class _Tp>
+struct copy_backward_dispatcher<const _Tp*, _Tp*, true_type>
+{
+    static _Tp* copy(const _Tp* __first, const _Tp* __last, _Tp* __result)
+    {
+        typedef typename copy_backward_dispatcher<_Tp*, _Tp*, true_type> cbd;
+        return cbd::copy(__first, __last, __result);
+    }
+};
+template<class _BI1, class _BI2>
+inline _BI2 copy_backward(_BI1 __first, _BI1 __last, _BI2 __result)
+{
+    GECO_REQUIRES(_BI1, _BidirectionalIterator);
+    GECO_REQUIRES(_BI2, _Mutable_BidirectionalIterator);
+    GECO_CONVERTIBLE(typename iterator_traitor<_BI1>::value_type,typename iterator_traitor<_BI2>::value_type);
+    typedef typename type_traitor<typename iterator_traitor<_BI2>::value_type>::has_trivial_assignment_operator _Trivial;
+    return copy_backward_dispatcher<_BI1, _BI2, _Trivial>::copy(__first, __last,__result);
+}
+#else
+template <class BI1, class BI2>
+inline BI2
+copy_backward(BI1 start, BI1 end, BI2 dest)
+{
+    return copy_backward_aux3(start, end, dest,
+            GET_ITER_CATEGORY(start), GET_DISTANCE_TYPE(start));
+}
+#define delc_memmove_copy_backward(_Tp)                                \
+  inline _Tp* copy_backward(const _Tp* __first, const _Tp* __last, _Tp* __result) { \
+    const ptrdiff_t _Num = __last - __first;\
+    memmove(__result - _Num, __first, sizeof(_Tp) * _Num);\
+    return __result - _Num;                              \
+  }
+
+delc_memmove_copy_backward(char)
+delc_memmove_copy_backward(signed char)
+delc_memmove_copy_backward(unsigned char)
+delc_memmove_copy_backward(short)
+delc_memmove_copy_backward(unsigned short)
+delc_memmove_copy_backward(int)
+delc_memmove_copy_backward(unsigned int)
+delc_memmove_copy_backward(long)
+delc_memmove_copy_backward(unsigned long)
+#ifdef GECO_HAS_WCHAR_T
+delc_memmove_copy_backward(wchar_t)
+#endif
+#ifdef GECO_HAS_LONG_LONG
+delc_memmove_copy_backward(long long)
+delc_memmove_copy_backward(unsigned long long)
+#endif
+delc_memmove_copy_backward(float)
+delc_memmove_copy_backward(double)
+delc_memmove_copy_backward(long double)
+#endif
 
 //--------------------------------------------------
 // copy_n (not part of the C++ standard)
