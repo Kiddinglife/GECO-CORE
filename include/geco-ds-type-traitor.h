@@ -101,27 +101,21 @@
 
 GECO_BEGIN_NAMESPACE
 
+# ifndef GECO_DEFAULT_CONSTRUCTOR_BUG
 enum true_type
 {
 };
 enum false_type
 {
 };
-//# ifndef GECO_DEFAULT_CONSTRUCTOR_BUG
-//enum true_type
-//{
-//};
-//enum false_type
-//{
-//};
-//# else
-//struct true_type
-//{
-//};
-//struct false_type
-//{
-//};
-//# endif
+# else
+struct true_type
+{
+};
+struct false_type
+{
+};
+# endif
 
 template<class Type>
 struct type_traitor

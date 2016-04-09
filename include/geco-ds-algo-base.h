@@ -79,17 +79,17 @@ inline const Type& min(const Type& a, const Type& b)
 template<class Type>
 inline const Type& max(const Type& a, const Type& b)
 {
-    GECO_REQUIRES(_Tp, _LessThanComparable);
+    GECO_REQUIRES(ValueType, _LessThanComparable);
     return a < b ? b : a;
 }
 #else
-template<class _Tp, class _Compare>
-inline const _Tp& min(const _Tp& __a, const _Tp& __b, _Compare __comp)
+template<class ValueType, class _Compare>
+inline const ValueType& min(const ValueType& __a, const ValueType& __b, _Compare __comp)
 {
     return __comp(__b, __a) ? __b : __a;
 }
-template<class _Tp, class _Compare>
-inline const _Tp& max(const _Tp& __a, const _Tp& __b, _Compare __comp)
+template<class ValueType, class _Compare>
+inline const ValueType& max(const ValueType& __a, const ValueType& __b, _Compare __comp)
 {
     return __comp(__a, __b) ? __b : __a;
 }
@@ -107,15 +107,15 @@ iter_swap_aux1(ForwardIter1 a, ForwardIter2 b, Type*)
     *b = tmp;
 }
 
-template<class _ForwardIter1, class _ForwardIter2>
-inline void iter_swap(_ForwardIter1 a, _ForwardIter2 b)
+template<class ForwardIter1, class ForwardIter2>
+inline void iter_swap(ForwardIter1 a, ForwardIter2 b)
 {
     GECO_REQUIRES(ForwardIter1, Mutable_ForwardIterator);
     GECO_REQUIRES(ForwardIter2, Mutable_ForwardIterator);
-    GECO_CONVERTIBLE(typename iterator_traitor<_ForwardIter1>::value_type,
-            typename iterator_traitor<_ForwardIter2>::value_type);
-    GECO_CONVERTIBLE(typename iterator_traitor<_ForwardIter2>::value_type,
-            typename iterator_traitor<_ForwardIter1>::value_type);
+    GECO_CONVERTIBLE(typename iterator_traitor<ForwardIter1>::value_type,
+        typename iterator_traitor<ForwardIter2>::value_type);
+    GECO_CONVERTIBLE(typename iterator_traitor<ForwardIter2>::value_type,
+        typename iterator_traitor<ForwardIter1>::value_type);
     iter_swap_aux1(a, b, GET_VALUE_TYPE(a));
 }
 
@@ -123,7 +123,7 @@ inline void iter_swap(_ForwardIter1 a, _ForwardIter2 b)
 template<class Type>
 inline void swap(Type& a, Type& b)
 {
-    GECO_REQUIRES(_Tp, _Assignable);
+    GECO_REQUIRES(ValueType, _Assignable);
     Type tmp = a;
     a = b;
     b = tmp;
@@ -139,7 +139,7 @@ inline void swap(Type& a, Type& b)
 template<class InputIter, class OutputIter, class Distance>
 inline OutputIter
 copy_aux3(InputIter first, InputIter last, OutputIter result,
-        input_iterator_tag, Distance*)
+input_iterator_tag, Distance*)
 {
     // first != last导致要进行迭代器的比较, 效率低
     for (; first != last; ++result, ++first)
@@ -152,7 +152,7 @@ copy_aux3(InputIter first, InputIter last, OutputIter result,
 template<class RandomAccessIter, class OutputIter, class Distance>
 inline OutputIter
 copy_aux3(RandomAccessIter first, RandomAccessIter last, OutputIter result,
-        random_access_iterator_tag, Distance*)
+random_access_iterator_tag, Distance*)
 {
     // 不进行迭代器间的比较, 直接指定循环次数, 高效
     for (Distance n = last - first; n > 0; --n)
@@ -191,28 +191,28 @@ copy_aux3(const Type* start, const Type* end, Type* dest)
 template <class InputIter, class OutputIter>
 inline OutputIter
 copy_aux2(InputIter start, InputIter end, OutputIter dest,
-        false_type non_trivial_assign_opt)
+false_type non_trivial_assign_opt)
 {
     return copy_aux3(start, end, dest,
-            GET_ITER_CATEGORY(start),
-            GET_DISTANCE_TYPE(start));
+        GET_ITER_CATEGORY(start),
+        GET_DISTANCE_TYPE(start));
 }
 
 template <class InputIter, class OutputIter>
 inline OutputIter
 copy_aux2(InputIter start, InputIter end, OutputIter dest,
-        true_type trivial_assign_opt)
+true_type trivial_assign_opt)
 {
     return copy_aux3(start, end, dest,
-            GET_ITER_CATEGORY(start),
-            GET_DISTANCE_TYPE(start));
+        GET_ITER_CATEGORY(start),
+        GET_DISTANCE_TYPE(start));
 }
 
 // partial order for raw pointer
 #ifndef __USLC__
 template <class Type>
 inline Type* copy_aux2(Type* start, Type* end, Type* dest,
-        true_type trivial_assign_opt)
+    true_type trivial_assign_opt)
 {
     return copy_aux3(start, end, dest);
 }
@@ -220,7 +220,7 @@ inline Type* copy_aux2(Type* start, Type* end, Type* dest,
 
 template <class Type>
 inline Type* copy_aux2(const Type* start, const Type* end, Type* dest,
-        true_type trivial_assign_opt)
+    true_type trivial_assign_opt)
 {
     return copy_aux3(start, end, dest);
 }
@@ -250,52 +250,52 @@ struct copy_dispatcher
     }
 };
 
-template <class _Tp>
-struct copy_dispatcher<_Tp*, _Tp*, true_type>
+template <class ValueType>
+struct copy_dispatcher<ValueType*, ValueType*, true_type>
 {
-    static _Tp* copy(const _Tp* __first, const _Tp* __last, _Tp* __result)
+    static ValueType* copy(const ValueType* start, const ValueType* end, ValueType* dest)
     {
-        return copy_aux3(__first, __last, __result);
+        return copy_aux3(start, end, dest);
     }
 };
 
-template <class _Tp>
-struct copy_dispatcher<const _Tp*, _Tp*, true_type>
+template <class ValueType>
+struct copy_dispatcher<const ValueType*, ValueType*, true_type>
 {
-    static _Tp* copy(const _Tp* __first, const _Tp* __last, _Tp* __result)
+    static ValueType* copy(const ValueType* start, const ValueType* end, ValueType* dest)
     {
-        return copy_aux3(__first, __last, __result);
+        return copy_aux3(start, end, dest);
     }
 };
 
-template <class _InputIter, class _OutputIter>
-inline _OutputIter
-copy(_InputIter __first, _InputIter __last,_OutputIter __result)
+template <class InputIter, class OutputIter>
+inline OutputIter
+copy(InputIter start, InputIter end,OutputIter dest)
 {
-    GECO_REQUIRES(_InputIter, _InputIterator);
-    GECO_REQUIRES(_OutputIter, _OutputIterator);
-    typedef typename iterator_traitor<_InputIter>::value_type value_type_;
+    GECO_REQUIRES(InputIter, _InputIterator);
+    GECO_REQUIRES(OutputIter, _OutputIterator);
+    typedef typename iterator_traitor<InputIter>::value_type value_type_;
     typedef typename type_traitor<value_type_>::has_trivial_assign_opt assign_opt_;
-    typedef typename copy_dispatcher<_InputIter, _OutputIter, assign_opt_> copy_dispatcher_;
-    return copy_dispatcher_::copy(__first, __last, __result);
+    typedef typename copy_dispatcher<InputIter, OutputIter, assign_opt_> copy_dispatcher_;
+    return copy_dispatcher_::copy(start, end, dest);
 }
 #else
 // fallback for compilers with neither func partial ordering nor partial specialization.
 // in order to define faster version of copy() for the basic builtin types using full specialization
 // full specialization is supported by all compilers
-template<class _InputIter, class _OutputIter>
-inline _OutputIter
-copy(_InputIter start, _InputIter end,_OutputIter dest)
+template<class InputIter, class OutputIter>
+inline OutputIter
+copy(InputIter start, InputIter end,OutputIter dest)
 {
     return copy_aux3(start, end,dest,
-            GET_ITER_CATEGORY(start),
-            GET_DISTANCE_TYPE(start));
+        GET_ITER_CATEGORY(start),
+        GET_DISTANCE_TYPE(start));
 }
 
-#define delc_memmove_copy(_Tp)                                \
-  inline _Tp* copy(const _Tp* __first, const _Tp* __last, _Tp* __result) { \
-    memmove(__result, __first, sizeof(_Tp) * (__last - __first));          \
-    return __result + (__last - __first);                                  \
+#define delc_memmove_copy(ValueType)                                \
+  inline ValueType* copy(const ValueType* start, const ValueType* end, ValueType* dest) { \
+    memmove(dest, start, sizeof(ValueType) * (end - start));          \
+    return dest + (end - start);                                  \
   }
 
 delc_memmove_copy(char)
@@ -323,10 +323,10 @@ delc_memmove_copy(long double)
 // copy_backward 从后往前拷贝 similar to copy will not expalin it again
 template <class BidirectionalIter1, class BidirectionalIter2, class Distance>
 inline BidirectionalIter2
-copy_backward_aux3(BidirectionalIter1 start,BidirectionalIter1 end,
-        BidirectionalIter2 dest, bidirectional_iterator_tag,Distance*)
+copy_backward_aux3(BidirectionalIter1 start, BidirectionalIter1 end,
+BidirectionalIter2 dest, bidirectional_iterator_tag, Distance*)
 {
-    while(start != end)
+    while (start != end)
     {
         *--dest = *--end;
     }
@@ -336,9 +336,9 @@ copy_backward_aux3(BidirectionalIter1 start,BidirectionalIter1 end,
 template <class RandomAccessIter, class BidirectionalIter, class Distance>
 inline BidirectionalIter
 copy_backward_aux3(RandomAccessIter start, RandomAccessIter end,
-        BidirectionalIter dest, random_access_iterator_tag, Distance*)
+BidirectionalIter dest, random_access_iterator_tag, Distance*)
 {
-    for(Distance n = end-start; n > 0; --n)
+    for (Distance n = end - start; n > 0; --n)
     {
         *--dest = *--end;
     }
@@ -357,39 +357,39 @@ copy_backward_aux3(const Type* start, const Type* end, Type* dest)
 template<class BidirectionalIter1, class BidirectionalIter2>
 inline BidirectionalIter1
 copy_backward_aux2(BidirectionalIter1 start, BidirectionalIter1 end,
-        BidirectionalIter2 dest, false_type not_trivial_type)
+BidirectionalIter2 dest, false_type not_trivial_type)
 {
     return copy_backward_aux3(start, end, dest,
-            GET_ITER_CATEGORY(start), GET_DISTANCE_TYPE(start));
+        GET_ITER_CATEGORY(start), GET_DISTANCE_TYPE(start));
 }
 template<class BidirectionalIter1, class BidirectionalIter2>
 inline BidirectionalIter1
 copy_backward_aux2(BidirectionalIter1 start, BidirectionalIter1 end,
-        BidirectionalIter2 dest, true_type trivial_type)
+BidirectionalIter2 dest, true_type trivial_type)
 {
     return copy_backward_aux3(start, end, dest,
-            GET_ITER_CATEGORY(start), GET_DISTANCE_TYPE(start));
+        GET_ITER_CATEGORY(start), GET_DISTANCE_TYPE(start));
 }
 template<class Type>
-Type* copy_backward_aux2(const Type* __first, const Type* __last,
-        Type* __result, true_type trivial_type)
+Type* copy_backward_aux2(const Type* start, const Type* end,
+    Type* dest, true_type trivial_type)
 {
-    return copy_backward_aux3(__first,__last, __result);
+    return copy_backward_aux3(start, end, dest);
 }
 
 #ifndef __USLC__
 template<class Type>
-Type* copy_backward_aux2( Type* __first, Type* __last,
-        Type* __result, true_type trivial_type)
+Type* copy_backward_aux2(Type* start, Type* end,
+    Type* dest, true_type trivial_type)
 {
-    return copy_backward_aux3(__first,__last, __result);
+    return copy_backward_aux3(start, end, dest);
 }
 #endif
 
-template<class BidirectionalIter1, class BidirectionalIter2,class Type>
+template<class BidirectionalIter1, class BidirectionalIter2, class Type>
 inline BidirectionalIter1
 copy_backward_aux1(BidirectionalIter1 start, BidirectionalIter1 end,
-        BidirectionalIter2 dest, Type* value_type_)
+BidirectionalIter2 dest, Type* value_type_)
 {
     typedef typename type_traitor<Type>::has_trivial_assign_opt assopt;
     return copy_backward_aux2(start, end, dest, assopt());
@@ -397,7 +397,7 @@ copy_backward_aux1(BidirectionalIter1 start, BidirectionalIter1 end,
 template<class BidirectionalIter1, class BidirectionalIter2>
 inline BidirectionalIter1
 copy_backward(BidirectionalIter1 start, BidirectionalIter1 end,
-        BidirectionalIter2 dest)
+BidirectionalIter2 dest)
 {
     return copy_backward_aux1(start, end, dest, GET_VALUE_TYPE(start));
 }
@@ -413,7 +413,7 @@ struct copy_backward_dispatcher
     typedef typename iterator_traitor<BidirectionalIter1>::difference_type Distance;
 
     static BidirectionalIter2 copy(BidirectionalIter1 first,
-            BidirectionalIter1 last, BidirectionalIter2 result)
+        BidirectionalIter1 last, BidirectionalIter2 result)
     {
         return copy_backward_aux3(first, last, result, Cat(),(Distance*) 0);
     }
@@ -421,31 +421,31 @@ struct copy_backward_dispatcher
 template<class Type>
 struct copy_backward_dispatcher<Type*, Type*, true_type>
 {
-    static Type* copy(const Type* __first, const Type* __last, Type* __result)
+    static Type* copy(const Type* start, const Type* end, Type* dest)
     {
-        const ptrdiff_t _Num = __last - __first;
-        memmove(__result - _Num, __first, sizeof(Type) * _Num);
-        return __result - _Num;
+        const ptrdiff_t _Num = end - start;
+        memmove(dest - _Num, start, sizeof(Type) * _Num);
+        return dest - _Num;
     }
 };
 
-template<class _Tp>
-struct copy_backward_dispatcher<const _Tp*, _Tp*, true_type>
+template<class ValueType>
+struct copy_backward_dispatcher<const ValueType*, ValueType*, true_type>
 {
-    static _Tp* copy(const _Tp* __first, const _Tp* __last, _Tp* __result)
+    static ValueType* copy(const ValueType* start, const ValueType* end, ValueType* dest)
     {
-        typedef typename copy_backward_dispatcher<_Tp*, _Tp*, true_type> cbd;
-        return cbd::copy(__first, __last, __result);
+        typedef typename copy_backward_dispatcher<ValueType*, ValueType*, true_type> cbd;
+        return cbd::copy(start, end, dest);
     }
 };
-template<class _BI1, class _BI2>
-inline _BI2 copy_backward(_BI1 __first, _BI1 __last, _BI2 __result)
+template<class BI1, class BI2>
+inline BI2 copy_backward(BI1 start, BI1 end, BI2 dest)
 {
-    GECO_REQUIRES(_BI1, _BidirectionalIterator);
-    GECO_REQUIRES(_BI2, _Mutable_BidirectionalIterator);
-    GECO_CONVERTIBLE(typename iterator_traitor<_BI1>::value_type,typename iterator_traitor<_BI2>::value_type);
-    typedef typename type_traitor<typename iterator_traitor<_BI2>::value_type>::has_trivial_assignment_operator _Trivial;
-    return copy_backward_dispatcher<_BI1, _BI2, _Trivial>::copy(__first, __last,__result);
+    GECO_REQUIRES(BI1, _BidirectionalIterator);
+    GECO_REQUIRES(BI2, _Mutable_BidirectionalIterator);
+    GECO_CONVERTIBLE(typename iterator_traitor<BI1>::value_type,typename iterator_traitor<BI2>::value_type);
+    typedef typename type_traitor<typename iterator_traitor<BI2>::value_type>::has_trivial_assignment_operator _Trivial;
+    return copy_backward_dispatcher<BI1, BI2, _Trivial>::copy(start, end,dest);
 }
 #else
 // compiler firstly try to find a matched function from common functions copy_backward,
@@ -455,13 +455,13 @@ inline BI2
 copy_backward(BI1 start, BI1 end, BI2 dest)
 {
     return copy_backward_aux3(start, end, dest,
-            GET_ITER_CATEGORY(start), GET_DISTANCE_TYPE(start));
+        GET_ITER_CATEGORY(start), GET_DISTANCE_TYPE(start));
 }
-#define delc_memmove_copy_backward(_Tp)                                \
-  inline _Tp* copy_backward(const _Tp* __first, const _Tp* __last, _Tp* __result) { \
-    const ptrdiff_t _Num = __last - __first;\
-    memmove(__result - _Num, __first, sizeof(_Tp) * _Num);\
-    return __result - _Num;                              \
+#define delc_memmove_copy_backward(ValueType)                                \
+  inline ValueType* copy_backward(const ValueType* start, const ValueType* end, ValueType* dest) { \
+    const ptrdiff_t _Num = end - start;\
+    memmove(dest - _Num, start, sizeof(ValueType) * _Num);\
+    return dest - _Num;                              \
   }
 
 delc_memmove_copy_backward(char)
@@ -487,162 +487,168 @@ delc_memmove_copy_backward(long double)
 
 //--------------------------------------------------
 // copy_n (not part of the C++ standard)
-template<class _InputIter, class _Size, class _OutputIter>
-pair<_InputIter, _OutputIter>
-copy_n_aux2(_InputIter __first, _Size __count,
-        _OutputIter __result, input_iterator_tag)
+template<class InputIter, class Size, class OutputIter>
+pair<InputIter, OutputIter>
+copy_n_aux2(InputIter start, Size count,
+OutputIter dest, input_iterator_tag)
 {
-    for (; __count > 0; --__count)
+    for (; count > 0; --count)
     {
-        *__result = *__first;
-        ++__first;
-        ++__result;
+        *dest = *start;
+        ++start;
+        ++dest;
     }
-    return pair<_InputIter, _OutputIter>(__first, __result);
+    return pair<InputIter, OutputIter>(start, dest);
 }
-template<class _RAIter, class _Size, class _OutputIter>
-inline pair<_RAIter, _OutputIter>
-copy_n_aux2(_RAIter __first, _Size __count,
-        _OutputIter __result, random_access_iterator_tag)
+template<class _RAIter, class Size, class OutputIter>
+inline pair<_RAIter, OutputIter>
+copy_n_aux2(_RAIter start, Size count,
+OutputIter dest, random_access_iterator_tag)
 {
-    _RAIter __last = __first + __count;
-    return pair<_RAIter, _OutputIter>(__last, copy(__first, __last, __result));
+    _RAIter end = start + count;
+    return pair<_RAIter, OutputIter>(end, copy(start, end, dest));
 }
-template<class _InputIter, class _Size, class _OutputIter>
-inline pair<_InputIter, _OutputIter>
-copy_n_aux1(_InputIter __first, _Size __count,_OutputIter __result)
+template<class InputIter, class Size, class OutputIter>
+inline pair<InputIter, OutputIter>
+copy_n_aux1(InputIter start, Size count, OutputIter dest)
 {
-    return copy_n_aux2(__first, __count, __result, GET_ITER_CATEGORY(__first));
+    return copy_n_aux2(start, count, dest, GET_ITER_CATEGORY(start));
 }
-template<class _InputIter, class _Size, class _OutputIter>
-inline pair<_InputIter, _OutputIter>
-copy_n(_InputIter __first, _Size __count,_OutputIter __result)
+template<class InputIter, class Size, class OutputIter>
+inline pair<InputIter, OutputIter>
+copy_n(InputIter start, Size count, OutputIter dest)
 {
-    GECO_REQUIRES(_InputIter, _InputIterator);
-    GECO_REQUIRES(_OutputIter, _OutputIterator);
-    return copy_n_aux1(__first, __count, __result);
+    GECO_REQUIRES(InputIter, _InputIterator);
+    GECO_REQUIRES(OutputIter, _OutputIterator);
+    return copy_n_aux1(start, count, dest);
 }
 //--------------------------------------------------
 // fill and fill_n
-template<class _ForwardIter, class _Tp>
-void fill(_ForwardIter __first, _ForwardIter __last, const _Tp& __value)
+template<class ForwardIter, class ValueType>
+void fill(ForwardIter start, ForwardIter end, const ValueType& value)
 {
-    GECO_REQUIRES(_ForwardIter, _Mutable_ForwardIterator);
-    for (; __first != __last; ++__first)
-    *__first = __value; // 调用的是operator =(), 这个要特别注意
+    GECO_REQUIRES(ForwardIter, _Mutable_ForwardIterator);
+    for (; start != end; ++start)
+        *start = value; // 调用的是operator =(), 这个要特别注意
 }
-// Specialization: for one-byte type and continues memory fill  we can use memset.
-inline void fill(unsigned char* __first, unsigned char* __last,
-        const unsigned char& __c)
+// Specialization: for one-byte type and continues memory fill  we can use 
+// memset. this is not template template specia;ization, 
+// @caution this is actually fill<unsigned char*, unsigned char*>(unsigned char* start, unsigned char* end)
+// you must sepecify specialized types in <>. this is like just a common function but will be taken into 
+// account first by compiler, if not satified, it will call template version. why need this? two reasons:
+// 1. less typing works 2. leass work for compiler deductions
+const unsigned char& c)
+inline void fill(unsigned char* start, unsigned char* end,
+const unsigned char& c)
 {
-    unsigned char __tmp = __c;
-    memset(__first, __tmp, __last - __first);
-}
-
-inline void fill(signed char* __first, signed char* __last,
-        const signed char& __c)
-{
-    signed char __tmp = __c;
-    memset(__first, static_cast<unsigned char>(__tmp), __last - __first);
-}
-
-inline void fill(char* __first, char* __last, const char& __c)
-{
-    char __tmp = __c;
-    memset(__first, static_cast<unsigned char>(__tmp), __last - __first);
+    unsigned char tmp = c;
+    memset(start, tmp, end - start);
 }
 
-template<class _OutputIter, class _Size, class _Tp>
-_OutputIter fill_n(_OutputIter __first, _Size __n, const _Tp& __value)
+inline void fill(signed char* start, signed char* end,
+    const signed char& c)
 {
-    GECO_REQUIRES(_OutputIter, _OutputIterator);
-    for (; __n > 0; --__n, ++__first)
-    *__first = __value;
-    return __first;
+    signed char tmp = c;
+    memset(start, static_cast<unsigned char>(tmp), end - start);
 }
 
-inline unsigned char* fill_n(unsigned char* __first, ptrdiff_t __n,
-        const unsigned char& __c)
+inline void fill(char* start, char* end, const char& c)
 {
-    fill(__first, __first + __n, __c);
-    return __first + __n;
+    char tmp = c;
+    memset(start, static_cast<unsigned char>(tmp), end - start);
 }
 
-inline signed char* fill_n(char* __first, ptrdiff_t __n, const signed char& __c)
+template<class OutputIter, class Size, class ValueType>
+OutputIter fill_n(OutputIter start, Size n, const ValueType& value)
 {
-    fill(__first, __first + __n, __c);
-    return __first + __n;
+    GECO_REQUIRES(OutputIter, _OutputIterator);
+    for (; n > 0; --n, ++start)
+        *start = value;
+    return start;
 }
 
-inline char* fill_n(char* __first, ptrdiff_t __n, const char& __c)
+inline unsigned char* fill_n(unsigned char* start, ptrdiff_t n,
+    const unsigned char& c)
 {
-    fill(__first, __first + __n, __c);
-    return __first + __n;
+    fill(start, start + n, c);
+    return start + n;
+}
+
+inline signed char* fill_n(char* start, ptrdiff_t n, const signed char& c)
+{
+    fill(start, start + n, c);
+    return (signed char*)start + n;
+}
+
+inline char* fill_n(char* start, ptrdiff_t n, const char& c)
+{
+    fill(start, start + n, c);
+    return start + n;
 }
 //--------------------------------------------------
 // equal and mismatch
 // 找到两个序列第一个失配的地方, 结果以pair返回
-template<class _InputIter1, class _InputIter2>
-pair<_InputIter1, _InputIter2>
-mismatch(_InputIter1 __first1,_InputIter1 __last1, _InputIter2 __first2)
+template<class InputIter1, class InputIter2>
+pair<InputIter1, InputIter2>
+mismatch(InputIter1 start1, InputIter1 end1, InputIter2 start2)
 {
-    GECO_REQUIRES(_InputIter1, _InputIterator);
-    GECO_REQUIRES(_InputIter2, _InputIterator);
-    GECO_REQUIRES(typename iterator_traitor<_InputIter1>::value_type,
-            _EqualityComparable);
-    GECO_REQUIRES(typename iterator_traitor<_InputIter2>::value_type,
-            _EqualityComparable);
-    while (__first1 != __last1 && *__first1 == *__first2)
+    GECO_REQUIRES(InputIter1, _InputIterator);
+    GECO_REQUIRES(InputIter2, _InputIterator);
+    GECO_REQUIRES(typename iterator_traitor<InputIter1>::value_type,
+        _EqualityComparable);
+    GECO_REQUIRES(typename iterator_traitor<InputIter2>::value_type,
+        _EqualityComparable);
+    while (start1 != end1 && *start1 == *start2)
     {
-        ++__first1;
-        ++__first2;
+        ++start1;
+        ++start2;
     }
-    return pair<_InputIter1, _InputIter2>(__first1, __first2);
+    return pair<InputIter1, InputIter2>(start1, start2);
 }
 // 提供用户自定义的二元判别式, 其余同上
-template<class _InputIter1, class _InputIter2, class _BinaryPredicate>
-pair<_InputIter1, _InputIter2>
-mismatch(_InputIter1 __first1,_InputIter1 __last1, _InputIter2 __first2,
-        _BinaryPredicate __binary_pred)
+template<class InputIter1, class InputIter2, class _BinaryPredicate>
+pair<InputIter1, InputIter2>
+mismatch(InputIter1 start1, InputIter1 end1, InputIter2 start2,
+_BinaryPredicate __binary_pred)
 {
-    GECO_REQUIRES(_InputIter1, _InputIterator);
-    GECO_REQUIRES(_InputIter2, _InputIterator);
-    while (__first1 != __last1 && __binary_pred(*__first1, *__first2))
+    GECO_REQUIRES(InputIter1, _InputIterator);
+    GECO_REQUIRES(InputIter2, _InputIterator);
+    while (start1 != end1 && __binary_pred(*start1, *start2))
     {
-        ++__first1;
-        ++__first2;
+        ++start1;
+        ++start2;
     }
-    return pair<_InputIter1, _InputIter2>(__first1, __first2);
+    return pair<InputIter1, InputIter2>(start1, start2);
 }
 
 // 如果序列在[first, last)内相等, 则返回true, 如果第二个序列有多余的元素,
 // 则不进行比较, 直接忽略. 如果第二个序列元素不足, 会导致未定义行为
-template<class _InputIter1, class _InputIter2>
+template<class InputIter1, class InputIter2>
 inline bool
-equal(_InputIter1 __first1, _InputIter1 __last1,_InputIter2 __first2)
+equal(InputIter1 start1, InputIter1 end1, InputIter2 start2)
 {
-    GECO_REQUIRES(_InputIter1, _InputIterator);
-    GECO_REQUIRES(_InputIter2, _InputIterator);
-    GECO_REQUIRES(typename iterator_traitor<_InputIter1>::value_type,
-            _EqualityComparable);
-    GECO_REQUIRES(typename iterator_traitor<_InputIter2>::value_type,
-            _EqualityComparable);
-    for (; __first1 != __last1; ++__first1, ++__first2)
-    if (*__first1 != *__first2) // 只要有一个不相等就判定为false
-    return false;
+    GECO_REQUIRES(InputIter1, _InputIterator);
+    GECO_REQUIRES(InputIter2, _InputIterator);
+    GECO_REQUIRES(typename iterator_traitor<InputIter1>::value_type,
+        _EqualityComparable);
+    GECO_REQUIRES(typename iterator_traitor<InputIter2>::value_type,
+        _EqualityComparable);
+    for (; start1 != end1; ++start1, ++start2)
+        if (*start1 != *start2) // 只要有一个不相等就判定为false
+            return false;
     return true;
 }
 // 提供用户自定义的二元判别式, 其余同上
-template<class _InputIter1, class _InputIter2, class _BinaryPredicate>
+template<class InputIter1, class InputIter2, class _BinaryPredicate>
 inline bool
-equal(_InputIter1 __first1, _InputIter1 __last1,
-        _InputIter2 __first2, _BinaryPredicate __binary_pred)
+equal(InputIter1 start1, InputIter1 end1,
+InputIter2 start2, _BinaryPredicate __binary_pred)
 {
-    GECO_REQUIRES(_InputIter1, _InputIterator);
-    GECO_REQUIRES(_InputIter2, _InputIterator);
-    for (; __first1 != __last1; ++__first1, ++__first2)
-    if (!__binary_pred(*__first1, *__first2)) // 只要有一个不相等就判定为false
-    return false;
+    GECO_REQUIRES(InputIter1, _InputIterator);
+    GECO_REQUIRES(InputIter2, _InputIterator);
+    for (; start1 != end1; ++start1, ++start2)
+        if (!__binary_pred(*start1, *start2)) // 只要有一个不相等就判定为false
+            return false;
     return true;
 }
 
@@ -650,66 +656,66 @@ equal(_InputIter1 __first1, _InputIter1 __last1,
 // 具体比较方式参见STL文档, 另外strcmp()也可以参考
 // lexicographical_compare and lexicographical_compare_3way.
 // (the latter is not part of the C++ standard.)
-template<class _InputIter1, class _InputIter2>
+template<class InputIter1, class InputIter2>
 bool lexicographical_compare(
-        _InputIter1 __first1,
-        _InputIter1 __last1,
-        _InputIter2 __first2,
-        _InputIter2 __last2)
+    InputIter1 start1,
+    InputIter1 end1,
+    InputIter2 start2,
+    InputIter2 end2)
 {
-    GECO_REQUIRES(_InputIter1, _InputIterator);
-    GECO_REQUIRES(_InputIter2, _InputIterator);
-    GECO_REQUIRES(typename iterator_traitor<_InputIter1>::value_type,
-            _LessThanComparable);
-    GECO_REQUIRES(typename iterator_traitor<_InputIter2>::value_type,
-            _LessThanComparable);
-    for (; __first1 != __last1 && __first2 != __last2; ++__first1, ++__first2)
+    GECO_REQUIRES(InputIter1, _InputIterator);
+    GECO_REQUIRES(InputIter2, _InputIterator);
+    GECO_REQUIRES(typename iterator_traitor<InputIter1>::value_type,
+        _LessThanComparable);
+    GECO_REQUIRES(typename iterator_traitor<InputIter2>::value_type,
+        _LessThanComparable);
+    for (; start1 != end1 && start2 != end2; ++start1, ++start2)
     {
-        if (*__first1 < *__first2)
-        return true;
-        if (*__first2 < *__first1)
-        return false;
+        if (*start1 < *start2)
+            return true;
+        if (*start2 < *start1)
+            return false;
     }
     // 区间所有元素相等 all elments have the same value
-    return __first1 == __last1 && __first2 != __last2;
+    return start1 == end1 && start2 != end2;
 }
 // 提供用户自定义的二元判别式, 其余同上
-template<class _InputIter1, class _InputIter2, class _Compare>
+template<class InputIter1, class InputIter2, class _Compare>
 bool lexicographical_compare(
-        _InputIter1 __first1,
-        _InputIter1 __last1,
-        _InputIter2 __first2,
-        _InputIter2 __last2,
-        _Compare __comp)
+    InputIter1 start1,
+    InputIter1 end1,
+    InputIter2 start2,
+    InputIter2 end2,
+    _Compare __comp)
 {
-    GECO_REQUIRES(_InputIter1, _InputIterator);
-    GECO_REQUIRES(_InputIter2, _InputIterator);
-    for (; __first1 != __last1 && __first2 != __last2; ++__first1, ++__first2)
+    GECO_REQUIRES(InputIter1, _InputIterator);
+    GECO_REQUIRES(InputIter2, _InputIterator);
+    for (; start1 != end1 && start2 != end2; ++start1, ++start2)
     {
-        if (__comp(*__first1, *__first2))
-        return true;
-        if (__comp(*__first2, *__first1))
-        return false;
+        if (__comp(*start1, *start2))
+            return true;
+        if (__comp(*start2, *start1))
+            return false;
     }
-    return __first1 == __last1 && __first2 != __last2;
+    return start1 == end1 && start2 != end2;
 }
 //char类型使用ｍｅｍｃｍｐ比较
 inline bool lexicographical_compare(
-        const unsigned char* __first1,
-        const unsigned char* __last1,
-        const unsigned char* __first2,
-        const unsigned char* __last2)
+    const unsigned char* start1,
+    const unsigned char* end1,
+    const unsigned char* start2,
+    const unsigned char* end2)
 {
-    const size_t __len1 = __last1 - __first1;
-    const size_t __len2 = __last2 - __first2;
-    const int __result = memcmp(__first1, __first2, min(__len1, __len2));
-    return __result != 0 ? __result < 0 : __len1 < __len2;
+    const size_t __len1 = end1 - start1;
+    const size_t __len2 = end2 - start2;
+    const int dest = memcmp(start1, start2, min(__len1, __len2));
+    return dest != 0 ? dest < 0 : __len1 < __len2;
 }
 inline bool lexicographical_compare(
-        const char* __first1,
-        const char* __last1,
-        const char* __first2,
-        const char* __last2)
+    const char* start1,
+    const char* end1,
+    const char* start2,
+    const char* end2)
 {
     /**
      limits.h 先定义了 SCHAR_ 和 UCHAR
@@ -730,77 +736,77 @@ inline bool lexicographical_compare(
      此外，int 还有 _I64  (64位整型）
      */
 #if CHAR_MAX == SCHAR_MAX
-    return lexicographical_compare((const signed char*) __first1,
-            (const signed char*) __last1, (const signed char*) __first2,
-            (const signed char*) __last2);
+    return lexicographical_compare((const signed char*)start1,
+        (const signed char*)end1, (const signed char*)start2,
+        (const signed char*)end2);
 #else /* CHAR_MAX == SCHAR_MAX */
-    return lexicographical_compare((const unsigned char*) __first1,
-            (const unsigned char*) __last1,
-            (const unsigned char*) __first2,
-            (const unsigned char*) __last2);
+    return lexicographical_compare((const unsigned char*) start1,
+        (const unsigned char*) end1,
+        (const unsigned char*) start2,
+        (const unsigned char*) end2);
 #endif /* CHAR_MAX == SCHAR_MAX */
 }
 
 // 一句话概括, 这个是strcmp()的泛化版本
-template<class _InputIter1, class _InputIter2>
-int __lexicographical_compare_3way(_InputIter1 __first1, _InputIter1 __last1,
-        _InputIter2 __first2, _InputIter2 __last2)
+template<class InputIter1, class InputIter2>
+int __lexicographical_compare_3way(InputIter1 start1, InputIter1 end1,
+    InputIter2 start2, InputIter2 end2)
 {
-    while (__first1 != __last1 && __first2 != __last2)
+    while (start1 != end1 && start2 != end2)
     {
-        if (*__first1 < *__first2)
-        return -1;
-        if (*__first2 < *__first1)
-        return 1;
-        ++__first1;
-        ++__first2;
+        if (*start1 < *start2)
+            return -1;
+        if (*start2 < *start1)
+            return 1;
+        ++start1;
+        ++start2;
     }
-    if (__first2 == __last2)
+    if (start2 == end2)
     {
-        return !(__first1 == __last1);
+        return !(start1 == end1);
     }
     else
     {
         return -1;
     }
 }
-inline int __lexicographical_compare_3way(const unsigned char* __first1,
-        const unsigned char* __last1, const unsigned char* __first2,
-        const unsigned char* __last2)
+inline int __lexicographical_compare_3way(const unsigned char* start1,
+    const unsigned char* end1, const unsigned char* start2,
+    const unsigned char* end2)
 {
-    const ptrdiff_t __len1 = __last1 - __first1;
-    const ptrdiff_t __len2 = __last2 - __first2;
-    const int __result = memcmp(__first1, __first2, min(__len1, __len2));
-    return __result != 0 ?
-    __result : (__len1 == __len2 ? 0 : (__len1 < __len2 ? -1 : 1));
+    const ptrdiff_t __len1 = end1 - start1;
+    const ptrdiff_t __len2 = end2 - start2;
+    const int dest = memcmp(start1, start2, min(__len1, __len2));
+    return dest != 0 ?
+    dest : (__len1 == __len2 ? 0 : (__len1 < __len2 ? -1 : 1));
 }
 
-inline int __lexicographical_compare_3way(const char* __first1,
-        const char* __last1, const char* __first2, const char* __last2)
+inline int __lexicographical_compare_3way(const char* start1,
+    const char* end1, const char* start2, const char* end2)
 {
 #if CHAR_MAX == SCHAR_MAX
-    return __lexicographical_compare_3way((const signed char*) __first1,
-            (const signed char*) __last1, (const signed char*) __first2,
-            (const signed char*) __last2);
+    return __lexicographical_compare_3way((const signed char*)start1,
+        (const signed char*)end1, (const signed char*)start2,
+        (const signed char*)end2);
 #else
-    return __lexicographical_compare_3way((const unsigned char*) __first1,
-            (const unsigned char*) __last1,
-            (const unsigned char*) __first2,
-            (const unsigned char*) __last2);
+    return __lexicographical_compare_3way((const unsigned char*) start1,
+        (const unsigned char*) end1,
+        (const unsigned char*) start2,
+        (const unsigned char*) end2);
 #endif
 }
 
-template<class _InputIter1, class _InputIter2>
-int lexicographical_compare_3way(_InputIter1 __first1, _InputIter1 __last1,
-        _InputIter2 __first2, _InputIter2 __last2)
+template<class InputIter1, class InputIter2>
+int lexicographical_compare_3way(InputIter1 start1, InputIter1 end1,
+    InputIter2 start2, InputIter2 end2)
 {
-    GECO_REQUIRES(_InputIter1, _InputIterator);
-    GECO_REQUIRES(_InputIter2, _InputIterator);
-    GECO_REQUIRES(typename iterator_traitor<_InputIter1>::value_type,
-            _LessThanComparable);
-    GECO_REQUIRES(typename iterator_traitor<_InputIter2>::value_type,
-            _LessThanComparable);
-    return __lexicographical_compare_3way(__first1, __last1, __first2, __last2);
+    GECO_REQUIRES(InputIter1, _InputIterator);
+    GECO_REQUIRES(InputIter2, _InputIterator);
+    GECO_REQUIRES(typename iterator_traitor<InputIter1>::value_type,
+        _LessThanComparable);
+    GECO_REQUIRES(typename iterator_traitor<InputIter2>::value_type,
+        _LessThanComparable);
+    return __lexicographical_compare_3way(start1, end1, start2, end2);
 }
 
 GECO_END_NAMESPACE

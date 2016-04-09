@@ -38,39 +38,105 @@
 # ifndef __INCLUDE_GECO_CONFIG_H
 # define __INCLUDE_GECO_CONFIG_H
 
-//! Flags.
+/*******************************************************
+* stl 模板的说明及congfig文件解析
+* stl的六大组建：
+* 容器:vector, list
+* 算法 : algorithm头文件中
+* 仿函数 : 和普通函数使用方式一样，在算法中用的较多
+* 迭代器 : 采用前闭后开区间
+* 配接器 : stack
+* 配置器：allocator
+* ****************************************************/
 
-//! @def GECO_NO_BOOL
-//! @brief defined if the compiler doesn't have bool as a builtin type.
+/************************************************************************
+ * 用户可以设置的宏定义
+ * GECO_USE_SGI_ALLOCATORS
+ *  让STL使用老的allocator
+ * GECO_NO_NAMESPACES
+ *  不要将库加入std命名空间中
+ * GECO_NO_RELOPS_NAMESPACE
+ *  不要将关系操作符(> , <= . >= , != )加入到std::rel_ops命名空间
+ *  GECO_ASSERTIONS
+ *  允许运行时检查
+ * PTHREADS
+ *  使用Posix线程
+ * UITHREADS
+ *  使用SCO / Solaris / UI线程
+ * NOTHREADS
+ *  不支持多线程
+ * GECO_USE_NEW_IOSTREAMS
+ *  使用新的输入输出流
+ * GECO_NO_CONCEPT_CHECKS
+ *  不支持错误检查
+ ************************************************ /
 
-//! @def GECO_HAS_WCHAR_T
-//! @brief defined if the compier has wchar_t as a builtin type.
 
-//! GECO_NO_DRAND48
-//! @brief defined if the compiler doesn't have the drand48 function.
-//! @See http://!blog.csdn.net/jimmyblind/article/details/5550042 
-//! for details about drand48() function
+ //! @def GECO_TEMPLATE_NULL
 
-//! @def GECO_STATIC_TEMPLATE_MEMBER_BUG
-//! @brief defined if the compiler can't handle static members of template classes.
+ //! @def GECO_NO_BOOL
+ //! @brief defined if the compiler doesn't have bool as a builtin type.
+
+ //! @def GECO_HAS_WCHAR_T
+ //! @brief defined if the compier has wchar_t as a builtin type.
+
+ //! GECO_NO_DRAND48
+ //! @brief defined if the compiler doesn't have the drand48 function.
+ //! @See http://!blog.csdn.net/jimmyblind/article/details/5550042
+ //! for details about drand48() function
+
+ /**
+ @def GECO_STATIC_TEMPLATE_MEMBER_BUG
+ @brief defined if the compiler can't handle static members of template classes.
+ 测试模板类中是否能够进行静态成员的定义。
+ @example
+ template <class T>
+ class testClass1{
+ public:
+ static int _data;
+ };
+ //进行泛化，定义int类型模板类的静态变量。
+ template<>
+ int testClass1<int>::_data = 10;
+ //进行泛化，定义char类型模板类的静态变量。
+ template<>
+ int testClass1<char>::_data = 11;
+ */
 
 //! @def GECO_STATIC_CONST_INIT_BUG:
 //! @brief defined if the compiler can't handle a constant-initializer in the declaration 
 //! of a static const data member
 
-//! @def GECO_CLASS_PARTIAL_SPECIALIZATION
-//! @brief defined if the compiler supports partial specialization of template classes.
-//! @code
-//!  generic template.
-//!  template<class I, class O>
-//!  struct testClass{...};
-//!  particial-specification 1
-//!  template <class Type>
-//!  struct testClass <Type*, const Type&>{...};
-//!  particial-specification 2
-//!  template <class Type>
-//!  struct testClass <const Type*, Type*>{...};
-//! @endcode
+/**
+ * @def GECO_CLASS_PARTIAL_SPECIALIZATION
+ * @brief defined if the compiler supports partial specialization of template classes.
+ * 是否支持类模板的偏特化
+ * 除了一般设计之外，特别针对某些template参数做特殊化处理，
+ * 也就是说，当有多个模板类符合时，只调用完全匹配的模板。
+
+ * 例如c++标准库中的类vector的定义
+ * template <class T, class Allocator> class vector { // … // };
+ * template <class Allocator> class vector<bool, Allocator> { //…//};
+
+ Another example:
+ template <class T, class O>
+ class testClass2{
+ public:
+ testClass2() {cout << "T,O" << endl;}
+ };
+
+ template <class T>
+ class testClass2<T*, T*>{
+ public:
+ testClass2(){cout << "T*,T*" << endl;}
+ };
+
+ template <class T>
+ class testClass2<const T, T>{
+ public:
+ testClass2(){cout << "cont T, T" << endl;}
+ };
+ */
 
 //! @def GECO_PARTIAL_SPECIALIZATION_SYNTAX
 //! @brief defined if the compiler supports partial specialization syntax for full 
@@ -85,13 +151,29 @@
 //! template <class T*> void f(T) testfunction();
 //! template <const class T*> void f(T) testfunction();
 //! partial_ordering_of_function_templates.cpp
-//! f(i);   // Calls less specialized function.
-//! f(pi);  // Calls more specialized function.
-//! f(cpi); // Calls even more specialized function.
+//! f(t);   // Calls first function.
+//! f(pointer_t);  // Calls second more specialized function.
+//! f(const_pointer_t); // Calls last even more specialized function.
 //! @endcode
 
+/**
 //! @def GECO_MEMBER_TEMPLATES
 //! @brief defined if the compiler supports template member functions of classes.
+//! 测试模板函数中是否允许再有模板成员
+
+class alloc{
+};
+
+template <class T, class Alloc = alloc>
+class vector{
+public:
+typedef T value_type;
+typedef value_type* iterator;
+
+template <class I>
+void insert(iterator, I, I){cout << "insert.\n";}
+};
+*/
 
 //! @def GECO_MEMBER_TEMPLATE_CLASSES
 //! @brief defined if the compiler supports nested classes that are member
@@ -118,12 +200,27 @@
 //! }
 //! @endcode
 
-//! @def  GECO_LIMITED_DEFAULT_TEMPLATES
-//! @brief defined if the compiler is unable to handle default template parameters
-//! that depend on previous template parameters.
-//! @code
-//! template<class Type, class Sequence = deque<Type>>
-//!@endcode
+/**
+ //! @def  GECO_LIMITED_DEFAULT_TEMPLATES
+ //! @brief defined if the compiler is unable to handle default template
+ // !parameters that depend on previous template parameters.
+ //! 测试模板参数可否根据前一个模板参数而设定默认值
+
+ template<class T, class Alloc = alloc, size_t BufSiz = 0 >
+ class deque{
+ public:
+ deque() {cout << "deque.\n";}
+ };
+
+ template <class T,
+ class Sequence = deque<T> >  // use previous T as default parameter
+ class stack{
+ public:
+ stack(){cout << "stack.\n";}
+ private:
+ Sequence d;
+ };
+ */
 
 //! @def  GECO_NON_TYPE_TMPL_PARAM_BUG
 //! @brief defined if the compiler has trouble with
@@ -232,7 +329,7 @@
 //!  comprehensible error messages.  It incurs no runtime overhead.  This 
 //!  feature requires member templates and partial specialization.
 
-//! @def _GECO_NO_CONCEPT_CHECKS
+//! @def GECO_NO_CONCEPT_CHECKS
 //! @brief if defined, disables the error checking that
 //! we get from GECO_USE_CONCEPT_CHECKS.
 
