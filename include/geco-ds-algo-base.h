@@ -537,7 +537,6 @@ void fill(ForwardIter start, ForwardIter end, const ValueType& value)
 // you must sepecify specialized types in <>. this is like just a common function but will be taken into 
 // account first by compiler, if not satified, it will call template version. why need this? two reasons:
 // 1. less typing works 2. leass work for compiler deductions
-const unsigned char& c)
 inline void fill(unsigned char* start, unsigned char* end,
 const unsigned char& c)
 {
