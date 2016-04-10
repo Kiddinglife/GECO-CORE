@@ -23,6 +23,7 @@
     <ClInclude Include="..\..\include\geco-ds-algo-base.h" />
     <ClInclude Include="..\..\include\geco-ds-config.h" />
     <ClInclude Include="..\..\include\geco-ds-ctor.h" />
+    <ClInclude Include="..\..\include\geco-ds-malloc-base.h" />
     <ClInclude Include="..\..\include\geco-ds-initialized.h" />
     <ClInclude Include="..\..\include\geco-ds-iter-base.h" />
     <ClInclude Include="..\..\include\geco-ds-iter.h" />
