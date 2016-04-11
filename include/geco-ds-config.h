@@ -61,6 +61,8 @@
  *  允许运行时检查
  * PTHREADS
  *  使用Posix线程
+ *  GECO_WIN32THREADS
+ *  使用ｗｉｎｓ线程
  * UITHREADS
  *  使用SCO / Solaris / UI线程
  * NOTHREADS
@@ -856,6 +858,7 @@ if (!(expr)){ fprintf(stderr, "%s:%d GECO assertion failure: %s\n",FILE,LINE,# e
 #   define GECO_USE_STL_THREADS
 #   define GECO_VOLATILE volatile
 #else
+#   define GECO_NO_THREADS
 #   define GECO_VOLATILE
 #endif
 
