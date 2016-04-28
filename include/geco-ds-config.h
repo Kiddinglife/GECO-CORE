@@ -559,6 +559,7 @@ void insert(iterator, I, I){cout << "insert.\n";}
 
 # endif
 
+// Sun C++ compiler
 # if defined(__SUNPRO_CC) 
 #   define GECO_NO_BOOL
 #   define GECO_NEED_TYPENAME
