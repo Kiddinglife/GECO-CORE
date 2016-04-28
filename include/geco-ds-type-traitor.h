@@ -101,27 +101,21 @@
 
 GECO_BEGIN_NAMESPACE
 
+# ifndef GECO_DEFAULT_CONSTRUCTOR_BUG
 enum true_type
 {
 };
 enum false_type
 {
 };
-//# ifndef GECO_DEFAULT_CONSTRUCTOR_BUG
-//enum true_type
-//{
-//};
-//enum false_type
-//{
-//};
-//# else
-//struct true_type
-//{
-//};
-//struct false_type
-//{
-//};
-//# endif
+# else
+struct true_type
+{
+};
+struct false_type
+{
+};
+# endif
 
 template<class Type>
 struct type_traitor
@@ -223,13 +217,36 @@ struct type_traitor<Type*>
     typedef true_type is_pod_type;
 };
 # else
-GECO_TEMPLATE_NULL delc_true_type(char*);
-GECO_TEMPLATE_NULL delc_true_type(signed char*);
-GECO_TEMPLATE_NULL delc_true_type(unsigned char*);
+# ifndef GECO_NO_BOOL
+GECO_TEMPLATE_NULL delc_true_type(bool*);
+# endif
 
-GECO_TEMPLATE_NULL delc_true_type(const char*);
-GECO_TEMPLATE_NULL delc_true_type(const signed char*);
-GECO_TEMPLATE_NULL delc_true_type(const unsigned char*);
+# ifdef GECO_HAS_WCHAR_T
+GECO_TEMPLATE_NULL delc_true_type(wchar_t*);
+# endif
+
+GECO_TEMPLATE_NULL delc_true_type(void*);
+GECO_TEMPLATE_NULL delc_true_type(char*);
+GECO_TEMPLATE_NULL delc_true_type(unsigned char*);
+GECO_TEMPLATE_NULL delc_true_type(signed char*);
+
+GECO_TEMPLATE_NULL delc_true_type(short*);
+GECO_TEMPLATE_NULL delc_true_type(unsigned short*);
+
+GECO_TEMPLATE_NULL delc_true_type(int*);
+GECO_TEMPLATE_NULL delc_true_type(unsigned int*);
+
+GECO_TEMPLATE_NULL delc_true_type(long*);
+GECO_TEMPLATE_NULL delc_true_type(unsigned long*);
+
+# ifndef GECO_LONG_LONG
+GECO_TEMPLATE_NULL delc_true_type(long long*);
+GECO_TEMPLATE_NULL delc_true_type(unsigned long long*);
+# endif
+
+GECO_TEMPLATE_NULL delc_true_type(float*);
+GECO_TEMPLATE_NULL delc_true_type(double*);
+GECO_TEMPLATE_NULL delc_true_type(long double*);
 # endif //! GECO_CLASS_PARTIAL_SPECIALIZATION
 
 

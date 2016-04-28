@@ -48,13 +48,14 @@
  */
 #ifndef INCLUDE_GECO_DS_TYPE_TRAITOR_EXT_H_
 #define INCLUDE_GECO_DS_TYPE_TRAITOR_EXT_H_
+
 using namespace geco::ds;
+
 
 struct test
 {
 };
-GECO_TEMPLATE_NULL
-delc_true_type(test);
+GECO_TEMPLATE_NULL delc_true_type(test);
 
 struct test2
 {

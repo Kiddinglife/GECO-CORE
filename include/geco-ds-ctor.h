@@ -56,15 +56,51 @@ GECO_BEGIN_NAMESPACE
 //! non-standard extensions.
 
 //! Internal names
-template<class Type, class Value>
-inline void construct(Type pointer, const Value& val) //!_Construct
-{
-    new ((void*) pointer) Type(val);
-}
+
 template<class Type>
 inline void construct(Type* pointer) //!_Construct
 {
-    new ((void*) pointer) Type();
+    new ((void*)pointer) Type();
+}
+
+template<class Type, class Value>
+inline void construct(Type* pointer, const Value& val) //!_Construct
+{
+    new ((void*)pointer) Type(val); // call copy ctor or single parameter ctor
+}
+template<class Type, class Value1, class Value2>
+inline void construct(Type* pointer,
+    const Value1& val1,
+    const Value2& val2) //!_Construct
+{
+    new ((void*)pointer) Type(val1, val2);
+}
+template<class Type, class Value1, class Value2, class Value3>
+inline void construct(Type* pointer,
+    const Value1& val1,
+    const Value2& val2,
+    const Value3& val3) //!_Construct
+{
+    new ((void*)pointer) Type(val1, val2, val3);
+}
+template<class Type, class Value1, class Value2, class Value3, class Value4>
+inline void construct(Type* pointer,
+    const Value1& val1,
+    const Value2& val2,
+    const Value3& val3,
+    const Value4& val4) //!_Construct
+{
+    new ((void*)pointer) Type(val1, val2, val3, val4);
+}
+template<class Type, class Value1, class Value2, class Value3, class Value4, class Value5>
+inline void construct(Type* pointer,
+    const Value1& val1,
+    const Value2& val2,
+    const Value3& val3,
+    const Value4& val4,
+    const Value5& val5) //!_Construct
+{
+    new ((void*)pointer) Type(val1, val2, val3, val4, val5);
 }
 
 //! call destructor and release memory
@@ -92,14 +128,14 @@ template<class ForwardIterator, class Type>
 inline void destroy(ForwardIterator first, ForwardIterator last, Type*)
 {
     typedef typename type_traitor<Type>::has_trivial_dtor has_trivial_dtor;
-    destroy(first,last,has_trivial_dtor());
+    destroy(first, last, has_trivial_dtor());
 }
 
 template<class ForwardIterator>
 void destroy(ForwardIterator first, ForwardIterator last)
 {
     //! this will call destroy(ForwardIterator first, ForwardIterator last, Type*)
-    destroy(first, last, VALUE_TYPE(first));
+    destroy(first, last, GET_VALUE_TYPE(first));
 }
 
 #define delc_destroy_trivial_raw_ptr(Type) inline void destroy(Type, Type){}
