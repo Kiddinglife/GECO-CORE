@@ -223,6 +223,12 @@ public:
         oom_handler = oom_handler_;
         return (old);
     }
+
+    bool operator==(const malloc_alloc&,const malloc_alloc&)
+    {   return true;}
+
+    bool operator!=(const malloc_alloc&,const malloc_alloc&)
+    {   return false;}
 };
 
 //! 这个版本的STL并没有使用non-type模板参数 
@@ -276,7 +282,6 @@ public:
 template <class Alloc>
 class debug_alloc
 {
-private:
     enum
     {   extra_size = 8};  //! Size of space used to store size.  Note
 
@@ -308,6 +313,13 @@ private:
         *(size_t*)result = __new_sz;
         return result + (int)extra_size;
     }
+
+public:
+    bool operator==(const default_alloc&,const default_alloc&)
+    {   return true;}
+
+    bool operator!=(const default_alloc&,const default_alloc&)
+    {   return false;}
 };
 
 //!编译器不支持template member的话，使用malloc()
@@ -382,8 +394,6 @@ private:
     // It would be nice to use _STL_auto_lock here.  But we
     // don't need the NULL check.  And we do need a test whether
     // threads have actually been started.
-    struct Guard;
-    friend struct Guard;
     struct Guard
     {
         Guard()
@@ -391,6 +401,13 @@ private:
         ~Guard()
         {   GECO_ALLOC_UNLOCK;}
     };
+    friend struct Guard;
+
+    bool operator==(const default_alloc&,const default_alloc&)
+    {   return true;}
+
+    bool operator!=(const default_alloc&,const default_alloc&)
+    {   return false;}
 
     //! 向上舍入操作
     //! 解释一下, ALIGN - 1指明的是实际内存对齐的粒度
@@ -641,5 +658,290 @@ default_alloc<threads, inst>::NFREELISTS
 // member templates, partial specialization, partial ordering of function
 // templates, the typename keyword, and the use of the template keyword
 // to refer to a template member of a dependent type.
+#ifdef GECO_USE_STD_ALLOCATORS
+template <class val_type>
+struct allocator
+{
+    typedef alloc Alloc;
+    typedef single_client_alloc SAlloc;
+
+    typedef size_t size_type;
+    typedef ptrdiff_t difference_type;
+    typedef val_type* pointer;
+    typedef const val_type* const_pointer;
+    typedef val_type& reference;
+    typedef const val_type& const_reference;
+    typedef val_type value_type;
+
+    template <class val_type>
+    struct rebind
+    {
+        typedef allocator<val_type> other;
+    };
+
+    allocator() GECO_NOTHROW
+    {} //default ctor
+    allocator(const allocator&) GECO_NOTHROW
+    {} //cpy ctor
+    template <class _Tp1>
+    allocator(const allocator<_Tp1>&) GECO_NOTHROW
+    {} //tpl  cpy-ctor
+    ~allocator() GECO_NOTHROW
+    {} //dtor
+
+    pointer address(reference x) const
+    {   return &x;}
+    const_pointer address(const_reference x) const
+    {   return &x;}
+
+    //! alloc_size is permitted to be 0.
+    //! C++ standard says nothing about what the return value is when alloc_size = 0.
+    pointer allocate(size_type alloc_size, const void* = 0)
+    {
+        return alloc_size == 0?
+        NULL:(pointer)(Alloc::allocate(alloc_size*sizeof(value_type)));
+    }
+
+    //! __p is not permitted to be a null pointer.
+    void deallocate(pointer ptr, size_type alloc_size)
+    {
+        Alloc::deallocate(ptr, alloc_size * sizeof(value_type));
+    }
+
+    size_type max_size() const GECO_NOTHROW
+    {
+        return size_t(-1) / sizeof(value_type);
+    }
+
+    void construct(pointer ptr, const value_type& val)
+    {   new (ptr) value_type(val);}
+
+    void destroy(pointer ptr)
+    {   ptr->~value_type();}
+};
+
+// full specialization
+GECO_TEMPLATE_NULL
+struct allocator<void>
+{
+    typedef size_t size_type;
+    typedef ptrdiff_t difference_type;
+    typedef void* pointer;
+    typedef const void* const_pointer;
+    typedef void value_type;
+
+    template <class val_type>
+    struct rebind
+    {
+        typedef allocator<val_type> other;
+    };
+};
+
+template <class _T1, class _T2>
+inline bool operator==(const allocator<_T1>&, const allocator<_T2>&)
+{
+    return true;
+}
+
+template <class _T1, class _T2>
+inline bool operator!=(const allocator<_T1>&, const allocator<_T2>&)
+{
+    return false;
+}
+
+// the first kind of Allocator adaptor to turn an SGI-style allocator (e.g. alloc, malloc_alloc)
+// into a standard-conforming allocator.   Note that this adaptor does
+// *not* assume that all objects of the underlying alloc class are
+// identical, nor does it assume that all of the underlying alloc's
+// member functions are static member functions.  Note, also, that
+// alloc_adaptor<_Tp, alloc> is essentially the same thing as allocator<_Tp>.
+template <class val_type, class Alloc>
+struct alloc_adaptor_0
+{
+    Alloc allocator_;
+
+    typedef size_t size_type;
+    typedef ptrdiff_t difference_type;
+    typedef val_type* pointer;
+    typedef const val_type* const_pointer;
+    typedef val_type& reference;
+    typedef const val_type& const_reference;
+    typedef val_type value_type;
+
+    template <class val_type>
+    struct rebind
+    {
+        typedef allocator<val_type> other;
+    };
+
+    alloc_adaptor_0() GECO_NOTHROW
+    {}
+    alloc_adaptor_0(const alloc_adaptor_0& __a) GECO_NOTHROW
+    : allocator_(__a.allocator_)
+    {}
+    template <class _Tp1>
+    alloc_adaptor_0(const alloc_adaptor_0<val_type, Alloc>& __a) GECO_NOTHROW
+    : alloc_adaptor_0(__a.allocator_)
+    {}
+    ~alloc_adaptor_0() GECO_NOTHROW
+    {}
+
+    pointer address(reference x) const
+    {   return &x;}
+    const_pointer address(const_reference x) const
+    {   return &x;}
+
+    //! alloc_size is permitted to be 0.
+    //! C++ standard says nothing about what the return value is when alloc_size = 0.
+    pointer allocate(size_type alloc_size, const void* = 0)
+    {
+        return alloc_size == 0?
+        NULL:(pointer)(allocator_.allocate(alloc_size*sizeof(value_type)));
+    }
+
+    //! __p is not permitted to be a null pointer.
+    void deallocate(pointer ptr, size_type alloc_size)
+    {
+        allocator_.deallocate(ptr, alloc_size * sizeof(value_type));
+    }
+
+    size_type max_size() const GECO_NOTHROW
+    {
+        return size_t(-1) / sizeof(value_type);
+    }
+
+    void construct(pointer ptr, const value_type& val)
+    {   new (ptr) value_type(val);}
+
+    void destroy(pointer ptr)
+    {   ptr->~value_type();}
+};
+
+template <class Alloc>
+class alloc_adaptor_0<void, Alloc>
+{
+    typedef size_t size_type;
+    typedef ptrdiff_t difference_type;
+    typedef void* pointer;
+    typedef const void* const_pointer;
+    typedef void value_type;
+
+    template <class valtype> struct rebind
+    {
+        typedef alloc_adaptor_0<valtype, Alloc> other;
+    };
+};
+
+// the second kind of  allocator adaptor.  This serves two
+// purposes.  First, make it possible to write containers that can use
+// either SGI-style allocators or standard-conforming allocator.
+// Second, provide a mechanism so that containers can query whether or
+// not the allocator has distinct instances.  If not, the container
+// can avoid wasting a word of memory to store an empty object.
+
+// This adaptor uses partial specialization.  The general case of
+// _Alloc_traits<_Tp, _Alloc> assumes that _Alloc is a
+// standard-conforming allocator, possibly with non-equal instances
+// and non-static members.  (It still behaves correctly even if _Alloc
+// has static member and if all instances are equal.  Refinements
+// affect performance, not correctness.)
+
+// There are always two members: allocator_type, which is a standard-
+// conforming allocator type for allocating objects of type _Tp, and
+// _S_instanceless, a static const member of type bool.  If
+// _S_instanceless is true, this means that there is no difference
+// between any two instances of type allocator_type.  Furthermore, if
+// _S_instanceless is true, then _Alloc_traits has one additional
+// member: _Alloc_type.  This type encapsulates allocation and
+// deallocation of objects of type _Tp through a static interface; it
+// has two member functions, whose signatures are
+//    static _Tp* allocate(size_t)
+//    static void deallocate(_Tp*, size_t)
+
+// 1) General version.
+template <class valtype, class Alloc>
+struct alloc_adaptor_1
+{
+    static const bool instanceless = false;
+    typedef typename Alloc::GECO_TEMPLATE rebind<valtype>::other allocator_type;
+};
+template <class valtype, class Alloc>
+const bool alloc_adaptor_1<valtype, Alloc>::instanceless;
+
+// 2) Version for the allocator
+// internallu typedef  'alloc'  Alloc , either malloc_alloc or default_alloc
+// based on macro define GECO_USE_MALLOC
+template <class valtype, class valtype1>
+struct alloc_adaptor_1<valtype, allocator<valtype1>>
+{
+    static const bool instanceless = true;
+    typedef simple_alloc<valtype, alloc> simple_alloc_type;
+    typedef allocator<valtype> allocator_type;
+};
+
+// 3) Versions for the predefined SGI-style allocators.
+// 1) for malloc_alloc
+template <class valtype, int inst>
+struct alloc_adaptor_1<valtype, malloc_alloc<inst>>
+{
+    static const bool instanceless = true;
+    typedef simple_alloc<valtype, malloc_alloc<inst>> simple_alloc_type;
+    typedef alloc_adaptor_0<valtype, malloc_alloc<int>> allocator_type;
+};
+// 2) for default_alloc
+template <class _Tp, bool __threads, int __inst>
+struct alloc_adaptor_1<_Tp, default_alloc<__threads, __inst> >
+{
+    static const bool _S_instanceless = true;
+    typedef simple_alloc<_Tp, default_alloc<__threads, __inst> >
+    simple_alloc_type;
+    typedef alloc_adaptor_0<_Tp, default_alloc<__threads, __inst> >
+    allocator_type;
+};
+template <class _Tp, class _Alloc>
+struct alloc_adaptor_1<_Tp, debug_alloc<_Alloc> >
+{
+    static const bool _S_instanceless = true;
+    typedef simple_alloc<_Tp, debug_alloc<_Alloc> > simple_alloc_type;
+    typedef alloc_adaptor_0<_Tp, debug_alloc<_Alloc> > allocator_type;
+};
+
+// 4) Versions for the alloc_adaptor_0 adaptor used with the predefined
+// SGI-style allocators.
+template <class _Tp, class _Tp1, int __inst>
+struct alloc_adaptor_1<_Tp,
+alloc_adaptor_0<_Tp1, malloc_alloc<__inst> > >
+{
+    static const bool _S_instanceless = true;
+    typedef simple_alloc<_Tp, malloc_alloc<__inst> > _Alloc_type;
+    typedef alloc_adaptor_0<_Tp, malloc_alloc<__inst> > allocator_type;
+};
+
+template <class _Tp, class _Tp1, bool __thr, int __inst>
+struct alloc_adaptor_1<_Tp,
+alloc_adaptor_0<_Tp1,
+default_alloc<__thr, __inst> > >
+{
+    static const bool _S_instanceless = true;
+    typedef simple_alloc<_Tp, default_alloc<__thr,__inst> >
+    _Alloc_type;
+    typedef alloc_adaptor_0<_Tp, default_alloc<__thr,__inst> >
+    allocator_type;
+};
+
+template <class _Tp, class _Tp1, class _Alloc>
+struct alloc_adaptor_1<_Tp, alloc_adaptor_0<_Tp1, debug_alloc<_Alloc> > >
+{
+    static const bool _S_instanceless = true;
+    typedef simple_alloc<_Tp, debug_alloc<_Alloc> > _Alloc_type;
+    typedef alloc_adaptor_0<_Tp, debug_alloc<_Alloc> > allocator_type;
+};
+#endif //fixme
+
+#if defined(__sgi) && !defined(__GNUC__) && (_MIPS_SIM != _MIPS_SIM_ABI32)
+#pragma reset woff 1174
+#endif
+
 GECO_END_NAMESPACE
+#undef __PRIVATE
 #endif /* INCLUDE_GECO_DS_MALLOC_H_ */

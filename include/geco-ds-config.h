@@ -773,8 +773,8 @@ typedef int bool;
     !defined(GECO_NO_BOOL) && \
     !defined(GECO_NON_TYPE_TMPL_PARAM_BUG) && \
     !defined(GECO_LIMITED_DEFAULT_TEMPLATES) && \
-    !defined(GECO_USE_POOL_ALLOCATOR)
-#   define GECO_USE_C_STANDARD_MALLOC
+    !defined(GECO_USE_POOL_ALLOCATORS)
+#   define GECO_USE_STD_ALLOCATORS
 # endif
 
 //! default is geco pool allocator
