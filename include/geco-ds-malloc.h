@@ -139,17 +139,16 @@ extern void (* __malloc_alloc_oom_handler)();
 
 #define alloc_type_first 1
 #define alloc_type_second 2
+typedef void(*oom_handler_t)();
 
 //! 一级配置器  使用malloc()分配内存
 template<int inst>
 class malloc_alloc
 {
-private:
-
 #ifndef GECO_STATIC_TEMPLATE_MEMBER_BUG
     //!! 如果编译器支持模板类静态成员, 则使用错误处理函数, 类似C++的set_new_handler()  
     //!! 默认值为0, 如果不设置, 则内存分配失败时直接THROW_BAD_ALLOC. 
-    static void(*oom_handler)();
+    static oom_handler_t oom_handler;
 #endif
 
     //!! 使用malloc()循环分配内存,  直到成功分配  
@@ -212,9 +211,15 @@ public:
 
     //!! 设置错误处理函数, 返回原来的函数指针 
     //!! 不属于C++标准规定的接口  
-    static void(*set_oom_handler(void(*oom_handler_)()))()
+    //static void(*set_oom_handler(void(*oom_handler_)()))()
+    //{
+    //void(*old)() = oom_handler;
+    //oom_handler = oom_handler_;
+    // return (old);
+    //}
+    static oom_handler_t set_oom_handler(oom_handler_t oom_handler_)
     {
-        void(*old)() = oom_handler;
+        oom_handler_t old = oom_handler;
         oom_handler = oom_handler_;
         return (old);
     }
@@ -226,7 +231,7 @@ typedef typename malloc_alloc<0> malloc_allocator;
 //! initialize out-of-memory handler when malloc() fails
 #ifndef GECO_STATIC_TEMPLATE_MEMBER_BUG
 template <int inst>
-void(*malloc_alloc<inst>::oom_handler)() = 0;
+oom_handler_t malloc_alloc<inst>::oom_handler = 0;
 #endif
 
 //! simple_alloc中的接口其实就是STL标准中的allocator的接口  
@@ -275,8 +280,7 @@ private:
     enum
     {   extra_size = 8};  //! Size of space used to store size.  Note
 
-    //! that this must be large enough to preserve
-    //! alignment.
+    //! that this must be large enough to preserve alignment.
     //! extra 保证不会分配为0的内存空间, 而且要保证内存对齐  
     //! 把分配内存的最前面设置成n的大小, 用于后面校验  
     //! 内存对齐的作用就是保护前面extra大小的数据不被修改  
@@ -311,16 +315,11 @@ private:
 typedef typename malloc_alloc_0 alloc;
 typedef typename malloc_alloc_0 single_client_alloc;
 #else
-//! Sun C++ compiler需要在类外定义这些枚举  
-#if defined(__SUNPRO_CC) || defined(__GNUC__)  || defined(__HP_aCC)
-//! breaks if we make these template class members:
-enum
-{   ALIGN = 8};
-enum
-{   MAX_BYTES = 256};
-enum
-{   NFREELISTS = 32}; //! _MAX_BYTES/_ALIGN
-#endif
+const size_t ALLOC_UNITS_SIZE = 256;
+const size_t ALIGN = 8;
+const size_t MAX_BYTES = 1512;
+const size_t NFREELISTS = MAX_BYTES/ALIGN;
+
 //! Default node allocator.
 //! With a reasonable compiler, this should be roughly as fast as the
 //! original STL class-specific allocators, but with less fragmentation.
@@ -361,23 +360,12 @@ class default_alloc
     };
 
 private:
-#if ! (defined(__SUNPRO_CC) || defined(__GNUC__))
-    //! Really we should use static const int x = N
-    //! instead of enum { x = N }, but few compilers accept the former.
-    enum
-    {   ALIGN = 8};
-    enum
-    {   MAX_BYTES = 256};
-    enum
-    {   NFREELISTS = 32}; //! _MAX_BYTES/_ALIGN
-# endif
-
 # if defined(__SUNPRO_CC) || defined(__GNUC__) || defined(__HP_aCC)
     static Unit* GECO_VOLATILE free_list[];
     // Specifying a size results in duplicate def for 4.1
 # else
     // 这里分配的free_list为16  
-    // 对应的内存链容量分别为8, 16, 32 ... 128  
+    // 对应的内存链容量分别为8, 16, 32 ... 128....1512
     static Unit* GECO_VOLATILE free_list[NFREELISTS];
 # endif
 
@@ -431,48 +419,185 @@ private:
         return (((size)+(size_t)ALIGN - 1) / (size_t)ALIGN - 1);
     }
 
-    //! Returns an object of size __n, and optionally adds to size __n free list.
-    static void* refill(size_t size);
+    //! Returns an object of size @allocbytes, and optionally adds to size @allocbytes free list.
+    //! We assume that size is properly aligned. We hold the allocation lock.
+    static void* build_unit_list(size_t aligned_uint_size)
+    {
+        int alloc_units_size = ALLOC_UNITS_SIZE;
+        char* unit =alloc_units(aligned_uint_size, alloc_units_size);
 
-    //! Allocates a number of chunks one-shot. num may be reduced
+        if(alloc_units_size == 1)
+        return (unit);
+
+        // substract 1 as we counted the one returned to client already
+        alloc_units_size-=1;
+        Unit* ret = (Unit*)(unit+aligned_uint_size);
+
+        /* Build a free list in size of @allocbytes */
+        //1) find an avaiable free list
+        Unit* GECO_VOLATILE* my_free_list = free_list + freelist_index(aligned_uint_size);
+        //2) find the start unit exclusive the first one for returning to client
+        Unit* curr;
+        Unit* next;
+        *my_free_list = next = ret;//allocbytes has been rounded up
+        //3) orgnize the units to a free list
+        while(alloc_units_size>1)
+        {
+            curr = next;
+            next = (Unit*)(next->_M_client_data+aligned_uint_size);
+            curr->_M_free_list_link = next;
+            alloc_units_size--;
+        }
+        curr = next;
+        curr->_M_free_list_link = 0;
+        return ret;
+    }
+
+    //! 每次分配一大块内存, 防止多次分配小内存块带来的内存碎片
+    //! 进行分配操作时, 根据具体环境决定是否加锁
+    //! 我们假定要分配的内存满足内存对齐要求
+    //! Allocates a number of units one-shot. num may be reduced
     //! if it is inconvenient to allocate the requested number.
-    static char* alloc_chunk(size_t aligned_uint_size, int& unit_num);
+    static char* alloc_units(size_t aligned_uint_size, int& alloc_units_size)
+    {
+        char* result;
+        size_t remainig_bytes = end_free - start_free;
+        size_t total_alloc_size = alloc_units_size * aligned_uint_size;
+
+        // can alloc as required
+        if(remainig_bytes >= total_alloc_size)
+        {
+            result = start_free;
+            start_free+=total_alloc_size;
+            return (result);
+        }
+
+        // can alloc at least one
+        if(remainig_bytes >= aligned_uint_size)
+        {
+            alloc_units_size = (int)(remainig_bytes/aligned_uint_size);
+            total_alloc_size = aligned_uint_size*alloc_units_size;
+            result = start_free;
+            start_free+=total_alloc_size;
+            return result;
+        }
+
+        /* cannot even alloc one, start to shunk the pool */
+        Unit* GECO_VOLATILE* my_free_list;
+        size_t byte2alloc = 2*total_alloc_size + round_up(heap_size>>4);
+
+        // Try to make use of the left-over piece.
+        if(remainig_bytes > 0)
+        {
+            my_free_list = free_list + freelist_index(remainig_bytes);
+            ((Unit*)start_free)->_M_free_list_link = *my_free_list;
+            *my_free_list = ((Unit*)start_free);
+        }
+
+        start_free = (char*) malloc(byte2alloc);
+        // 分配失败, 搜索原来已经分配的内存块, 看是否有大于等于当前请求的内存块
+        if(start_free == NULL)
+        {
+            // Try to make do with what we have.  That can't
+            // hurt.  We do not try smaller requests, since that tends
+            // to result in disaster on multi-process machines.
+            for(size_t newsize = aligned_uint_size;
+                    newsize <= MAX_BYTES;
+                    newsize+=ALIGN)
+            {
+                my_free_list = free_list + freelist_index(newsize);
+                Unit* unit = *my_free_list;
+                if(unit != NULL)
+                {
+                    *my_free_list = unit->_M_free_list_link;
+                    start_free = unit->_M_client_data;
+                    end_free = start_free+newsize;
+                    // Any leftover piece will eventually make it to the right free list.
+                    return alloc_units(aligned_uint_size, alloc_units_size);
+                }
+            }
+
+            // no even one avaiable unit poll completely empty
+            // This should either throw an exception or remedy the situation.
+            // Thus we assume it succeeded.
+            end_free = 0;
+            start_free = (char*) malloc_allocator::allocate(byte2alloc);
+        }
+
+        heap_size += byte2alloc;
+        end_free = start_free+byte2alloc;
+        // try to alloc again
+        return alloc_units(aligned_uint_size, alloc_units_size);
+    }
 
 public:
     static void* allocate(size_t size)
     {
-        void* ret = 0;
-        if (size > (size_t)MAX_BYTES)
+        // use maalocator if bigger than MAX_BYTES
+        if (size > MAX_BYTES)
         {
-            ret = malloc_allocator::allocate(size);
+            return malloc_allocator::allocate(size);
         }
-        else
-        {
-            Unit* GECO_VOLATILE* my_free_list = free_list + freelist_index(size);
-            // Acquire the lock here with a constructor call.
-            // This ensures that it is released in exit or during stack
-            // unwinding.
+
+        /*find an avaiable free list*/
+        Unit* GECO_VOLATILE* my_free_list = free_list + freelist_index(size);
+        // Acquire the lock here with a constructor call.
+        // This ensures that it is released in exit or during stack
+        // unwinding.
 #if defined(GECO_USE_STL_THREADS) && !defined(GECO_NO_THREADS)
-            Guard locker_guard;
+        Guard locker_guard;
 #endif
-            Unit* __RESTRICT result = *my_free_list;
-            if(result == 0)
-            {
-                ret = refill(round_up(size));
-            }
-            else
-            {
-                *my_free_list = result->_M_free_list_link;
-                ret = result;
-            }
+        Unit* __RESTRICT result = *my_free_list;
+        if(result == 0)
+        {
+            // 如果是第一次使用这个容量的链表, 则分配此链表需要的内存
+            // 如果不是, 则判断内存吃容量, 不够则分配
+            // not find, refill more free lists to be used
+            return (build_unit_list(round_up(size)));
         }
-        return ret;
+        *my_free_list = result->_M_free_list_link;
+        return (result);
     }
 
+    //! p may not be 0
     static void deallocate(void* pointer, size_t size)
     {
         GECO_assert(pointer != 0);
+        if(size > MAX_BYTES)
+        {
+            malloc_allocator::deallocate(pointer, size);
+            return;
+        }
+        Unit* GECO_VOLATILE* my_free_list = free_list + freelist_index(size);
+        Unit* unit = ( Unit*)pointer;
+#if defined(GECO_USE_STL_THREADS) && !defined(GECO_NO_THREADS)
+        Guard locker_guard;
+#endif
+        unit->_M_free_list_link = *my_free_list;
+        *my_free_list = unit;
+    }
 
+    void* reallocate(void* unit_pointer, size_t old_unit_size, size_t new_unit_size)
+    {
+        // 如果old_size和new_size均大于__MAX_BYTES, 则直接调用realloc()
+        // 因为这部分内存不是经过内存池分配的
+        if(old_unit_size > MAX_BYTES && new_unit_size > MAX_BYTES)
+        {
+            return (malloc_allocator::reallocate(unit_pointer, old_unit_size, new_unit_size));
+        }
+
+        // 如果ROUND_UP(old_sz) == ROUND_UP(new_sz), 内存大小没变化, 不进行重新分配
+        if(round_up(old_unit_size) == round_up(new_unit_size))
+        {
+            return unit_pointer;
+        }
+
+        // 进行重新分配并拷贝数据
+        void* result = allocate(new_unit_size);
+        size_t cpyszie = new_unit_size > old_unit_size ? old_unit_size : new_unit_size;
+        memcpy(result, unit_pointer, cpyszie);
+        deallocate(unit_pointer, old_unit_size);
+        return (result);
     }
 };
 
@@ -507,7 +632,14 @@ default_alloc<threads, inst>::NFREELISTS
 // The 16 zeros are necessary to make version 4.1 of the SunPro
 // compiler happy.  Otherwise it appears to allocate too little
 // space for the array.
+#endif  /* ! GECO__USE_MALLOC */
 
-#endif
+// This implements allocators as specified in the C++ standard.
+//
+// Note that standard-conforming allocators use many language features
+// that are not yet widely implemented.  In particular, they rely on
+// member templates, partial specialization, partial ordering of function
+// templates, the typename keyword, and the use of the template keyword
+// to refer to a template member of a dependent type.
 GECO_END_NAMESPACE
 #endif /* INCLUDE_GECO_DS_MALLOC_H_ */
