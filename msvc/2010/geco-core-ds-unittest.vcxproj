@@ -36,6 +36,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -160,18 +161,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\unittest\test-geco-alog-h.cc" />
+    <ClCompile Include="..\..\unittest\test-geco-iter-base-h.cc" />
+    <ClCompile Include="..\..\unittest\test-geco-type-traits-h.cc" />
+    <ClCompile Include="..\..\unittest\test-main.cc" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\thirdparty\googlemock\msvc\2010\gmock.vcxproj">
       <Project>{34681f0d-ce45-415d-b5f2-5c662dfe3bd5}</Project>
     </ProjectReference>
     <ProjectReference Include="..\..\thirdparty\googletest\msvc\gtest.vcxproj">
       <Project>{c8f6c172-56f2-4e76-b5fa-c3b423b31be7}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\unittest\test-geco-alog-h.cc" />
-    <ClCompile Include="..\..\unittest\test-geco-iter-base-h.cc" />
-    <ClCompile Include="..\..\unittest\test-geco-type-traits-h.cc" />
-    <ClCompile Include="..\..\unittest\test-main.cc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

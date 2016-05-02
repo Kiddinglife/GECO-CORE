@@ -651,6 +651,7 @@ void insert(iterator, I, I){cout << "insert.\n";}
 #   if _MSC_VER > 1000
 //! c standard library header 
 //!@see http://!blog.csdn.net/acmicpc123/article/details/50205729 for details
+# include <windows.h>
 #     include <yvals.h>
 #     define GECO_DONT_USE_BOOL_TYPEDEF
 #   endif
@@ -675,6 +676,7 @@ void insert(iterator, I, I){cout << "insert.\n";}
 #     undef max
 #     undef  GECO_DEFAULT_CONSTRUCTOR_BUG // support DEFAULT_CONSTRUCTOR
 #     undef  GECO_CLASS_PARTIAL_SPECIALIZATION  // not support
+#     undef GECO_NON_TYPE_TMPL_PARAM_BUG
 
 //! disable warning 'initializers put in unrecognized initialization area'
 #     pragma warning ( disable : 4075 )

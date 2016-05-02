@@ -30,7 +30,7 @@
     <ClInclude Include="..\..\include\geco-ds-malloc.h" />
     <ClInclude Include="..\..\include\geco-ds-pair.h" />
     <ClInclude Include="..\..\include\geco-ds-type-traitor.h" />
-    <ClInclude Include="..\..\include\geco-stl-thread.h" />
+    <ClInclude Include="..\..\include\geco-thread.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{6930D32F-92C6-4208-A9C5-CF92470E075F}</ProjectGuid>
