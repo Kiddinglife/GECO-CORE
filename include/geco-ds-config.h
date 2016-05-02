@@ -581,7 +581,18 @@
 #     define GECO_USE_EXCEPTIONS
 #   endif
 
-#   ifdef _REENTRANT
+/**
+ * Use g++ -pthread, it is equivalent to g++ -pthread -D_REENTRANT.
+ * Using g++ -D_REENTRANT would be different, it may not set all the linker flags.
+ *
+ * Use -pthread, not -lpthread.
+ * The -pthread option sets all flags necessary for threading,
+ * no matter what platform you're on.Using -lpthread would only link in libpthread,
+ * which may not be enough for some platforms.
+ * (e.g., OpenBSD used to not have libpthread---it used libc_r instead.)
+ * see http://stackoverflow.com/questions/875789/gcc-do-i-need-d-reentrant-with-pthreads fro details
+ */
+#   if defined(_REENTRANT) || defined(D_REENTRANT)
 #     define GECO_PTHREADS
 #   endif
 
