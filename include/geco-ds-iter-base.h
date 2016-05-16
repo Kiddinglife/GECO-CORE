@@ -104,17 +104,31 @@ delc_iterator(random_access_iterator, Type, random_access_iterator_tag, Distance
 // ?????
 //! stl standard confirming iterator delc
 //! you can inheritat from this struct to make your own iterator
+#ifndef GECO_LIMITED_DEFAULT_TEMPLATES
 template<class Category,
 class Type, class Distance = ptrdiff_t,
-class Pointer = Type*, class Reference = Type&>
+class Pointer=Type*, class Reference=Type&>
 struct iterator
 {
     typedef Category iterator_category;
-    typedef Type value_type;
+    typedef Type        value_type;
     typedef Distance difference_type;
-    typedef Pointer pointer;
+    typedef Pointer      pointer;
     typedef Reference reference;
 };
+#else
+template<class Category,
+class Type, class Distance = ptrdiff_t,
+class Pointer, class Reference>
+struct iterator
+{
+    typedef Category iterator_category;
+    typedef Type        value_type;
+    typedef Distance difference_type;
+    typedef Type*      pointer;
+    typedef Type& reference;
+};
+#endif
 //++++++++++ ITERATOR DELCS ++++++++++++
 
 
@@ -211,9 +225,10 @@ value_type(const Iter& i)
     return __value_type(i);
 }
 
-#define GET_ITER_CATEGORY(i)     __iterator_category(i)
-#define GET_DISTANCE_TYPE(i)     __distance_type(i)
-#define GET_VALUE_TYPE(i)           __value_type(i)
+#define GET_ITER_CATEGORY(i)     iterator_category(i)
+#define GET_DISTANCE_TYPE(i)     distance_type(i)
+#define GET_VALUE_TYPE(i)           value_type(i)
+
 #else 
 //!! make life easier
 #define delc_iterator_category(iterator_tag, name, iterator_type) \

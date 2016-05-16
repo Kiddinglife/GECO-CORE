@@ -13,16 +13,12 @@
  */
 
 /*
- * Created by Jakez on 1 April 2016
- * Reviewed by Jackz on 16 May 2016
- */
-
-/*
  * geco-initialize.h
- *
  * Author:     jake zhang
  * E - mail:   Jakezhang1989@hotmail.com
  * GitHub:    https://github.com/Kiddinglife
+ * Created by Jakez on 1 April 2016
+ * Reviewed by Jackz on 16 May 2016
  *+++++++++++++++++++++++++++++++++++++++
  * @brief
  * there are two things we can do to fill unnitialized memory spaces:
