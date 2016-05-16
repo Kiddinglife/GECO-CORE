@@ -70,35 +70,35 @@ inline void construct(Type* pointer, const Value& val) //!_Construct
 }
 template<class Type, class Value1, class Value2>
 inline void construct(Type* pointer,
-    const Value1& val1,
-    const Value2& val2) //!_Construct
+        const Value1& val1,
+        const Value2& val2) //!_Construct
 {
     new ((void*)pointer) Type(val1, val2);
 }
 template<class Type, class Value1, class Value2, class Value3>
 inline void construct(Type* pointer,
-    const Value1& val1,
-    const Value2& val2,
-    const Value3& val3) //!_Construct
+        const Value1& val1,
+        const Value2& val2,
+        const Value3& val3) //!_Construct
 {
     new ((void*)pointer) Type(val1, val2, val3);
 }
 template<class Type, class Value1, class Value2, class Value3, class Value4>
 inline void construct(Type* pointer,
-    const Value1& val1,
-    const Value2& val2,
-    const Value3& val3,
-    const Value4& val4) //!_Construct
+        const Value1& val1,
+        const Value2& val2,
+        const Value3& val3,
+        const Value4& val4) //!_Construct
 {
     new ((void*)pointer) Type(val1, val2, val3, val4);
 }
 template<class Type, class Value1, class Value2, class Value3, class Value4, class Value5>
 inline void construct(Type* pointer,
-    const Value1& val1,
-    const Value2& val2,
-    const Value3& val3,
-    const Value4& val4,
-    const Value5& val5) //!_Construct
+        const Value1& val1,
+        const Value2& val2,
+        const Value3& val3,
+        const Value4& val4,
+        const Value5& val5) //!_Construct
 {
     new ((void*)pointer) Type(val1, val2, val3, val4, val5);
 }

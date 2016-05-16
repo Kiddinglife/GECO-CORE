@@ -235,7 +235,7 @@ delc_iterator_category(random_access_iterator_tag, iterator_category, random_acc
 
 // raw pointer is special iterator, you cannnot use :: to get inside iterator_category
 // and so, we have to handle it individually
-template <class Type> inline random_access_iterator_tag 
+template <class Type> inline random_access_iterator_tag
 iterator_category(const Type*){ return random_access_iterator_tag(); }
 
 

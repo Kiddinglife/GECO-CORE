@@ -51,10 +51,12 @@
 #include <cstdlib>
 #include <cstring>
 #include <cassert>
+#include <cstdio>
+#include "geco-ds-config.h"
+
 #ifndef __RESTRICT
 #  define __RESTRICT
 #endif
-#include "geco-ds-config.h"
 
 #ifdef __SUNPRO_CC
 #   define PRIVATE public
@@ -242,7 +244,7 @@ class malloc_alloc
 };
 
 //! 这个版本的STL并没有使用non-type模板参数 
-typedef typename malloc_alloc<0> malloc_allocator;
+typedef malloc_alloc<0> malloc_allocator;
 
 //! initialize out-of-memory handler when malloc() fails
 #ifndef GECO_STATIC_TEMPLATE_MEMBER_BUG
@@ -399,9 +401,10 @@ class default_alloc
     // 这里分配的free_list为16  
     // 对应的内存链容量分别为8, 16, 32 ... 128....1512
     static Unit* GECO_VOLATILE free_list[NFREELISTS];
+# endif
+
     static void* pools_[NFREELISTS];
     static size_t pool_num;
-# endif
 
     // Unit allocation state.
     static char* start_free;// pool start address in each chunk
@@ -692,8 +695,8 @@ class default_alloc
     }
 };
 
-typedef typename default_alloc<GECO_ALLOC_USES_THREAD, 0> alloc;
-typedef typename default_alloc<false, 0> single_client_alloc;
+typedef  default_alloc<GECO_ALLOC_USES_THREAD, 0> alloc;
+typedef  default_alloc<false, 0> single_client_alloc;
 
 // INITIALIZE MEMBERS
 #ifdef GECO_USE_STL_THREADS
@@ -742,10 +745,10 @@ struct allocator
     typedef const val_type& const_reference;
     typedef val_type value_type;
 
-    template <class val_type>
+    template <class valtype>
     struct rebind
     {
-        typedef allocator<val_type> other;
+        typedef allocator<valtype> other;
     };
 
     allocator() GECO_NOTHROW
@@ -845,10 +848,10 @@ struct alloc_adaptor_0
     typedef const val_type& const_reference;
     typedef val_type value_type;
 
-    template <class val_type>
+    template <class valtype>
     struct rebind
     {
-        typedef allocator<val_type> other;
+        typedef allocator<valtype> other;
     };
 
     alloc_adaptor_0() GECO_NOTHROW
@@ -948,7 +951,7 @@ template <class valtype, class Alloc>
 struct alloc_adaptor_1
 {
     static const bool instanceless = false;
-    typedef GECO_TEMPLATE Alloc::rebind<valtype>::other allocator_type;
+    //typedef  GECO_TEMPLATE Alloc::rebind<valtype>::other allocator_type;
 };
 template <class valtype, class Alloc>
 const bool alloc_adaptor_1<valtype, Alloc>::instanceless;
@@ -971,7 +974,7 @@ struct alloc_adaptor_1<valtype, malloc_alloc<inst>>
 {
     static const bool instanceless = true;
     typedef simple_alloc<valtype, malloc_alloc<inst>> simple_alloc_type;
-    typedef alloc_adaptor_0<valtype, malloc_alloc<int>> allocator_type;
+    typedef alloc_adaptor_0<valtype, malloc_alloc<inst>> allocator_type;
 };
 // 2) for default_alloc
 template <class _Tp, bool __threads, int __inst>

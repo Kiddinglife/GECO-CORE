@@ -44,7 +44,7 @@ all: geco_core_ds_unittest
 geco_core_ds_unittest: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -L/home/jakez/2016209/geco-ds/thirdparty/googlemock -o "geco_core_ds_unittest" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L/home/jakez/2016209/geco-data-structures/thirdparty/googlemock -o "geco_core_ds_unittest" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

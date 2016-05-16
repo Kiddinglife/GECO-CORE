@@ -1,7 +1,6 @@
 #include <iostream>
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-
 #if GTEST_OS_WINDOWS_MOBILE
 # include <tchar.h>  // NOLINT
 GTEST_API_ int _tmain(int argc, TCHAR** argv) {
