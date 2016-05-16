@@ -48,7 +48,6 @@
 #include <cstddef>
 
 GECO_BEGIN_NAMESPACE
-#define GECO_REQUIRES(a,b)
 
 //++++++++++ ITERATOR TAG ++++++++++++
 struct input_iterator_tag
@@ -76,7 +75,7 @@ struct random_access_iterator_tag : public bidirectional_iterator_tag
 //! the C++ standard. (They have been replaced by struct iterator.)
 //! however, they are useful when the compiler does not support
 //! class partial specialization in which case we have to use function overload
-//! to get iterator type instance.
+//! to get iterator type.
 
 //! define to make life easier, used for declare iterators
 #define delc_iterator(iterator_name,valuetype, itertag, distance)\
@@ -100,7 +99,7 @@ delc_iterator(bidirectional_iterator, Type, bidirectional_iterator_tag, Distance
 template<class Type, class Distance>
 delc_iterator(random_access_iterator, Type, random_access_iterator_tag, Distance)
 
-// @question whicj one should be used? iterator or input_iterator....and so on?
+// FIXME whicj one should be used? iterator or input_iterator....and so on?
 // if iterator is used, unitialized and copy functions only accept detailed type of iterator like input_iterator declared above
 // ?????
 //! stl standard confirming iterator delc
@@ -132,7 +131,6 @@ struct iterator
  * for code example of overloaded function traitor
  */
 #ifdef GECO_CLASS_PARTIAL_SPECIALIZATION
-
 template<class Iterator>
 struct iterator_traitor
 {
@@ -169,7 +167,8 @@ struct iterator_traitor<const Type*>
 //! backward compatibility with the HP STL.
 //! We introduce internal names for these functions.
 template<class Iter>
-inline typename iterator_traitor<Iter>::iterator_category
+inline
+typename iterator_traitor<Iter>::iterator_category
 __iterator_category(const Iter&)
 {
     typedef typename iterator_traitor<Iter>::iterator_category _Category;
@@ -177,7 +176,8 @@ __iterator_category(const Iter&)
 }
 
 template<class Iter>
-inline typename iterator_traitor<Iter>::difference_type*
+inline
+typename iterator_traitor<Iter>::difference_type*
 __distance_type(const Iter&)
 {
     return static_cast<typename iterator_traitor<Iter>::difference_type*>(0);
@@ -221,7 +221,11 @@ inline iterator_tag name(const iterator_type<Type, Distance>&) \
 {\
     return iterator_tag();\
 }
-
+//template <class Type, class Distance>
+//inline input_iterator_tag iterator_category(const input_iterator<Type, Distance>&)
+//{
+//    return input_iterator_tag();
+//}
 template <class Type, class Distance>
 delc_iterator_category(input_iterator_tag, iterator_category, input_iterator)
 template <class Type, class Distance>
@@ -232,7 +236,6 @@ template <class Type, class Distance>
 delc_iterator_category(bidirectional_iterator_tag, iterator_category, bidirectional_iterator)
 template <class Type, class Distance>
 delc_iterator_category(random_access_iterator_tag, iterator_category, random_access_iterator)
-
 // raw pointer is special iterator, you cannnot use :: to get inside iterator_category
 // and so, we have to handle it individually
 template <class Type> inline random_access_iterator_tag
@@ -290,7 +293,6 @@ template <class Type> inline ptrdiff_t* distance_type(const Type*){ return (ptrd
 
 //! Without partial specialization we can't use iterator_traitor, so
 //! we must keep the old iterator query functions around.
-
 #define GET_ITER_CATEGORY(i) iterator_category(i)
 #define GET_DISTANCE_TYPE(i)     distance_type(i)
 #define GET_VALUE_TYPE(i)        value_type(i)

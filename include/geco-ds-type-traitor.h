@@ -1,39 +1,20 @@
 /*
-*
-* Copyright (c) 1994
-* Hewlett-Packard Company SGI_STL
-*
-* Permission to use, copy, modify, distribute and sell this software
-* and its documentation for SGI_STL purpose is hereby granted without fee,
-* provided that the above copyright notice appear in all copies and
-* that both that copyright notice and this permission notice appear
-* in supporting documentation.  Hewlett-Packard Comp SGI_STL makes no
-* representations about the suitability of this software for SGI_STL
-* purpose.  It is provided "as is" without express or implied warranty.
-*
-* Copyright (c) 1997
-* Silicon Graphics
-*
-* Permission to use, copy, modify, distribute and sell this software
-* and its documentation for SGI_STL purpose is hereby granted without fee,
-* provided that the above copyright notice appear in all copies and
-* that both that copyright notice and this permission notice appear
-* in supporting documentation.  Silicon Graphics makes no
-* representations about the suitability of this software for SGI_STL
-* purpose.  It is provided "as is" without express or implied warranty.
-*
-* Copyright (c) 2016
-* Geco Gaming Company
-*
-* Permission to use, copy, modify, distribute and sell this software
-* and its documentation for GECO purpose is hereby granted without fee,
-* provided that the above copyright notice appear in all copies and
-* that both that copyright notice and this permission notice appear
-* in supporting documentation.  GECO makes no representations about
-* the suitability of this software for GECO purpose.
-* It is provided "as is" without express or implied warranty.
-*
-*/
+ * Copyright (c) 2016
+ * Geco Gaming Company
+ *
+ * Permission to use, copy, modify, distribute and sell this software
+ * and its documentation for GECO purpose is hereby granted without fee,
+ * provided that the above copyright notice appear in all copies and
+ * that both that copyright notice and this permission notice appear
+ * in supporting documentation.  GECO makes no representations about
+ * the suitability of this software for GECO purpose.
+ * It is provided "as is" without express or implied warranty.
+ */
+
+/*
+ * Created by Jakez on 1 April 2016
+ * Reviewed by Jackz on 16 May 2016
+ */
 
 # ifndef __INCLUDE_GECO__TYPE_TRAITS_H
 # define __INCLUDE_GECO__TYPE_TRAITS_H
@@ -140,11 +121,10 @@ struct type_traitor
      */
     typedef false_type has_trivial_default_ctor; //!< ctor means constructor.
     typedef false_type has_trivial_copy_ctor;
-    typedef false_type has_trivial_assign_opt; //!< opt means operator.
-    typedef false_type has_trivial_dtor; //!< dtor means destructor.
-    typedef false_type is_pod_type; //!< @see http://blog.csdn.net/aqtata/article/details/35618709 for details.
+    typedef false_type has_trivial_assign_opt;//!< opt means operator.
+    typedef false_type has_trivial_dtor;//!< dtor means destructor.
+    typedef false_type is_pod_type;//!< @see http://blog.csdn.net/aqtata/article/details/35618709 for details.
 };
-
 
 /*!
  * @brief Provide some specilizations for @struct TypeTraits.
@@ -249,23 +229,16 @@ GECO_TEMPLATE_NULL delc_true_type(double*);
 GECO_TEMPLATE_NULL delc_true_type(long double*);
 # endif //! GECO_CLASS_PARTIAL_SPECIALIZATION
 
-
-
-
 //! The following could be written in terms of numeric_limits.  
 //! We're doing it separately to reduce the number of dependencies.
-
 template<class Type>
 struct IsInteger
 {
     typedef false_type Integer;
 };
 
-#define delc_is_integer_true(Type)\
-struct IsInteger<Type>\
-{\
-    typedef true_type Integer;\
-}
+#define delc_is_integer_true(Type) \
+struct IsInteger<Type> {typedef true_type Integer;}
 
 # ifndef GECO_NO_BOOL
 GECO_TEMPLATE_NULL delc_is_integer_true(bool);

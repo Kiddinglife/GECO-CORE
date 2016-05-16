@@ -3,36 +3,11 @@
 #include "include/geco-ds-config.h"
 #include "include/geco-ds-iter-base.h"
 #include "include/geco-ds-type-traitor.h"
+#include "include/geco-ds-initialized.h"
 
 #ifdef GECO_USE_NAMESPACES
 using namespace geco::ds;
 #endif
-
-template<class InputIter, class Distance>
-inline void advance(InputIter& i, Distance n, input_iterator_tag)
-{
-    printf("input_iterator_tag advance\n");
-}
-
-template<class BidirectionalIter, class Distance>
-inline void advance(BidirectionalIter& i, Distance n,
-        bidirectional_iterator_tag)
-{
-    printf("bidirectional_iterator_tag advance\n");
-}
-
-template<class _RandomAccessIterator, class Distance>
-inline void advance(_RandomAccessIterator& i, Distance n,
-        random_access_iterator_tag)
-{
-    printf("random_access_iterator_tag advance\n");
-}
-
-template<class IteType, class Distance>
-inline void advance_(const IteType& i, Distance n)
-{
-    advance(i, n, GET_ITER_CATEGORY(i));
-}
 
 /*!
  * ITERATOR TRAITOR TEST
@@ -43,6 +18,21 @@ inline void advance_(const IteType& i, Distance n)
  * and so, these compilers have to use another way to trait assciated types,
  * which is called 'overloaded functons'
  */
+template<class Category, class Type, class Distance = ptrdiff_t,
+        class Pointer = Type*, class Reference = Type&>
+struct test_inter: public iterator<Category, Type, Distance, Pointer, Reference>
+{
+        const test_inter& operator++()
+        {
+            return *this;
+        }
+
+        test_inter operator++(int n)
+        {
+            return *this;
+        }
+};
+
 TEST(IteratorTraitor, test_trait_assciated_types)
 {
 
@@ -52,12 +42,16 @@ TEST(IteratorTraitor, test_trait_assciated_types)
     //class Pointer = Type*, class Reference = Type&>
     //struct iterator {....}
 
-    //! first use standard iterator
-    typedef iterator<random_access_iterator<int, ptrdiff_t>, int> iter;
-    typedef iter::iterator_category itertype; // is actually random_access_iterator<int, ptrdiff_t>
-    advance_(itertype(), 12);
+    //! first use standard iterator when GECO_CLASS_PARTIAL_SPECIALIZATION defined
+    //! itertor traitor will be used to trait iter cate
+    typedef test_inter<forward_iterator_tag, int> iter;
+    iter input_iter = iter();
+    __advance(input_iter, 12, iterator_traitor<iter>::iterator_category());
 
-    //! second one uses refined iterator
-    advance_(random_access_iterator<int, ptrdiff_t>(), 12);
+    //! first use non-standard iterator when GECO_CLASS_PARTIAL_SPECIALIZATION NOT defined
+    //! function overload will be used to trait iter cate
+    typedef test_inter<forward_iterator<int, ptrdiff_t>, int> iter1;
+    iter1 input_iter1 = iter1();
+    __advance(input_iter1, 12, iter1::iterator_category::iterator_category());
 
 }
