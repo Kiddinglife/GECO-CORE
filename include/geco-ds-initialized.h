@@ -18,15 +18,15 @@
  * E - mail:   Jakezhang1989@hotmail.com
  * GitHub:    https://github.com/Kiddinglife
  * Created by Jakez on 1 April 2016
- * Reviewed by Jackz on 16 May 2016
- *+++++++++++++++++++++++++++++++++++++++
+ * Reviewed by Jackz on 17 May 2016
+ *
  * @brief
  * there are two things we can do to fill unnitialized memory spaces:
  * 1.fill memory with a given value
  * 2.copy data from other palces;
- *+++++++++++++++++++++++++++++++++++++++
+ *
  *                                uninitialized_copy()
- *+++++++++++++++++++++++++++++++++++++++
+ *
  *                      |---------------> call memmove() for highest effciency
  *                      |---------------> (char *, ...)   <--- partial specialization char
  *                      |---------------> (wchar_t, ...) <--- partial specialization wchar_t
@@ -37,9 +37,9 @@
  *                                           |
  *                                           |  Is POD? ctor equals to opt= && dtor is trivial
  *                                          ↓
- *               ++++++++++++++++++++++
+ *               -------------------------------------------------------
  *           No |                                                    | yes
- *               ↓                                                   | handled by algo function copy
+ *               ↓ cpy ctor                                      | handled by algo function copy
  *      construct(&*cur, *start);               copy(start, end, dest)
  *                                                                      |
  *                                                                      |
