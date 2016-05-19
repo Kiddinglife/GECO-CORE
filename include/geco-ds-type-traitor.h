@@ -153,7 +153,7 @@ struct type_traitor<Type>\
     typedef false_type is_pod_type;\
 }
 
-#include "ext/geco-ds-type-traitor-ext.h"
+#include "geco-ds-type-traitor-ext.h"
 
 # ifndef GECO_NO_BOOL
 GECO_TEMPLATE_NULL delc_true_type(bool);

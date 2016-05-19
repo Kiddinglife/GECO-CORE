@@ -169,7 +169,7 @@ struct ref_count_t
     }
 #else 
     // No threads 
-    static inline unsigned long swap(unsigned long __q)
+     inline unsigned long swap(unsigned long __q)
     {
         unsigned long __result = rfcount_val_;
         rfcount_val_ = __q;

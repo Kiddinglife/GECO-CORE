@@ -28,18 +28,16 @@
  *                                uninitialized_copy()
  *
  *                      |---------------> call memmove() for highest effciency
- *                      |---------------> (char *, ...)   <--- partial specialization char
- *                      |---------------> (wchar_t, ...) <--- partial specialization wchar_t
+ *                      |---------------> (char *, ...)   <--- full specialization char
+ *                      |---------------> (wchar_t, ...) <--- full specialization wchar_t
  *                      |
- *                      | Call
- *                      | tempalte uninitialized_copy(start, end, ValueType* is_pod_type)
- *                      |----->function overloaded
+ *                      | Call uninitialized_copy_aux1(start, end, ValueType* is_pod_type)
  *                                           |
  *                                           |  Is POD? ctor equals to opt= && dtor is trivial
  *                                          ↓
  *               -------------------------------------------------------
  *           No |                                                    | yes
- *               ↓ cpy ctor                                      | handled by algo function copy
+ *               ↓ use cpy ctor                                 | handled by algo function copy
  *      construct(&*cur, *start);               copy(start, end, dest)
  *                                                                      |
  *                                                                      |
@@ -82,10 +80,12 @@ inline ForwardIter
 uninitialized_copy_aux2(InputIter start, InputIter end,
         ForwardIter dest, true_type cpy_ctor_equals_opt_assign_and_dtor_is_trivial)
 {
-    return copy(start, end, dest);
+    return copy_aux2(start, end, dest,cpy_ctor_equals_opt_assign_and_dtor_is_trivial);
 }
 
 // @pre copy dtor is not trivial
+// this is uaually what we want beause we may have customized cpy ctor and dtor which
+// may have pointer member variables to allocate and release
 template<class InputIter, class ForwardIter>
 inline ForwardIter
 uninitialized_copy_aux2(InputIter start, InputIter end,
@@ -99,7 +99,7 @@ uninitialized_copy_aux2(InputIter start, InputIter end,
             construct(&*cur, *start);
         }
         return cur;
-    }GECO_UNWIND(destroy(dest, cur)); //!< if exception, destroy all copied data
+    }GECO_UNWIND(destroy(dest, cur)); //!< if exception, destroy all copied data.
 }
 
 template<class InputIter, class ForwardIter, class ValueType>
@@ -119,16 +119,17 @@ uninitialized_copy(InputIter start, InputIter end, ForwardIter dest)
 }
 
 //! full specializations of uninitialized_copy(...)
+GECO_TEMPLATE_NULL
 inline char*
-uninitialized_copy(const char* start, const char* end, char* dest)
+uninitialized_copy<const char*>(const char* start, const char* end, char* dest)
 {
     memmove(dest, start, end - start);
     return dest + (end - start);
 }
-
 #ifdef GECO_HAS_WCHAR_T
+GECO_TEMPLATE_NULL
 inline wchar_t*
-uninitialized_copy(const wchar_t* start, const wchar_t* end, wchar_t* dest)
+uninitialized_copy<const wchar_t*>(const wchar_t* start, const wchar_t* end, wchar_t* dest)
 {
     memmove(dest, start, sizeof(wchar_t) * (end - start));
     return dest + (end - start);
@@ -186,13 +187,6 @@ uninitialized_copy_n_aux1(RandomAccessIter start, Size copy_size,
 }
 
 // for internal use not standard-conforming
-template <class InputIter, class ForwardIter, class Size>
-inline pair<InputIter, ForwardIter>
-__uninitialized_copy_n(InputIter first, Size count, ForwardIter result)
-{
-    return uninitialized_copy_n_aux1(first, count, result, GET_ITER_CATEGORY(first));
-}
-
 template <class InputIter, class ForwardIter, class Size>
 inline pair<InputIter, ForwardIter>
 uninitialized_copy_n(InputIter first, Size count, ForwardIter result)
@@ -329,7 +323,7 @@ uninitialized_fill_n(ForwardIter start, Size __n, const Type& value)
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Copies [first1, last1) into [result, result + (last1 - first1)), and
-// Copies [first2, last2) into [result, result + (last1 - first1) + (last2 - first2)).
+// Copies [first2, last2) into [ result + (last1 - first1), result + (last1 - first1) + (last2 - first2)).
 template <class InputIter1, class InputIter2, class ForwardIter>
 inline ForwardIter
 uninitialized_copy_copy(InputIter1 start, InputIter1 end,

@@ -529,7 +529,7 @@ void fill(ForwardIter start, ForwardIter end, const ValueType& value)
 {
     GECO_REQUIRES(ForwardIter, _Mutable_ForwardIterator);
     for (; start != end; ++start)
-        *start = value; // 调用的是operator =(), 这个要特别注意
+        *start = value; // 调用的是operator =() if not pod or assignment if pod, 这个要特别注意
 }
 // Specialization: for one-byte type and continues memory fill  we can use 
 // memset. this is not template template specia;ization, 

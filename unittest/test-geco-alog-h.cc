@@ -36,7 +36,7 @@ TEST(ALLOCtEST, TEST_ALLOC_DEALLOC)
     {
         times++;
         char* intptr = (char*)single_client_alloc::allocate(j);
-
+        char* intptr1 = (char*)single_client_alloc::allocate(j);
         int mod=0;
         int i;
         if (intptr != NULL)
@@ -54,10 +54,11 @@ TEST(ALLOCtEST, TEST_ALLOC_DEALLOC)
         //{
         //    *(intptr + i) = 0;
         //}
-
+        //alloc::deallocate(otr2, j);
         single_client_alloc::deallocate(intptr, j);
+        single_client_alloc::deallocate(intptr1, j);
         if (j >= 1512) j = 0;
-        if (times >= 100000000) break;
+        if (times >= 100000) break;
     }
     single_client_alloc::destroy();
 }

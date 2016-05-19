@@ -372,7 +372,7 @@ class default_alloc
 {
     private:
 # if defined(__SUNPRO_CC) || defined(__GNUC__) || defined(__HP_aCC)
-    static Unit* GECO_VOLATILE free_list[];
+    static Unit* GECO_VOLATILE free_list[NFREELISTS];
     // Specifying a size results in duplicate def for 4.1
 # else
     // 这里分配的free_list为16  
@@ -579,22 +579,19 @@ class default_alloc
 #if defined(GECO_USE_STL_THREADS) && !defined(GECO_NO_THREADS)
         GECO_ALLOC_LOCK;
 #endif
-
         void* __RESTRICT result = (void*)(*my_free_list);
         if (result == 0)
         {
             // 如果是第一次使用这个容量的链表, 则分配此链表需要的内存
             // 如果不是, 则判断内存吃容量, 不够则分配
             // not find, refill more free lists to be used
-            size = round_up(size);
-            result = build_unit_list(size);
+            result = build_unit_list(round_up(size));
+            return result;
         }
         *my_free_list = ((Unit*)result)->_M_free_list_link;
-
 #if defined(GECO_USE_STL_THREADS) && !defined(GECO_NO_THREADS)
         GECO_ALLOC_UNLOCK;
 #endif
-
         return (result);
     }
 

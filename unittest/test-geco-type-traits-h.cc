@@ -7,6 +7,7 @@
 using namespace geco::ds;
 #endif
 
+
 //copy an array of elments which have non-trivial copy ctors.
 template<class Type>
 inline bool mcopy(Type* source, Type* destination, int n, false_type)
@@ -28,15 +29,75 @@ inline bool mcopy(Type* source, Type* destination, int n)
     typedef typename type_traitor<Type>::has_trivial_copy_ctor has_trivial_copy_ctor;
     return mcopy(source, destination, n, has_trivial_copy_ctor());
 }
-
-TEST(TypeTraitor, test_trait_type)
+# if defined(_PTHREADS) && !defined(_NOTHREADS)
+#     define GECO_PTHREADS
+# endif
+#include "include/geco-ds-type-traitor-ext.h"
+TEST(TypeTraitor, test_trait_types)
 {
-    int a = int();
-    printf("int a '%d'\n", a);
-    int *s = 0;
-    int *d = 0;
-    bool val = mcopy<int>(s, d, 12);
+    void **s = 0;
+    void **d = 0;
+    bool val = mcopy<void*>(s, d, 12);
     EXPECT_EQ(true, val);
+
+    val = mcopy<wchar_t>((wchar_t*)s, (wchar_t*)d, 12);
+    EXPECT_EQ(true, val);
+    val = mcopy<unsigned wchar_t>((unsigned wchar_t*)s, (unsigned wchar_t*)d, 12);
+    EXPECT_EQ(true, val);
+
+    val = mcopy<int>((int*)s, (int*)d, 12);
+    EXPECT_EQ(true, val);
+    val = mcopy<unsigned int>((unsigned int*)s, (unsigned int*)d, 12);
+    EXPECT_EQ(true, val);
+
+    val = mcopy<short>((short*)s, (short*)d, 12);
+    EXPECT_EQ(true, val);
+    val = mcopy<unsigned short>((unsigned short*)s, (unsigned short*)d, 12);
+    EXPECT_EQ(true, val);
+
+    val = mcopy<char>((char*)s, (char*)d, 12);
+    EXPECT_EQ(true, val);
+    val = mcopy<unsigned char>((unsigned char*)s, (unsigned char*)d, 12);
+    EXPECT_EQ(true, val);
+
+    val = mcopy<float>((float*)s, (float*)d, 12);
+    EXPECT_EQ(true, val);
+    val = mcopy<double>((double*)s, (double*)d, 12);
+    EXPECT_EQ(true, val);
+
+    val = mcopy<int*>((int**)s, (int**)d, 12);
+    EXPECT_EQ(true, val);
+    val = mcopy<unsigned int*>((unsigned int**)s, (unsigned int**)d, 12);
+    EXPECT_EQ(true, val);
+
+    val = mcopy<short*>((short**)s, (short**)d, 12);
+    EXPECT_EQ(true, val);
+    val = mcopy<unsigned short*>((unsigned short**)s, (unsigned short**)d, 12);
+    EXPECT_EQ(true, val);
+
+    val = mcopy<char*>((char**)s, (char**)d, 12);
+    EXPECT_EQ(true, val);
+    val = mcopy<unsigned char*>((unsigned char**)s, (unsigned char**)d, 12);
+    EXPECT_EQ(true, val);
+
+    val = mcopy<wchar_t*>((wchar_t**)s, (wchar_t**)d, 12);
+    EXPECT_EQ(true, val);
+    val = mcopy<unsigned wchar_t*>((unsigned wchar_t**)s, (unsigned wchar_t**)d, 12);
+    EXPECT_EQ(true, val);
+
+    val = mcopy<float*>((float**)s, (float**)d, 12);
+    EXPECT_EQ(true, val);
+    val = mcopy<double*>((double**)s, (double**)d, 12);
+    EXPECT_EQ(true, val);
+
+    val = mcopy<test_cus_type_false>((test_cus_type_false*)s, (test_cus_type_false*)d, 12);
+    EXPECT_EQ(false, val);
+
+    val = mcopy<test_cus_type_true>((test_cus_type_true*)s, (test_cus_type_true*)d, 12);
+    EXPECT_EQ(true, val);
+
+    val = mcopy<test_cus_type_false>((test_cus_type_false*)s, (test_cus_type_false*)d, 12);
+    EXPECT_EQ(false, val);
 }
 
 

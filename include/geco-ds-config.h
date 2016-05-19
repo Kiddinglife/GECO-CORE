@@ -232,7 +232,7 @@
  */
 
 /**
- //! @def  SGI_GECO_NO_ARROW_OPERATOR
+ //! @def  GECO_NO_ARROW_OPERATOR
  //! @brief defined if the compiler is unable to support the -> operator for iterators.
  */
 
@@ -533,7 +533,7 @@
 
 //! GCC
 # ifdef __GNUC__
-
+#   define GECO_HAS_WCHAR_T
 #   define GECO_DEFAULT_CONSTRUCTOR_BUG
 
 #   if __GNUC__ == 2 && __GNUC_MINOR__ <= 7
